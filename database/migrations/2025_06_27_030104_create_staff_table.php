@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('credential_id')->constrained('credentials')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->timestamp('last_login')->nullable();
-            $table->string('status');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

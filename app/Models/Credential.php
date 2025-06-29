@@ -15,9 +15,16 @@ class Credential extends Model
         'password'
     ];
 
+    protected $hidden = ['password'];
+
     public function staff()
     {
         return $this->hasOne(Staff::class, 'credential_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'credential_id');
     }
 
 }

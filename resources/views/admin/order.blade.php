@@ -10,7 +10,7 @@
         <div class="left">
             <span><i class="fa-solid fa-house"></i> Home</span>
             <span> > </span>
-            <span>Dashboard</span>
+            <span>Orders</span>
         </div>
         <div class="center"></div>
         <div class="right">

@@ -15,17 +15,17 @@ class RoleSeeder extends Seeder
     {
         Role::create([
             'name' => 'Admin',
-            'status' => 'Active'
+            'status' => 'active'
         ]);
 
         Role::create([
             'name' => 'Manager',
-            'status' => 'Active'
+            'status' => 'active'
         ]);
 
         Role::create([
             'name' => 'Staff',
-            'status' => 'Active'
+            'status' => 'active'
         ]);
     }
 }

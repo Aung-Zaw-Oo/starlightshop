@@ -1,45 +1,43 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AdminController;
-use function PHPUnit\Framework\returnArgument;
+use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/admin/login', function () {
-    return view('admin.login');
-})->name('admin.login');
-
-Route::post('/admin/login/submit', [AdminController::class, 'login'])->name('admin.login.submit');
-
-
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', function(){
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
+    Route::post('/login', [AdminController::class, 'loginProcess'])->name('admin.loginProcess');
 
-    // Route::get('/order', function(){ 
-    //     return view('admin.order');
-    // })->name('Order');
+    Route::middleware(AdminMiddleware::class)->group(function () {
+        Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/order', [AdminController::class, 'order'])->name('admin.order');
+        Route::get('/product', [AdminController::class, 'product'])->name('admin.product');
+        Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
+        Route::get('/employee', [AdminController::class, 'employee'])->name('admin.employee');
 
-    Route::get('/customer', function () {
-        return view('admin.customer');
-    })->name('admin.customer');
+        // Staff routes
+        Route::get('/staff', [StaffController::class, 'index'])->name('admin.employee');
+        Route::get('/employee/create', [StaffController::class, 'create'])->name('admin.staff.create');
+        Route::post('/employee', [StaffController::class, 'store'])->name('admin.staff.store');
+        Route::get('/employee/{id}/edit', [StaffController::class, 'edit'])->name('admin.staff.edit');
+        Route::put('/employee/{id}', [StaffController::class, 'update'])->name('admin.staff.update');
+        Route::delete('/employee/{id}', [StaffController::class, 'destroy'])->name('admin.staff.destroy');
+        Route::get('/staff/search', [StaffController::class, 'ajaxSearch'])->name('admin.staff.ajaxSearch');
 
-    Route::get('/product', function () {
-        return view('admin.product');
-    })->name('admin.product');
-
-    Route::get('/category', function () {
-        return view('admin.category');
-    })->name('admin.category');
-
-    Route::get('/employee', function(){
-        return view('admin.employee');
-    })->name('admin.employee');
+        // Customer routes
+        Route::get('/customer', [CustomerController::class, 'index'])->name('admin.customer');
+        Route::get('/customer/create', [CustomerController::class, 'create'])->name('admin.customer.create');
+        Route::post('/customer', [CustomerController::class, 'store'])->name('admin.customer.store');
+        Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('admin.customer.edit');
+        Route::put('/customer/{id}', [CustomerController::class, 'update'])->name('admin.customer.update');
+        Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('admin.customer.destroy');
+        Route::get('/customer/search', [CustomerController::class, 'ajaxSearch'])->name('admin.customer.ajaxSearch');
+    });
 });
-
-Route::get('/order',[AdminController::class, 'list'])->name('Order');

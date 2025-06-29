@@ -6,28 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Staff extends Model
+class Customer extends Model
 {
-    /** @use HasFactory<\Database\Factories\StaffFactory> */
+    /** @use HasFactory<\Database\Factories\CustomerFactory> */
     use HasFactory;
 
     protected $fillable = [
-        'role_id',
-        'first_name',
-        'last_name',
+        'name',
         'address',
         'phone',
         'dob',
         'credential_id',
-        'image',
         'last_login',
+        'image',
         'status'
     ];
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
     public function credential()
     {
@@ -38,17 +31,16 @@ class Staff extends Model
     {
         parent::boot();
 
-        static::deleting(function ($staff) {
+        static::deleting(function ($customer) {
             // Delete the related credential
-            if ($staff->credential) {
-                $staff->credential->delete();
+            if ($customer->credential) {
+                $customer->credential->delete();
             }
 
-            // Delete the old image file if exists and not default
-            if ($staff->image && Storage::disk('public')->exists($staff->image)) {
-                Storage::disk('public')->delete($staff->image);
+            // Delete the old image file if exists
+            if ($customer->image && Storage::disk('public')->exists($customer->image)) {
+                Storage::disk('public')->delete($customer->image);
             }
         });
     }
-
 }
