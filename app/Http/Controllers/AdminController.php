@@ -8,36 +8,80 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    function list(){
-        // dd("hi");
-        return view('admin.order');
+    public function login()
+    {
+        return view('admin.login');
     }
-    public function login(Request $request)
+
+    public function loginProcess(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
         $credential = Credential::where('email', $request->email)->first();
 
-        if (!$credential || !Hash::check($request->password, $credential->password)) {
-            return back()->withErrors(['email' => 'Invalid email or password'])->withInput();
+        if ($credential && Hash::check($request->password, $credential->password)) {
+            $staff = $credential->staff()->with('role')->first();
+
+            if (!$staff || !in_array(optional($staff->role)->name, ['Admin', 'Manager', 'Staff'])) {
+                return redirect()->route('admin.login')->with('error', 'Unauthorized user');
+            }
+
+            // ✅ Update last_login
+            $staff->update([
+                'last_login' => now()
+            ]);
+
+            // ✅ Store staff with image in session if needed
+            session([
+                'staff' => $staff,
+                'staff_id' => $staff->id,
+                'staff_name' => $staff->first_name . ' ' . $staff->last_name,
+                'staff_image' => $staff->image,
+                'role' => $staff->role->name,
+            ]);
+
+            return redirect()->route('admin.dashboard');
         }
 
-        $staff = $credential->staff()->with('role')->first();
+        return redirect()->route('admin.login')->with('error', 'Invalid credentials');
+    }
 
-        if (!$staff || $staff->role->name !== 'Admin') {
-            return back()->withErrors(['email' => 'Unauthorized user'])->withInput();
-        }
+    public function logout()
+    {
+        session()->flush();
+        return redirect()->route('admin.login');
+    }
 
-        // Store session data
-        session([
-            'staff_id' => $staff->id,
-            'role' => $staff->role->name,
-            'staff_name' => $staff->first_name . ' ' . $staff->last_name,
-        ]);
+    public function dashboard()
+    {
+        return view('admin.dashboard');
+    }
 
-        return redirect()->route('admin.dashboard');
+    public function order()
+    {
+        return view('admin.order');
+    }
+
+    public function customer()
+    {
+        return view('admin.customer');
+    }
+
+    public function product()
+    {
+        return view('admin.product');
+    }
+
+    public function category()
+    {
+        return view('admin.category');
+    }
+
+    public function employee()
+    {
+        return view('admin.employee');
     }
 }

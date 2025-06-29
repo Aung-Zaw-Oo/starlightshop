@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     menuItems.forEach((item) => {
         item.addEventListener("click", (e) => {
-            e.preventDefault();
+            // e.preventDefault();
             menuItems.forEach((mi) => mi.classList.remove("active"));
             item.classList.add("active");
 
