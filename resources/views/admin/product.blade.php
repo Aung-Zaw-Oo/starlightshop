@@ -344,6 +344,10 @@
             .notification.show {
                 transform: translateY(0);
             }
+
+            .search-box {
+                max-width: unset;
+            }
         }
     </style>
 @endpush

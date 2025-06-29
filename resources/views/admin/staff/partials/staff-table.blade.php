@@ -13,7 +13,13 @@
         <td>{{ $member->first_name }} {{ $member->last_name }}</td>
         <td>{{ $member->role->name }}</td>
         <td>{{ $member->credential->email }}</td>
-        <td><span class="status {{ strtolower($member->status) }}">{{ $member->status }}</span></td>
+        <td>
+            @if ($member->status == 'active')
+                <span class="status {{ strtolower($member->status) }}">{{ ucfirst($member->status) }}</span>
+            @else
+                <span class="status {{ strtolower($member->status) }}">{{ ucfirst($member->status) }}</span>
+            @endif
+        </td>
         <td>{{ $member->last_login ? \Carbon\Carbon::parse($member->last_login)->diffForHumans() : 'Never' }}</td>
     </tr>
 @endforeach

@@ -343,6 +343,10 @@
         .notification.show {
             transform: translateY(0);
         }
+
+        .search-box {
+            max-width: unset;
+        }
     }
 </style>
 @endpush
@@ -390,43 +394,14 @@
             </tr>
         </thead>
         <tbody id="customer-table-body">
-            @foreach ($customers as $customer)
-                <tr class="clickable-row" data-href="{{ route('admin.customer.edit', $customer->id) }}">
-                    <td>{{ $customer->id }}</td>
-                    <td>
-                        <div style="display: inline-flex; align-items: center; gap: 10px;">
-                            <img class="avatar" src="{{ asset('storage/' . ($customer->image ?? 'uploads/default-avatar.png')) }}" alt="Image">
-                            <span>{{ $customer->name }}</span>
-                        </div>
-                    </td>
-                    <td>{{ $customer->phone }}</td>
-                    <td>{{ $customer->credential->email ?? 'N/A' }}</td>
-                    <td>{{ $customer->item_bought }}</td>
-                    <td>${{ number_format($customer->money_spent, 2) }}</td>
-                    <td>{{ optional($customer->credential)->last_login ? $customer->credential->last_login->format('Y-m-d H:i') : 'Never' }}</td>
-                </tr>
-            @endforeach
+           @include('admin.customer.partials.customer-table', ['customers' => $customers])
         </tbody>
     </table>
 </div>
 
 <!-- Mobile Cards -->
 <div class="card-list mobile-only" id="customer-card-list">
-    @foreach ($customers as $customer)
-        <div class="staff-card clickable-card" data-href="{{ route('admin.customer.edit', $customer->id) }}">
-            <div class="card-header">
-                <img class="avatar" src="{{ asset('storage/' . ($customer->image ?? 'uploads/default-avatar.png')) }}" alt="Avatar">
-                <div class="name">{{ $customer->name }}</div>
-            </div>
-            <div class="card-body">
-                <div><strong>Phone:</strong> {{ $customer->phone }}</div>
-                <div><strong>Email:</strong> {{ $customer->credential->email ?? 'N/A' }}</div>
-                <div><strong>Items Bought:</strong> {{ $customer->item_bought }}</div>
-                <div><strong>Money Spent:</strong> ${{ number_format($customer->money_spent, 2) }}</div>
-                <div><strong>Last Login:</strong> {{ optional($customer->credential)->last_login ? $customer->credential->last_login->format('Y-m-d H:i') : 'Never' }}</div>
-            </div>
-        </div>
-    @endforeach
+    @include('admin.customer.partials.customer-cards', ['customers' => $customers])
 </div>
 
 <div class="pagination-wrapper">

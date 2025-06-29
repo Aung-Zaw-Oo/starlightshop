@@ -1,7 +1,7 @@
 @if ($customers->isEmpty())
     <tr>
         <td colspan="7" class="text-center" style="padding: 20px; font-style: italic; color: gray;">
-            No customers found.
+            No customer found.
         </td>
     </tr>
 @else

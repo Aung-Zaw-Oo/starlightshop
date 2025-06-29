@@ -33,6 +33,11 @@ class Product extends Model
         return $this->belongsTo(Staff::class);
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

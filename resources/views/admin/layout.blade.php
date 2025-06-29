@@ -59,7 +59,9 @@
         <a href="{{ route('admin.order') }}" class="menu-item {{ Route::currentRouteName() == 'admin.order' ? 'active' : '' }}">
             <span class="icon"><i class="fa-solid fa-bag-shopping"></i></span>
             <span class="text">Orders</span>
-            <span class="order-count">10</span>
+            <span class="order-count">
+                {{ \App\Models\Order::count() }}
+            </span>
         </a>
 
         <a href="{{ route('admin.customer') }}" class="menu-item {{ Route::currentRouteName() == 'admin.customer' ? 'active' : '' }}">
