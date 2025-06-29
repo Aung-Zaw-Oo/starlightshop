@@ -25,7 +25,11 @@ class StaffController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('status', 'Active')->get();
+        if (session('role') === 'Staff') {
+            return redirect()->back()->with('error', 'You are not authorized to create staffs accounts.');
+        }
+
+        $roles = Role::where('status', 'active')->get();
         return view('admin.employee_create', compact('roles'));
     }
 

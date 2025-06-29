@@ -79,6 +79,10 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
+        if (session('role') === 'Staff') {
+            return redirect()->back()->with('error', 'You are not authorized to edit customers.');
+        }
+
         $customer = Customer::with(['credential'])->findOrFail($id);
 
         return view('admin.customer_edit', compact('customer'));

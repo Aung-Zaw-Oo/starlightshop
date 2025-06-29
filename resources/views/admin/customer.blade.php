@@ -349,20 +349,6 @@
 
 @section('content')
 <!-- Flash Messages for non-JS fallback -->
-@if(session('success'))
-    <div class="alert alert-success">
-        <i class="fa-solid fa-circle-check"></i>
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        {{ session('error') }}
-    </div>
-@endif
-
 @if(session('info'))
     <div class="alert alert-info">
         <i class="fa-solid fa-circle-info"></i>

@@ -27,6 +27,11 @@ class Customer extends Model
         return $this->belongsTo(Credential::class);
     }
 
+    public function sessions()
+    {
+        return $this->hasMany(CustomerSession::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
