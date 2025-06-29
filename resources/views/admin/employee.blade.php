@@ -349,20 +349,6 @@
 
 @section('content')
 <!-- Flash Messages (Fallback for non-JS users) -->
-@if(session('success'))
-    <div class="alert alert-success">
-        <i class="fa-solid fa-circle-check"></i>
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        {{ session('error') }}
-    </div>
-@endif
-
 @if(session('info'))
     <div class="alert alert-info">
         <i class="fa-solid fa-circle-info"></i>
@@ -385,7 +371,7 @@
     </div>
 
     <div class="breadcrumb-right">
-        <a href="{{ route('admin.staff.create') }}" class="btn">Add</a>
+        <a href="{{ route('admin.staff.create') }}" class="btn"><i class="fa-solid fa-plus"></i> Add</a>
     </div>
 </div>
 

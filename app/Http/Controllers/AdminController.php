@@ -29,12 +29,12 @@ class AdminController extends Controller
                 return redirect()->route('admin.login')->with('error', 'Unauthorized user');
             }
 
-            // ✅ Update last_login
+            // Update last_login
             $staff->update([
                 'last_login' => now()
             ]);
 
-            // ✅ Store staff with image in session if needed
+            // Store staff data in session
             session([
                 'staff' => $staff,
                 'staff_id' => $staff->id,

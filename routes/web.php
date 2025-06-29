@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\StaffController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,5 +41,23 @@ Route::prefix('admin')->group(function () {
         Route::put('/customer/{id}', [CustomerController::class, 'update'])->name('admin.customer.update');
         Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('admin.customer.destroy');
         Route::get('/customer/search', [CustomerController::class, 'ajaxSearch'])->name('admin.customer.ajaxSearch');
+
+        // Category routes
+        Route::get('/category', [CategoryController::class, 'index'])->name('admin.category');
+        Route::get('/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
+        Route::post('/category', [CategoryController::class, 'store'])->name('admin.category.store');
+        Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+        Route::put('/category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+        Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+        Route::get('/category/search', [CategoryController::class, 'ajaxSearch'])->name('admin.category.ajaxSearch');
+
+        // Product routes
+        Route::get('/product', [ProductController::class, 'index'])->name('admin.product');
+        Route::get('/product/create', [ProductController::class, 'create'])->name('admin.product.create');
+        Route::post('/product', [ProductController::class, 'store'])->name('admin.product.store');
+        Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('admin.product.edit');
+        Route::put('/product/{id}', [ProductController::class, 'update'])->name('admin.product.update');
+        Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('admin.product.destroy');
+        Route::get('/product/search', [ProductController::class, 'ajaxSearch'])->name('admin.product.ajaxSearch');
     });
 });

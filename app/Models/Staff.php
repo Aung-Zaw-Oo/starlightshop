@@ -34,6 +34,10 @@ class Staff extends Model
         return $this->belongsTo(Credential::class);
     }
 
+    public function product(){
+        return $this->hasMany(Product::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

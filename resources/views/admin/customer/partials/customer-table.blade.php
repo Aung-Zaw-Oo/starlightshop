@@ -7,7 +7,7 @@
 @else
     @foreach ($customers as $customer)
     <tr class="clickable-row" data-href="{{ route('admin.customer.edit', $customer->id) }}">
-        <td>{{ $customer->id }}</td>
+        <td>{{ ($customers->currentPage() - 1) * $customers->perPage() + $loop->iteration }}</td>
         <td>{{ $customer->name }}</td>
         <td>{{ $customer->phone }}</td>
         <td>{{ $customer->credential->email ?? 'N/A' }}</td>
