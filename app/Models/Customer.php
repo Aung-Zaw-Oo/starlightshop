@@ -32,6 +32,44 @@ class Customer extends Model
         return $this->hasMany(CustomerSession::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function updateStats()
+    {
+        $totalItems = 0;
+        $totalSpent = 0;
+
+        foreach ($this->orders as $order) {
+            foreach ($order->orderDetails as $detail) {
+                $totalItems += $detail->qty;
+                $totalSpent += $detail->qty * $detail->price;
+            }
+        }
+
+        $this->item_bought = $totalItems;
+        $this->money_spent = $totalSpent;
+        $this->save();
+    }
+
+    public function getItemBoughtAttribute()
+    {
+        return $this->orders()->with('orderDetails')->get()
+            ->flatMap(fn($order) => $order->orderDetails)
+            ->sum('qty');
+    }
+
+    public function getMoneySpentAttribute()
+    {
+        return $this->orders()->with('orderDetails')->get()
+            ->flatMap(fn($order) => $order->orderDetails)
+            ->reduce(fn($carry, $detail) => $carry + ($detail->qty * $detail->price), 0);
+    }
+
+
+
     protected static function boot()
     {
         parent::boot();

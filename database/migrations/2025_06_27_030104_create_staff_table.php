@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->date('dob');
-            $table->foreignId('credential_id')->constrained('credentials')->onDelete('cascade');
+            $table->foreignId('credential_id')->unique()->constrained('credentials')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');

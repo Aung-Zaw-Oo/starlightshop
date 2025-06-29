@@ -29,14 +29,12 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate inputs - adjust as needed
+        // Validate inputs
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:credentials,email',
             'password' => 'required|string|min:6|confirmed',
-            'item_bought' => 'required|string|max:255',
-            'money_spent' => 'required|numeric',
             'image' => 'nullable|image|max:2048',
         ]);
 
@@ -46,7 +44,7 @@ class CustomerController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        // Handle image upload if present
+        // Handle image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('uploads', 'public');
@@ -142,7 +140,6 @@ class CustomerController extends Controller
 
         return redirect()->route('admin.customer')->with('success', 'Customer deleted successfully.');
     }
-
 
     public function ajaxSearch(Request $request)
     {

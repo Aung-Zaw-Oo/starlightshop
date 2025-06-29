@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('customer_sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
+            $table->foreignId('credential_id')->unique()->constrained('credentials')->onDelete('cascade');
             $table->string('browser');
             $table->string('device');
             $table->integer('visit_count')->default(1);

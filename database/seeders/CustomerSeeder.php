@@ -18,7 +18,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 2,
+            'credential_id' => 4,
             'last_login' => null,
             'image' => null,
             'status' => 'active'
@@ -29,7 +29,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 3,
+            'credential_id' => 5,
             'last_login' => null,
             'image' => null,
             'status' => 'active'
@@ -40,7 +40,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 4,
+            'credential_id' => 6,
             'last_login' => null,
             'image' => null,
             'status' => 'active'
@@ -51,7 +51,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 5,
+            'credential_id' => 7,
             'last_login' => null,
             'image' => null,
             'status' => 'active'
@@ -62,7 +62,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 6,
+            'credential_id' => 8,
             'last_login' => null,
             'image' => null,
             'status' => 'active'
@@ -73,7 +73,7 @@ class CustomerSeeder extends Seeder
             'address' => 'Customer St',
             'phone' => '1234567890',
             'dob' => '1990-01-01',
-            'credential_id' => 7,
+            'credential_id' => 9,
             'last_login' => null,
             'image' => null,
             'status' => 'active'

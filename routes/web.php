@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
@@ -19,10 +21,10 @@ Route::prefix('admin')->group(function () {
     Route::middleware(AdminMiddleware::class)->group(function () {
         Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/order', [AdminController::class, 'order'])->name('admin.order');
-        Route::get('/product', [AdminController::class, 'product'])->name('admin.product');
-        Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
-        Route::get('/employee', [AdminController::class, 'employee'])->name('admin.employee');
+        // Route::get('/order', [AdminController::class, 'order'])->name('admin.order');
+        // Route::get('/product', [AdminController::class, 'product'])->name('admin.product');
+        // Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
+        // Route::get('/employee', [AdminController::class, 'employee'])->name('admin.employee');
 
         // Staff routes
         Route::get('/staff', [StaffController::class, 'index'])->name('admin.employee');
@@ -59,5 +61,14 @@ Route::prefix('admin')->group(function () {
         Route::put('/product/{id}', [ProductController::class, 'update'])->name('admin.product.update');
         Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('admin.product.destroy');
         Route::get('/product/search', [ProductController::class, 'ajaxSearch'])->name('admin.product.ajaxSearch');
+
+        // Order routes
+        Route::get('/order', [OrderDetailController::class, 'index'])->name('admin.order');
+        Route::get('/order/create', [OrderDetailController::class, 'create'])->name('admin.order.create');
+        Route::post('/order', [OrderDetailController::class, 'store'])->name('admin.order.store');
+        Route::get('/order/{id}/edit', [OrderDetailController::class, 'edit'])->name('admin.order.edit');
+        Route::put('/order/{id}', [OrderDetailController::class, 'update'])->name('admin.order.update');
+        Route::delete('/order/{id}', [OrderDetailController::class, 'destroy'])->name('admin.order.destroy');
+        Route::get('/order/search', [OrderDetailController::class, 'ajaxSearch'])->name('admin.order.ajaxSearch');
     });
 });

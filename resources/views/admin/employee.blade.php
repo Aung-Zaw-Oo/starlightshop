@@ -343,6 +343,10 @@
         .notification.show {
             transform: translateY(0);
         }
+
+        .search-box {
+            max-width: unset;
+        }
     }
 </style>
 @endpush
@@ -396,20 +400,7 @@
 
 <!-- Mobile Cards -->
 <div class="card-list mobile-only" id="staff-card-list">
-    @foreach ($staff as $member)
-        <div class="staff-card clickable-card" data-href="{{ route('admin.staff.edit', $member->id) }}">
-            <div class="card-header">
-                <img class="avatar" src="{{ asset('storage/' . ($member->image ?? 'uploads/default-avatar.png')) }}" alt="Image">
-                <div class="name">{{ $member->first_name }} {{ $member->last_name }}</div>
-            </div>
-            <div class="card-body">
-                <div><strong>Role:</strong> {{ $member->role->name }}</div>
-                <div><strong>Email:</strong> {{ $member->credential->email }}</div>
-                <div><strong>Status:</strong> {{ $member->status }}</div>
-                <div><strong>Last Login:</strong> {{ $member->last_login ? \Carbon\Carbon::parse($member->last_login)->diffForHumans() : 'Never' }}</div>
-            </div>
-        </div>
-    @endforeach
+    @include('admin.staff.partials.staff-cards', ['staff' => $staff])
 </div>
 
 <div class="pagination-wrapper">
