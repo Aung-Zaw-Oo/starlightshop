@@ -20,7 +20,7 @@
                 @endphp
 
                 <div>
-                    <img class="avatar" src="{{ asset('storage/' . ($productImage ?? 'uploads/default-avatar.png')) }}" alt="Avatar">
+                    <img class="avatar" src="{{ asset('storage/' . ($productImage ?? 'uploads/default-item.png')) }}" alt="Avatar">
                     {{ $product?->name ?? 'Unknown Product' }}
                 </div>
             @else
