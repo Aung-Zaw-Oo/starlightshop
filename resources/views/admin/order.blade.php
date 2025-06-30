@@ -345,6 +345,11 @@
             border-bottom: 1px solid var(--color-8);
         }
 
+        td div {
+            text-wrap: nowrap;
+            overflow: hidden;
+        }
+
         th, td {
             padding: 10px 20px;
             text-align: left;
