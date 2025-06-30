@@ -14,6 +14,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('customer')->group(function () {
+    Route::get('/layout', function () {
+        return view('customer.layout.layout');
+    });
+});
+
+
+
+
+
+
+
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
     Route::post('/login', [AdminController::class, 'loginProcess'])->name('admin.loginProcess');
