@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductController;
@@ -26,6 +27,9 @@ Route::prefix('customer')->group(function () {
     Route::get('register', function(){
         return view('customer.register');
     })->name('customer.register');
+
+    Route::get('home', [HomeController::class, 'index'])->name('customer.home');
+    Route::get('test', [HomeController::class, 'test'])->name('customer.test');
 });
 
 

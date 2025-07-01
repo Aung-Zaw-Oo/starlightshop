@@ -47,6 +47,7 @@ class ProductController extends Controller
             'name' => $validated['name'],
             'category_id' => $validated['category_id'],
             'sale_price' => $validated['sale_price'],
+            'staff_id' => session('staff_id'),
             'purchase_price' => $validated['purchase_price'],
             'qty' => $validated['qty'],
             'description' => $validated['description'],

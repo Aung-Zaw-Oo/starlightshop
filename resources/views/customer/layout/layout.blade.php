@@ -9,13 +9,53 @@
   @stack('styles')
   <style>
     :root {
-      --bg-dark: #0a0a0a;
-      --bg-dark-2: #1a1a1a;
-      --bg-dark-3: #2d2d2d;
-      --text-light: #ffffff;
-      --border-dark: #333;
-      --btn-primary: #4f46e5;
+      /* Backgrounds */
+      --bg-1: #000000;
+      --bg-2: #1a1a1a;
+      --bg-3: #2d2d2d;
+      --bg-4: #404040;
+      --bg-5: #525252;
+      --bg-6: #6b6b6b;
+      --bg-7: #808080;
+      --bg-8: #a3a3a3;
+      --bg-9: #c7c7c7;
+      --bg-10: #d4d4d4;
+      --bg-11: #e6e6e6;
+      --bg-12: #f5f5f5;
+      --bg-13: #ffffff;
+
+      /* Text */
+      --text-1: #000000;
+      --text-2: #1a1a1a;
+      --text-3: #2d2d2d;
+      --text-4: #404040;
+      --text-5: #525252;
+      --text-6: #6b6b6b;
+      --text-7: #808080;
+      --text-8: #a3a3a3;
+      --text-9: #c7c7c7;
+      --text-10: #d4d4d4;
+      --text-11: #e6e6e6;
+      --text-12: #f5f5f5;
+      --text-13: #ffffff;
+
+      /* Semantic Aliases */
+      --bg-dark: var(--bg-1);
+      --bg-dark-2: var(--bg-2);
+      --bg-dark-3: var(--bg-3);
+      --text-light: var(--text-13);
+      --border-dark: var(--text-4);
+      --btn-primary: #10b981;
+
+      /* Status Colors */
       --green: #10b981;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --yellow: #f59e0b;
+
+      /* Custom */
+      --yellow-star: #ffd700;
+      --scroll-thumb: #555;
     }
 
     * {
@@ -61,7 +101,7 @@
     }
 
     .star-icon {
-      color: #ffd700;
+      color: var(--yellow-star);
       font-size: 1.5rem;
     }
 
@@ -110,7 +150,7 @@
       top: -5px;
       right: -5px;
       background: var(--green);
-      color: white;
+      color: var(--text-light);
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -155,7 +195,7 @@
       top: 100%;
       right: 0;
       background: var(--bg-dark-3);
-      border: 1px solid #404040;
+      border: 1px solid var(--border-dark);
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
       min-width: 200px;
@@ -181,7 +221,7 @@
       color: var(--text-light);
       text-decoration: none;
       transition: 0.3s;
-      border-bottom: 1px solid #404040;
+      border-bottom: 1px solid var(--border-dark);
     }
 
     .profile-dropdown a:last-child {
@@ -217,7 +257,6 @@
     .main-content {
       min-height: max-content;
       background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
-      padding: 1rem 2rem;
     }
 
     @media (max-width: 768px) {
@@ -235,7 +274,7 @@
         background: var(--bg-dark-3);
         flex-direction: column;
         padding: 1rem;
-        border-top: 1px solid #404040;
+        border-top: 1px solid var(--border-dark);
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       }
 
@@ -277,101 +316,99 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #404040;
+      background: var(--bg-4);
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #555;
+      background: var(--scroll-thumb);
     }
 
     footer {
-        padding: 1rem 2rem;
-        background-color: var(--bg-dark-3);
+      padding: 1rem 2rem;
+      background-color: var(--bg-dark-3);
     }
 
     .footer-upper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
 
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-.footer-col h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
+    .footer-col h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
 
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-.footer-col li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-}
+    .footer-col li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
 
-.subscribe-container {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+    .subscribe-container {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
 
-.subscribe-container input[type="email"] {
-  flex: 1;
-  padding: 0.5rem;
-  background-color: #1e1e1e;
-  border: 1px solid var(--border-dark);
-  border-radius: 4px;
-  color: white;
-  min-width: 150px;
-}
+    .subscribe-container input[type="email"] {
+      flex: 1;
+      padding: 0.5rem;
+      background-color: var(--bg-3);
+      border: 1px solid var(--border-dark);
+      border-radius: 4px;
+      color: var(--text-light);
+      min-width: 150px;
+    }
 
-.subscribe-container button {
-  padding: 0.5rem 1rem;
-  background: var(--green);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-}
+    .subscribe-container button {
+      padding: 0.5rem 1rem;
+      background: var(--green);
+      color: var(--text-light);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
-.social-icons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
 
-.social-icons i {
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: color 0.3s;
-}
+    .social-icons i {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
 
-.social-icons i:hover {
-  color: var(--btn-primary);
-}
+    .social-icons i:hover {
+      color: var(--btn-primary);
+    }
 
-.footer-lower {
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--text-light);
-}
-
-
+    .footer-lower {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
   </style>
 </head>
 <body>
@@ -388,7 +425,7 @@
     </div>
     <div class="nav-center">
         <ul class="nav-menu" id="navMenu">
-        <li><a href="#" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
+        <li><a href="{{ route('customer.home') }}" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
         <li><a href="#">Product List</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="#">Contact Us</a></li>

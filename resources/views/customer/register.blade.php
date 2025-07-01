@@ -13,14 +13,18 @@
             --green: #8AC926;
         }
 
+        .main-content div {
+            padding: 1rem 0;
+        }
+
         h2 {
             text-align: center;
-            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
         form {
             max-width: 800px;
-            margin: 2rem auto;
+            margin: 0 auto;
             padding: 2rem;
             background-color: #282828;
             border-radius: 1rem;
@@ -214,7 +218,7 @@
 
 @section('content')
     <div>
-        <h2 style="text-align:center; margin-top: 1rem;">CUSTOMER REGESTRATION</h2>
+        <h2 style="text-align:center;">CUSTOMER REGESTRATION</h2>
         <form action="" method="post">
             <div class="input-box">
                 <label for="name">Customer Name:</label>
