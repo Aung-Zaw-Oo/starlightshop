@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
 @push('styles')
     <style>
+        .main-content > div {
+            padding-top: 1rem;
+        }
+        
         .login-container {
             display: flex;
             justify-content: center;
@@ -44,6 +48,7 @@
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         form label {
@@ -130,12 +135,11 @@
             }
         }
     </style>
-
 @endpush
 
 @section('content')
     <div>
-        <h2 style="text-align:center; margin-top: 1rem;">CUSTOMER LOGIN</h2>
+        <h2 style="text-align:center;">CUSTOMER LOGIN</h2>
         <div class="login-container">
             <div class="left">
                 <img src="{{ asset('storage/uploads/shopping-cart.png') }}" alt="">
