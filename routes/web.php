@@ -15,9 +15,17 @@ Route::get('/', function () {
 });
 
 Route::prefix('customer')->group(function () {
-    Route::get('/layout', function () {
+    Route::get('layout', function () {
         return view('customer.layout.layout');
     });
+
+    Route::get('login', function(){
+        return view('customer.login');
+    })->name('customer.login');
+
+    Route::get('register', function(){
+        return view('customer.register');
+    })->name('customer.register');
 });
 
 

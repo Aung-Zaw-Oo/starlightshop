@@ -1,5 +1,8 @@
 /* reset.css */
 
+/* font */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 /* Box sizing and margin/padding reset */
 *,
 *::before,
@@ -61,6 +64,24 @@ table {
 
 /* root */
 :root {
+    --bg-1: #000000;
+    --bg-2: #303641;
+    --bg-3: #353c47;
+    --bg-4: #505a6b;
+    --bg-5: #9e9e9e;
+    --bg-6: #e6e6e6;
+    --bg-7: #f5f5f5;
+    --bg-8: #ffffff;
+
+    --text-1: #000000;
+    --text-2: #303641;
+    --text-3: #353c47;
+    --text-4: #505a6b;
+    --text-5: #9e9e9e;
+    --text-6: #e6e6e6;
+    --text-7: #f5f5f5;
+    --text-8: #ffffff;
+
     --color-1: #000000;
     --color-2: #303641;
     --color-3: #353c47;
@@ -74,6 +95,3 @@ table {
     --btn-primary-hover: #1b9ad0;
     --btn-delete: #ff0000;
 }
-
-/* font */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
