@@ -6,6 +6,7 @@
   <title>StarLight Store</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="{{ asset('css/reset.css') }}"/>
+  @stack('styles')
   <style>
     :root {
       --bg-dark: #0a0a0a;
@@ -214,8 +215,9 @@
     }
 
     .main-content {
-      min-height: calc(100vh - 355px);
+      min-height: max-content;
       background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
+      padding: 1rem 2rem;
     }
 
     @media (max-width: 768px) {
@@ -386,7 +388,7 @@
     </div>
     <div class="nav-center">
         <ul class="nav-menu" id="navMenu">
-        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
         <li><a href="#">Product List</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
@@ -417,10 +419,7 @@
   </nav>
 
   <main class="main-content">
-    <div style="padding: 2rem; text-align: center; color: #888;">
-      <h2>Main Content Area</h2>
-      <p>This is where your custom content will be placed.</p>
-    </div>
+    @yield('content')
   </main>
 
   <footer>
@@ -458,7 +457,7 @@
             <h3>Subscribe</h3>
             <p>Receive updates, hot deals, discounts sent straight in your inbox daily</p>
             <div class="subscribe-container">
-                <input type="email" name="" id="" placeholder="Email Address">
+                <input type="email" name="subscribe" id="subscribe" placeholder="Email Address">
                 <button>Subscribe</button>
             </div>
             <div class="social-icons">
@@ -514,5 +513,6 @@
       });
     });
   </script>
+  @stack('scripts')
 </body>
 </html>
