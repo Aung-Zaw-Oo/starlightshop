@@ -118,11 +118,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 2rem;
         }
 
         .categories > h2 {
-            padding-top: 2rem;
             text-align: center;
+            margin-bottom: 2rem;
         }
 
         .category-tags {
@@ -130,7 +131,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 2rem;
-            padding: 2rem;
+            /* padding: 1rem; */
         }
 
         .tag {
@@ -160,19 +161,56 @@
             transform: scale(1.1);
         }
 
-        .products {
+        .top-selling {
+            padding: 2rem;
+            background: var(--bg-1);
+        }
+
+        .top-selling > h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .selling-cards {
             display: flex;
+            gap: 1rem;
+        }
+
+        .left, .right {
+            width: 50%;
+            /* padding: 2rem; */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .left > div, .right > div {
+            background: var(--bg-2);
+        }
+
+        .first, .second, .third {
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            border-radius: .5rem;
+        }
+
+        .first {
             flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .image {
+            display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .products > h2 {
-            padding-top: 2rem;
-            text-align: center;
+        .second, .third {
+            flex-direction: row-reverse;
+            justify-content: space-between;
         }
 
-        
 
         /* Responsive: Tablet */
         @media (max-width: 1024px) {
@@ -201,6 +239,10 @@
         }
 
         @media (max-width: 425px) {
+            .category-tags {
+                gap: 1rem;
+            }
+
             .tag a {
                 width: 85px;
             }
@@ -252,6 +294,7 @@
         </div>
     </div>
 
+    <!-- Carousel Dots -->
     <div class="dots">
         <span class="dot" onclick="showSlide(0)"></span>
         <span class="dot" onclick="showSlide(1)"></span>
@@ -266,53 +309,37 @@
             <div class="tag">
                 <a href="/category/{{ $category->id }}">
                     <img src="{{ asset('storage/' . $category->image) }}" alt="">
-                    <p>{{ $category->name }}</p>
                 </a>
             </div>
             @endforeach
         </div>
     </div>
 
-    
-
-    <!-- Products -->
-    <div class="products">
-        <h2>TOP PRODUCTS</h2>
-        <div class="product-cards">
-            <div class="product-card">
-                <div class="product-card-image">
-                    <img src="{{ asset('storage/' . $highestOrders[0]->image) }}" alt="">
-                </div>
-                <div class="product-card-content">
-                    {{ $highestOrders[0]->name }}
-                    <a href="">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+    <!-- Top Selling -->
+    <div class="top-selling">
+        <h2>TOP SELLING</h2>
+        <div class="selling-cards">
+            <div class="left">
+                <div class="first">
+                    <div class="image">
+                        <img src="" alt="">
+                        {{ $topSellings[0]->name }}
+                    </div>
+                    <div class="description">desc</div>
                 </div>
             </div>
-            <div class="product-card">
-                <div class="product-card-image">
-                    <img src="{{ asset('storage/' . $highestOrders[0]->image) }}" alt="">
+            <div class="right">
+                <div class="second">
+                    <div class="image">image</div>
+                    <div class="description">desc</div>
                 </div>
-                <div class="product-card-content">
-                    {{ $highestOrders[0]->name }}
-                    <a href="">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-card-image">
-                    <img src="{{ asset('storage/' . $highestOrders[0]->image) }}" alt="">
-                </div>
-                <div class="product-card-content">
-                    {{ $highestOrders[0]->name }}
-                    <a href="">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="third">
+                    <div class="image">image</div>
+                    <div class="description">desc</div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
 @endsection
 
 @push('scripts')
