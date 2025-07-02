@@ -10,7 +10,7 @@
         img.avatar {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            border-radius: 6px;
             object-fit: cover;
         }
 
@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.innerWidth <= 768) {
                     document.querySelector('#product-card-list').innerHTML = html;
                 } else {
-                    document.querySelector('#staff-table-body').innerHTML = html;
+                    document.querySelector('#product-table-body').innerHTML = html;
                 }
                 handleClickable();
             })
