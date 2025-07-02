@@ -6,7 +6,7 @@
 
 @push('styles')
     <style>
-    /* Carousel Container */
+        /* Carousel */
         .carousel {
             position: relative;
             width: 75%;
@@ -63,7 +63,6 @@
             margin: 0 auto;
         }
 
-
         /* Buttons */
         .buttons {
             position: absolute;
@@ -82,12 +81,8 @@
             font-size: 2rem;
             padding: 10px 20px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s ease;
             border-radius: 5px;
-        }
-
-        .buttons button:hover {
-            background: rgba(0, 0, 0, 0.8);
         }
 
         /* Dots */
@@ -131,7 +126,6 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 2rem;
-            /* padding: 1rem; */
         }
 
         .tag {
@@ -162,7 +156,7 @@
         }
 
         .top-selling {
-            padding: 2rem;
+            padding: 1rem;
             background: var(--bg-1);
         }
 
@@ -171,14 +165,23 @@
             margin-bottom: 2rem;
         }
 
+        .top-selling a {
+            color: var(--green);
+            transition: color 0.3s ease;
+        }
+
+        .top-selling a:hover {
+            color: #0a662e;
+        }
+
         .selling-cards {
             display: flex;
             gap: 1rem;
         }
 
+
         .left, .right {
             width: 50%;
-            /* padding: 2rem; */
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -193,6 +196,11 @@
             padding: 2rem;
             display: flex;
             border-radius: .5rem;
+            transition: all .3s ease;
+        }
+
+        .first:hover, .second:hover, .third:hover {
+            scale: 1.01;
         }
 
         .first {
@@ -206,15 +214,111 @@
             align-items: center;
         }
 
+        .description {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .first img {
+            max-width: 300px;
+        }
+
+        .second img, .third img {
+            max-width: 200px;
+        }
+
         .second, .third {
             flex-direction: row-reverse;
             justify-content: space-between;
         }
+             
+        /* NEW ARRIVALS */
+        .new-arrivals {
+            background: var(--bg-1);
+            padding: 2rem 1rem;
+        }
 
+        .new-arrivals h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        /* Card Container */
+        .arrival-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        /* Card */
+        .new-arrival-card {
+            background: var(--bg-2);
+            padding: 1rem;
+            border-radius: .75rem;
+            width: 100%;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .new-arrival-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card Image */
+        .new-arrival-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: .5rem;
+        }
+
+        /* Card Details */
+        .card-lower {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .card-lower p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-13);
+        }
+
+        .card-lower button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .card-lower button a {
+            color: var(--green);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .card-lower button a:hover {
+            color: #0a662e;
+        }
 
         /* Responsive: Tablet */
         @media (max-width: 1024px) {
-            
+            .arrival-cards-container {
+                gap: 1.5rem;
+            }
         }
 
         /* Responsive: Mobile */
@@ -236,6 +340,26 @@
                 flex: 1;
                 padding: 0;
             }
+
+            .selling-cards {
+                flex-direction: column;
+            }
+
+            .left, .right{
+                width: 100%;
+            }
+
+            .first {
+                flex-direction: row-reverse;
+            }
+
+            .image img {
+                max-width: 250px;
+            }
+
+            .new-arrival-card {
+                max-width: 45%;
+            }
         }
 
         @media (max-width: 425px) {
@@ -245,6 +369,15 @@
 
             .tag a {
                 width: 85px;
+            }
+
+            .first, .second, .third {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .new-arrival-card {
+                max-width: 100%;
             }
         }
     </style>
@@ -322,24 +455,114 @@
             <div class="left">
                 <div class="first">
                     <div class="image">
-                        <img src="" alt="">
-                        {{ $topSellings[0]->name }}
+                        <img src="{{ asset('storage/' . $topSellings[0]->image) }}" alt="">
                     </div>
-                    <div class="description">desc</div>
+                    <div class="description">
+                        <p>{{ $topSellings[0]->name }}</p>
+                        <button style="color: var(--green);">
+                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="right">
                 <div class="second">
-                    <div class="image">image</div>
-                    <div class="description">desc</div>
+                    <div class="image">
+                        <img src="{{ asset('storage/' . $topSellings[1]->image) }}" alt="">
+                    </div>
+                    <div class="description">
+                        <p>{{ $topSellings[1]->name }}</p>
+                        <button style="color: var(--green);">
+                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        </button>
+                    </div>
                 </div>
                 <div class="third">
-                    <div class="image">image</div>
-                    <div class="description">desc</div>
+                    <div class="image">
+                        <img src="{{ asset('storage/' . $topSellings[2]->image) }}" alt="">
+                    </div>
+                    <div class="description">
+                        <p>{{ $topSellings[2]->name }}</p>
+                        <button style="color: var(--green);">
+                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- New Arrivals -->
+     <div class="new-arrivals">
+        <h2>NEW ARRIVALS</h2>
+        <!-- New Arrival Cards -->
+        <div class="arrival-cards-container">
+            <div class="new-arrival-card">
+                <div class="card-upper">
+                    <img src="{{ asset('storage/' . $products[count($products) - 1]->image) }}" alt="">
+                </div>
+                <div class="card-lower">
+                    <p>{{$products[count($products) - 1]->name}}</p>
+                    <p>$ {{$products[count($products) - 1]->sale_price}}</p>
+                    <button style="color: var(--green);">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
+                </div>
+            </div>
+
+            <div class="new-arrival-card">
+                <div class="card-upper">
+                    <img src="{{ asset('storage/' . $products[count($products) - 2]->image) }}" alt="">
+                </div>
+                <div class="card-lower">
+                    <p>{{$products[count($products) - 2]->name}}</p>
+                    <p>$ {{$products[count($products) - 2]->sale_price}}</p>
+                    <button style="color: var(--green);">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
+                </div>
+            </div>
+
+            <div class="new-arrival-card">
+                <div class="card-upper">
+                    <img src="{{ asset('storage/' . $products[count($products) - 3]->image) }}" alt="">
+                </div>
+                <div class="card-lower">
+                    <p>{{$products[count($products) - 3]->name}}</p>
+                    <p>$ {{$products[count($products) - 3]->sale_price}}</p>
+                    <button style="color: var(--green);">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
+                </div>
+            </div>
+
+            <div class="new-arrival-card">
+                <div class="card-upper">
+                    <img src="{{ asset('storage/' . $products[count($products) - 4]->image) }}" alt="">
+                </div>
+                <div class="card-lower">
+                    <p>{{$products[count($products) - 4]->name}}</p>
+                    <p>$ {{$products[count($products) - 4]->sale_price}}</p>
+                    <button style="color: var(--green);">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
+                </div>
+            </div>
+
+            <div class="new-arrival-card">
+                <div class="card-upper">
+                    <img src="{{ asset('storage/' . $products[count($products) - 5]->image) }}" alt="">
+                </div>
+                <div class="card-lower">
+                    <p>{{$products[count($products) - 5]->name}}</p>
+                    <p>$ {{$products[count($products) - 5]->sale_price}}</p>
+                    <button style="color: var(--green);">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
+                </div>
+            </div>
+        </div>
+     </div>
 @endsection
 
 @push('scripts')
