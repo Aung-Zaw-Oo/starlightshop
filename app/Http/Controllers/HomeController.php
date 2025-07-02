@@ -14,7 +14,7 @@ public function index()
         $products = Product::all();
         $categories = Category::all();
 
-        $highestOrders = DB::table('order_details')
+        $topSellings = DB::table('order_details')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select(
                 'products.id',
@@ -27,7 +27,7 @@ public function index()
             ->take(3)
             ->get();
 
-        return view('customer.home', compact('products', 'categories', 'highestOrders'));
+        return view('customer.home', compact('products', 'categories', 'topSellings'));
     }
 
 
