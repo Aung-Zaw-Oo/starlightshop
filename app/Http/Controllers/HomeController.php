@@ -29,10 +29,4 @@ public function index()
 
         return view('customer.home', compact('products', 'categories', 'topSellings'));
     }
-
-
-
-    public function test()
-    {
-    }
 }

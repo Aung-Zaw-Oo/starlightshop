@@ -68,10 +68,10 @@
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto auto auto;
+            grid-template-rows: .5fr 1fr 1fr;
             gap: 20px;
-            max-width: 1400px;
             margin: 0 auto;
+            height: 100vh;
         }
 
         .card {
@@ -265,24 +265,24 @@
             font-size: 14px;
         }
 
-        /* Mobile Responsive */
+        /* Responsive Layouts */
         @media (max-width: 1200px) {
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
             }
-            
-            .chart-card, .table-card {
-                grid-column: span 4;
+
+            .line-chart-card,
+            .income-chart-card,
+            .chart-card,
+            .table-card {
+                grid-column: span 2;
             }
 
             .pie-chart-section {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 20px;
-            }
-
-            .pie-chart-section .pie-placeholder {
-                height: 200px;
             }
 
             .legend-placeholder {
@@ -306,19 +306,18 @@
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
-            .chart-card, .table-card {
-                grid-column: span 4;
+
+            .line-chart-card,
+            .income-chart-card,
+            .chart-card,
+            .table-card {
+                grid-column: span 1;
             }
-            
+
             .pie-chart-section {
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
-            }
-
-            .pie-chart-section .pie-placeholder {
-                height: 200px;
             }
 
             .card {
@@ -341,15 +340,15 @@
             }
 
             .chart-placeholder,
-            .pie-placeholder {
+            .pie-placeholder,
+            .bar-chart-placeholder,
+            .table-placeholder {
                 height: 150px;
                 font-size: 12px;
             }
 
-            .bar-chart-placeholder,
-            .table-placeholder {
-                height: 200px;
-                font-size: 12px;
+            .legend-placeholder {
+                flex-direction: column;
             }
         }
     </style>

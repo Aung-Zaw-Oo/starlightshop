@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderDetailController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\ProductListController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,7 +30,8 @@ Route::prefix('customer')->group(function () {
     })->name('customer.register');
 
     Route::get('home', [HomeController::class, 'index'])->name('customer.home');
-    Route::get('test', [HomeController::class, 'test'])->name('customer.test');
+
+    Route::get('product_list', [ProductListController::class, 'index'])->name('customer.product_list');
 });
 
 
