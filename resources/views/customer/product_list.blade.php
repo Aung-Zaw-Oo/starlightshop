@@ -12,7 +12,6 @@
         --color-2: #2a2a2a;
         --btn-primary: #4CAF50;
         --btn-primary-hover: #3e9142;
-
         --transition: all 0.3s ease;
     }
 
@@ -20,7 +19,6 @@
         padding: 1rem;
     }
 
-    /* Remove default number arrows */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -31,7 +29,6 @@
         -moz-appearance: textfield;
     }
 
-    /* Layout */
     .container {
         display: flex;
         min-height: 100vh;
@@ -42,7 +39,6 @@
         flex: 1;
     }
 
-    /* Sidebar */
     .sidebar {
         width: 280px;
         background-color: var(--color-2);
@@ -111,7 +107,6 @@
         color: #fff;
     }
 
-    /* Header */
     .header {
         display: flex;
         justify-content: space-between;
@@ -201,7 +196,6 @@
         cursor: pointer;
     }
 
-    /* Product Grid */
     .products-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -221,6 +215,7 @@
         flex-direction: column;
         transition: 0.2s;
         cursor: pointer;
+        gap: 1rem;
     }
 
     .product-card:hover {
@@ -238,6 +233,16 @@
         align-items: center;
         justify-content: center;
         color: #888;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+    .card-header img {
+        width: 75%;
     }
 
     .product-card.list-item .product-image {
@@ -330,7 +335,6 @@
         transform: translateX(5px);
     }
 
-    /* Pagination */
     .pagination-wrapper {
         margin-top: 20px;
         text-align: center;
@@ -377,7 +381,6 @@
         cursor: not-allowed;
     }
 
-    /* Responsive */
     @media (max-width: 1024px) {
         .products-grid {
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -407,6 +410,7 @@
 
         .mobile-menu-btn {
             display: block;
+            align-self: start;
         }
 
         .overlay.show {
@@ -436,12 +440,6 @@
             flex-direction: column;
         }
 
-        .product-card.list-item .product-image {
-            width: 100%;
-            height: 180px;
-            margin: 0 0 10px;
-        }
-
         .product-card.list-item .product-info {
             flex-direction: column;
             align-items: flex-start;
@@ -457,10 +455,6 @@
     @media (max-width: 480px) {
         .products-grid {
             grid-template-columns: 1fr;
-        }
-
-        .main-section {
-            padding: 1rem;
         }
 
         .search-status {
@@ -491,7 +485,6 @@
 </style>
 @endpush
 
-
 @section('content')
     <div class="container">
         <div class="overlay" id="overlay"></div>
@@ -502,12 +495,12 @@
             <div class="price-range">
                 <div class="price-input">
                     <label for="minPrice">Min:</label>
-                    <input type="number" name="" id="minPrice">
+                    <input type="number" id="minPrice">
                 </div>
                 
                 <div class="price-input">
                     <label for="maxPrice">Max:</label>
-                    <input type="number" name="" id="maxPrice">
+                    <input type="number" id="maxPrice">
                 </div>
             </div>
             
@@ -525,6 +518,7 @@
                         <label for="category-{{ $category->id }}">{{ $category->name }}</label>
                     </div>
                 @endforeach
+            </div>
         </aside>
         
         <main class="main-section">
@@ -555,40 +549,15 @@
                 </div>
             </div>
             
-            <div class="products-grid grid-view" id="productsGrid">
-
-                @foreach ($products as $product)
-                    <div class="product-card list-item"
-                        data-name="{{ strtolower($product->name) }}"
-                        data-category-id="{{ $product->category_id }}"
-                        data-price="{{ $product->sale_price }}"
-                    >
-                        <div class="card-header">
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image">
-                        </div>
-                        <div class="card-body">
-                            <div class="product-title">
-                                {{ $product->name }}
-                            </div>
-                            <div class="product-price">
-                                {{ $product->sale_price }}
-                            </div>
-                            <div class="product-category">
-                                {{ $product->category->name }}
-                            </div>
-                            <button class="detail-btn">
-                                <a href="{{ route('customer.product_detail', $product->id) }}">More Detail <i class="fas fa-arrow-right"></i> </a>
-                            </button>
-                        </div>
-                    </div>
-                @endforeach
+            <div id="ajaxProductContainer">
+                @include('customer.product.partials.product_list', ['products' => $products])
+            </div>
+            
+            <div class="pagination-wrapper" id="paginationWrapper">
+                {{ $products->onEachSide(1)->links('vendor.pagination.custom') }}
             </div>
         </main>
     </div>
-
-    <div class="pagination-wrapper">
-            {{ $products->onEachSide(1)->links('vendor.pagination.custom') }}
-        </div>
 @endsection
 
 @push('scripts')
@@ -596,9 +565,9 @@
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const menuBtn = document.getElementById('menuBtn');
-
     const gridView = document.getElementById('gridView');
     const listView = document.getElementById('listView');
+    const ajaxProductContainer = document.getElementById('ajaxProductContainer');
     const productsGrid = document.getElementById('productsGrid');
     const viewButtons = document.querySelectorAll('.view-btn');
     const searchInput = document.getElementById('searchInput');
@@ -606,26 +575,23 @@
     const sortSelect = document.getElementById('sortSelect');
     const minPriceInput = document.getElementById('minPrice');
     const maxPriceInput = document.getElementById('maxPrice');
-
-    const productCards = document.querySelectorAll('.product-card');
-
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
 
-    // Grid/List View
-    gridView.onclick = () => {
-        productsGrid.classList.remove('list-view');
-        viewButtons.forEach(btn => btn.classList.remove('active'));
-        gridView.classList.add('active');
-    };
 
-    listView.onclick = () => {
-        productsGrid.classList.add('list-view');
-        viewButtons.forEach(btn => btn.classList.remove('active'));
-        listView.classList.add('active');
-    };
+    function applyViewMode() {
+        const isListView = productsGrid.classList.contains('list-view');
+        const productCards = document.querySelectorAll('.product-card');
+        
+        productCards.forEach(card => {
+            if (isListView) {
+                card.classList.add('list-item');
+            } else {
+                card.classList.remove('list-item');
+            }
+        });
+    }
 
-    // Sidebar Toggle
     menuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
         overlay.classList.toggle('show');
@@ -636,13 +602,11 @@
         overlay.classList.remove('show');
     });
 
-        // Select All Categories
     selectAllBtn.addEventListener('click', () => {
         categoryCheckboxes.forEach(cb => cb.checked = true);
         filterProducts();
     });
 
-    // Clear All Filters
     clearFiltersBtn.addEventListener('click', () => {
         searchInput.value = '';
         minPriceInput.value = '';
@@ -652,70 +616,79 @@
         filterProducts();
     });
 
-    // Filter logic
+    function getSelectedCategories() {
+        return Array.from(categoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.id.replace('category-', ''))
+            .join(',');
+    }
+
+    function fetchProducts(page = 1) {
+        const search = searchInput.value.trim();
+        const categories = getSelectedCategories();
+        const minPrice = minPriceInput.value.trim();
+        const maxPrice = maxPriceInput.value.trim();
+        const sort = sortSelect.value;
+
+        const params = new URLSearchParams({
+            search,
+            categories,
+            minPrice,
+            maxPrice,
+            sort,
+            page
+        });
+
+        document.getElementById('ajaxProductContainer').innerHTML = '<p>Loading...</p>';
+
+        fetch(`{{ route('customer.products.ajaxSearch') }}?${params.toString()}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('ajaxProductContainer').innerHTML = data.html;
+            document.getElementById('paginationWrapper').innerHTML = data.pagination;
+            attachPaginationLinks();
+            applyViewMode(); // Apply current view mode to new content
+        })
+        .catch(err => {
+            console.error('AJAX fetch error:', err);
+            document.getElementById('ajaxProductContainer').innerHTML = '<p>Error loading products. Please try again.</p>';
+        });
+    }
+
     function filterProducts() {
-        const search = searchInput.value.toLowerCase();
-        const selectedCategories = Array.from(categoryCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.id.replace('category-', ''));
-
-        const min = minPriceInput.value ? parseFloat(minPriceInput.value) : 0;
-        const max = maxPriceInput.value ? parseFloat(maxPriceInput.value) : Infinity;
-
-        productCards.forEach(card => {
-            const name = card.dataset.name.toLowerCase();
-            const price = parseFloat(card.dataset.price);
-            const categoryId = card.dataset.categoryId;
-
-            const matchName = name.includes(search);
-            const matchCategory = selectedCategories.includes(categoryId);
-            const matchPrice = price >= min && price <= max;
-
-            if (matchName && matchCategory && matchPrice) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        sortProducts(); // re-sort after filtering
+        fetchProducts(1);
     }
 
-    // Sorting logic
-    function sortProducts() {
-        const sortValue = sortSelect.value;
-        const cardsArray = Array.from(productCards).filter(card => card.style.display !== 'none');
-
-        cardsArray.sort((a, b) => {
-            const priceA = parseFloat(a.dataset.price);
-            const priceB = parseFloat(b.dataset.price);
-            const nameA = a.dataset.name;
-            const nameB = b.dataset.name;
-
-            switch (sortValue) {
-                case 'price-low':
-                    return priceA - priceB;
-                case 'price-high':
-                    return priceB - priceA;
-                case 'name-asc':
-                    return nameA.localeCompare(nameB);
-                case 'name-desc':
-                    return nameB.localeCompare(nameA);
-                default:
-                    return 0;
-            }
+    function attachPaginationLinks() {
+        document.querySelectorAll('#paginationWrapper a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                const page = url.searchParams.get('page') || 1;
+                fetchProducts(page);
+            });
         });
-
-        // Re-append sorted cards
-        cardsArray.forEach(card => productsGrid.appendChild(card));
     }
 
-    // Event Listeners
-    searchInput.addEventListener('input', filterProducts);
+    searchInput.addEventListener('input', () => {
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(filterProducts, 300);
+    });
+
     categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterProducts));
-    sortSelect.addEventListener('change', sortProducts);
-    minPriceInput?.addEventListener('input', filterProducts);
-    maxPriceInput?.addEventListener('input', filterProducts);
+    minPriceInput.addEventListener('input', filterProducts);
+    maxPriceInput.addEventListener('input', filterProducts);
+    sortSelect.addEventListener('change', filterProducts);
+
+    attachPaginationLinks();
 </script>
 @endpush
-
