@@ -34,6 +34,9 @@ Route::prefix('customer')->group(function () {
     Route::get('product_list', [ProductListController::class, 'index'])->name('customer.product_list');
 
     Route::get('product_detail/{id}', [ProductListController::class, 'productDetail'])->name('customer.product_detail');
+
+    Route::get('/products_list/search', [ProductListController::class, 'ajaxSearch'])->name('customer.products.ajaxSearch');
+
 });
 
 
