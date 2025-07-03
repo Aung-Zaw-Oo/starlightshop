@@ -256,7 +256,7 @@
 
     .main-content {
       min-height: max-content;
-      background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
+      background: var(--bg-dark-1);
     }
 
     @media (max-width: 768px) {
@@ -266,21 +266,27 @@
       }
 
       .nav-menu {
-        display: none;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
         background: var(--bg-dark-3);
         flex-direction: column;
+        overflow: hidden;
+        max-height: 0;
+        padding: 0 1rem;
+        border-top: 1px solid transparent;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        transition: all 0.4s ease
+      }
+
+      .nav-menu.show {
+        max-height: max-content;
         padding: 1rem;
         border-top: 1px solid var(--border-dark);
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       }
 
-      .nav-menu.show {
-        display: flex;
-      }
 
       .mobile-menu-toggle {
         display: block;
@@ -426,7 +432,7 @@
     <div class="nav-center">
         <ul class="nav-menu" id="navMenu">
         <li><a href="{{ route('customer.home') }}" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
-        <li><a href="#">Product List</a></li>
+        <li><a href="{{ route('customer.product_list') }}" class="{{ Route::currentRouteName() == 'customer.product_list' ? 'active' : '' }}">Product List</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
       </ul>

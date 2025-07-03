@@ -6,17 +6,26 @@
 
 @push('styles')
     <style>
-        /* Carousel */
-        .carousel {
-            position: relative;
-            width: 75%;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 10px;
-            padding: 50px 0;
+        :root {
+            --bg-1: #f8f9fa;
+            --bg-2: #ffffff;
+            --text-13: #333333;
+            --green: #28a745;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 0.5rem;
+            --transition: all 0.3s ease;
         }
 
-        /* Slides Wrapper */
+        /* CAROUSEL SECTION */
+        .carousel {
+            position: relative;
+            width: min(75%, 1200px);
+            margin: 0 auto;
+            padding: 3rem 0 0 0;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
         .slides {
             display: flex;
             transition: transform 0.5s ease-in-out;
@@ -25,100 +34,126 @@
         .slide {
             min-width: 100%;
             display: flex;
-            flex-direction: row;
-            height: 300px;
+            height: 350px;
         }
 
         .slide-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
             justify-content: center;
-            padding: 20px;
-            padding-left: 4rem;
-            gap: 1rem;
+            padding: 2rem 4rem;
+            gap: 1.5rem;
+            color: white;
         }
 
         .slide-content h2 {
-            font-size: 2rem;
-        }        
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .slide-content button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            align-self: flex-start;
+        }
+
+        .slide-content button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
 
         .slide-image {
             flex: 1;
-            overflow: hidden;
-            padding-right: 4rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            aspect-ratio: 4 / 3;
+            padding: 2rem;
         }
 
         .slide-image img {
-            width: 100%;
-            height: auto;
+            max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            display: block;
-            margin: 0 auto;
+            border-radius: var(--border-radius);
         }
 
-        /* Buttons */
-        .buttons {
+        /* Carousel Controls */
+        .carousel-controls {
             position: absolute;
             top: 50%;
             width: 100%;
             display: flex;
             justify-content: space-between;
             transform: translateY(-50%);
-            z-index: 2;
+            z-index: 10;
+            padding: 0 1rem;
         }
 
-        .buttons button {
-            background: rgba(0, 0, 0, 0.5);
+        .carousel-btn {
+            background: rgba(0, 0, 0, 0.7);
             border: none;
             color: white;
-            font-size: 2rem;
-            padding: 10px 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background 0.3s ease;
-            border-radius: 5px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
         }
 
-        /* Dots */
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
         .dots {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0 3rem;
         }
 
         .dot {
-            display: inline-block;
-            height: 12px;
             width: 12px;
-            margin: 0 5px;
-            background-color: #bbb;
+            height: 12px;
             border-radius: 50%;
+            background: #ccc;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
         }
 
         .dot.active {
-            background-color: #333;
+            background: var(--green);
+            transform: scale(1.2);
         }
 
+        /* CATEGORIES SECTION */
         .categories {
-            background-color: var(--bg-1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
+            background: var(--bg-1);
+            padding: 4rem 2rem;
+            text-align: center;
         }
 
-        .categories > h2 {
-            text-align: center;
-            margin-bottom: 2rem;
+        .categories h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-13);
+            font-weight: 700;
         }
 
         .category-tags {
@@ -126,473 +161,545 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .tag {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            transform: translateY(-5px);
         }
 
         .tag a {
+            display: block;
             text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
         }
 
         .tag img {
-            width: 50px;
-            height: auto;
-            display: block;
-            border-radius: 0.5rem;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         .tag img:hover {
             transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
+        /* TOP SELLING SECTION */
         .top-selling {
-            padding: 1rem;
-            background: var(--bg-1);
-        }
-
-        .top-selling > h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .top-selling a {
-            color: var(--green);
-            transition: color 0.3s ease;
-        }
-
-        .top-selling a:hover {
-            color: #0a662e;
-        }
-
-        .selling-cards {
-            display: flex;
-            gap: 1rem;
-        }
-
-
-        .left, .right {
-            width: 50%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .left > div, .right > div {
+            padding: 4rem 2rem;
             background: var(--bg-2);
         }
 
-        .first, .second, .third {
-            width: 100%;
+        .top-selling h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-13);
+            font-weight: 700;
+        }
+
+        .selling-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .selling-card {
+            background: var(--bg-1);
             padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             display: flex;
-            border-radius: .5rem;
-            transition: all .3s ease;
+            gap: 1.5rem;
         }
 
-        .first:hover, .second:hover, .third:hover {
-            scale: 1.01;
+        .selling-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .first {
+        .selling-card.featured {
+            grid-column: 1;
+            grid-row: 1 / 3;
             flex-direction: column;
-            justify-content: space-between;
+            text-align: center;
         }
 
-        .image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .description {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: start;
-        }
-        
-        .first img {
-            max-width: 300px;
-        }
-
-        .second img, .third img {
+        .selling-card img {
             max-width: 200px;
+            height: auto;
+            object-fit: contain;
+            border-radius: var(--border-radius);
         }
 
-        .second, .third {
-            flex-direction: row-reverse;
-            justify-content: space-between;
+        .selling-card.featured img {
+            max-width: 300px;
+            margin: 0 auto;
         }
-             
-        /* NEW ARRIVALS */
+
+        .card-description {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .card-description h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-13);
+            margin: 0;
+        }
+
+        .shop-now-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .shop-now-btn a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shop-now-btn a:hover {
+            color: #0a662e;
+            transform: translateX(5px);
+        }
+
+        /* NEW ARRIVALS SECTION */
         .new-arrivals {
             background: var(--bg-1);
-            padding: 2rem 1rem;
+            padding: 4rem 2rem;
         }
 
         .new-arrivals h2 {
             text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-13);
+            font-weight: 700;
         }
 
-        /* Card Container */
         .arrival-cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* Card */
         .new-arrival-card {
             background: var(--bg-2);
-            padding: 1rem;
-            border-radius: .75rem;
-            width: 100%;
-            max-width: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .new-arrival-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* Card Image */
         .new-arrival-card img {
             width: 100%;
             height: auto;
             object-fit: cover;
-            border-radius: .5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
         }
 
-        /* Card Details */
-        .card-lower {
-            margin-top: 1rem;
+        .card-details {
             display: flex;
             flex-direction: column;
-            gap: .5rem;
+            gap: 0.5rem;
         }
 
-        .card-lower p {
-            font-size: 1rem;
+        .card-details h3 {
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--text-13);
+            margin: 0;
         }
 
-        .card-lower button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .card-lower button a {
+        .card-details .price {
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--green);
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.3s ease;
         }
 
-        .card-lower button a:hover {
-            color: #0a662e;
-        }
-
-        /* Responsive: Tablet */
+        /* RESPONSIVE DESIGN */
         @media (max-width: 1024px) {
-            .arrival-cards-container {
-                gap: 1.5rem;
+            .carousel {
+                width: 90%;
+            }
+
+            .selling-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .selling-card.featured {
+                grid-column: 1;
+                grid-row: auto;
             }
         }
 
-        /* Responsive: Mobile */
         @media (max-width: 768px) {
             .carousel {
                 width: 100%;
+                margin: 2rem 0;
                 border-radius: 0;
             }
 
             .slide {
                 flex-direction: column;
+                height: auto;
+                min-height: 400px;
             }
 
             .slide-content {
-                display: none;
+                padding: 2rem;
+                text-align: center;
             }
 
             .slide-image {
-                flex: 1;
-                padding: 0;
+                padding: 1rem 2rem 2rem;
             }
 
-            .selling-cards {
+            .categories, .top-selling, .new-arrivals {
+                padding: 3rem 1rem;
+            }
+
+            .categories h2, .top-selling h2, .new-arrivals h2 {
+                font-size: 2rem;
+            }
+
+            .selling-card {
                 flex-direction: column;
+                text-align: center;
             }
 
-            .left, .right{
-                width: 100%;
-            }
-
-            .first {
-                flex-direction: row-reverse;
-            }
-
-            .image img {
+            .selling-card img {
                 max-width: 250px;
+                margin: 0 auto;
             }
 
-            .new-arrival-card {
-                max-width: 45%;
+            .arrival-cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
             }
         }
 
-        @media (max-width: 425px) {
+        @media (max-width: 480px) {
+            .carousel-controls {
+                display: none;
+            }
+
+            .slide-content {
+                padding: 1.5rem;
+            }
+
+            .slide-content h2 {
+                font-size: 1.5rem;
+            }
+
             .category-tags {
                 gap: 1rem;
             }
 
-            .tag a {
-                width: 85px;
+            .tag img {
+                width: 60px;
+                height: 60px;
             }
 
-            .first, .second, .third {
-                flex-direction: column;
-                gap: 1rem;
+            .selling-card {
+                padding: 1.5rem;
             }
 
-            .new-arrival-card {
-                max-width: 100%;
+            .arrival-cards-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 @endpush
 
 @section('content')
-    <!-- Carousel -->
+    <!-- Hero Carousel -->
     <div class="carousel">
         <div class="slides" id="slideContainer">
             <div class="slide">
                 <div class="slide-content">
-                    <h2>
-                        {{ $products[count($products) - 3]->description }}
-                    </h2>
-                    <button>Shop Collection</button>
+                    <h2>{{ $products[count($products) - 3]->description }}</h2>
+                    <button type="button">Shop Collection</button>
                 </div>
                 <div class="slide-image">
-                    <img src="{{ asset('storage/' . $products[count($products) - 3]->image) }}" alt="Slide 1">
+                    <img src="{{ asset('storage/' . $products[count($products) - 3]->image) }}" alt="{{ $products[count($products) - 3]->name }}">
                 </div>
             </div>
             <div class="slide">
                 <div class="slide-content">
-                    <h2>
-                        {{ $products[count($products) - 2]->description }}
-                    </h2>
-                    <button>Shop Collection</button>
+                    <h2>{{ $products[count($products) - 2]->description }}</h2>
+                    <button type="button">Shop Collection</button>
                 </div>
                 <div class="slide-image">
-                    <img src="{{ asset('storage/' . $products[count($products) - 2]->image) }}" alt="Slide 2">
+                    <img src="{{ asset('storage/' . $products[count($products) - 2]->image) }}" alt="{{ $products[count($products) - 2]->name }}">
                 </div>
             </div>
             <div class="slide">
                 <div class="slide-content">
-                    <h2>
-                        {{ $products[count($products) - 1]->description }}
-                    </h2>
-                    <button>Shop Collection</button>
+                    <h2>{{ $products[count($products) - 1]->description }}</h2>
+                    <button type="button">Shop Collection</button>
                 </div>
                 <div class="slide-image">
-                    <img src="{{ asset('storage/' . $products[count($products) - 1]->image) }}" alt="Slide 3">
+                    <img src="{{ asset('storage/' . $products[count($products) - 1]->image) }}" alt="{{ $products[count($products) - 1]->name }}">
                 </div>
             </div>
         </div>
-        <div class="buttons">
-            <button onclick="prevSlide()">❮</button>
-            <button onclick="nextSlide()">❯</button>
+        
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="prevBtn" aria-label="Previous slide">❮</button>
+            <button class="carousel-btn" id="nextBtn" aria-label="Next slide">❯</button>
         </div>
     </div>
 
     <!-- Carousel Dots -->
-    <div class="dots">
-        <span class="dot" onclick="showSlide(0)"></span>
-        <span class="dot" onclick="showSlide(1)"></span>
-        <span class="dot" onclick="showSlide(2)"></span>
+    <div class="dots" id="dotsContainer">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
     </div>
 
     <!-- Categories -->
-    <div class="categories">
+    <section class="categories">
         <h2>CATEGORIES</h2>
         <div class="category-tags">
             @foreach ($categories as $category)
-            <div class="tag">
-                <a href="/category/{{ $category->id }}">
-                    <img src="{{ asset('storage/' . $category->image) }}" alt="">
-                </a>
-            </div>
+                <div class="tag">
+                    <a href="/category/{{ $category->id }}" title="{{ $category->name }}">
+                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
+                    </a>
+                </div>
             @endforeach
         </div>
-    </div>
+    </section>
 
     <!-- Top Selling -->
-    <div class="top-selling">
+    <section class="top-selling">
         <h2>TOP SELLING</h2>
         <div class="selling-cards">
-            <div class="left">
-                <div class="first">
-                    <div class="image">
-                        <img src="{{ asset('storage/' . $topSellings[0]->image) }}" alt="">
-                    </div>
-                    <div class="description">
-                        <p>{{ $topSellings[0]->name }}</p>
-                        <button style="color: var(--green);">
-                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </button>
-                    </div>
+            <div class="selling-card featured">
+                <img src="{{ asset('storage/' . $topSellings[0]->image) }}" alt="{{ $topSellings[0]->name }}">
+                <div class="card-description">
+                    <h3>{{ $topSellings[0]->name }}</h3>
+                    <button class="shop-now-btn">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
                 </div>
             </div>
-            <div class="right">
-                <div class="second">
-                    <div class="image">
-                        <img src="{{ asset('storage/' . $topSellings[1]->image) }}" alt="">
-                    </div>
-                    <div class="description">
-                        <p>{{ $topSellings[1]->name }}</p>
-                        <button style="color: var(--green);">
-                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </button>
-                    </div>
+            
+            <div class="selling-card">
+                <img src="{{ asset('storage/' . $topSellings[1]->image) }}" alt="{{ $topSellings[1]->name }}">
+                <div class="card-description">
+                    <h3>{{ $topSellings[1]->name }}</h3>
+                    <button class="shop-now-btn">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
                 </div>
-                <div class="third">
-                    <div class="image">
-                        <img src="{{ asset('storage/' . $topSellings[2]->image) }}" alt="">
-                    </div>
-                    <div class="description">
-                        <p>{{ $topSellings[2]->name }}</p>
-                        <button style="color: var(--green);">
-                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </button>
-                    </div>
+            </div>
+            
+            <div class="selling-card">
+                <img src="{{ asset('storage/' . $topSellings[2]->image) }}" alt="{{ $topSellings[2]->name }}">
+                <div class="card-description">
+                    <h3>{{ $topSellings[2]->name }}</h3>
+                    <button class="shop-now-btn">
+                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- New Arrivals -->
-     <div class="new-arrivals">
+    <section class="new-arrivals">
         <h2>NEW ARRIVALS</h2>
-        <!-- New Arrival Cards -->
         <div class="arrival-cards-container">
-            <div class="new-arrival-card">
-                <div class="card-upper">
-                    <img src="{{ asset('storage/' . $products[count($products) - 1]->image) }}" alt="">
+            @for ($i = 1; $i <= 5; $i++)
+                <div class="new-arrival-card">
+                    <img src="{{ asset('storage/' . $products[count($products) - $i]->image) }}" alt="{{ $products[count($products) - $i]->name }}">
+                    <div class="card-details">
+                        <h3>{{ $products[count($products) - $i]->name }}</h3>
+                        <p class="price">${{ $products[count($products) - $i]->sale_price }}</p>
+                        <button class="shop-now-btn">
+                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        </button>
+                    </div>
                 </div>
-                <div class="card-lower">
-                    <p>{{$products[count($products) - 1]->name}}</p>
-                    <p>$ {{$products[count($products) - 1]->sale_price}}</p>
-                    <button style="color: var(--green);">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
-
-            <div class="new-arrival-card">
-                <div class="card-upper">
-                    <img src="{{ asset('storage/' . $products[count($products) - 2]->image) }}" alt="">
-                </div>
-                <div class="card-lower">
-                    <p>{{$products[count($products) - 2]->name}}</p>
-                    <p>$ {{$products[count($products) - 2]->sale_price}}</p>
-                    <button style="color: var(--green);">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
-
-            <div class="new-arrival-card">
-                <div class="card-upper">
-                    <img src="{{ asset('storage/' . $products[count($products) - 3]->image) }}" alt="">
-                </div>
-                <div class="card-lower">
-                    <p>{{$products[count($products) - 3]->name}}</p>
-                    <p>$ {{$products[count($products) - 3]->sale_price}}</p>
-                    <button style="color: var(--green);">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
-
-            <div class="new-arrival-card">
-                <div class="card-upper">
-                    <img src="{{ asset('storage/' . $products[count($products) - 4]->image) }}" alt="">
-                </div>
-                <div class="card-lower">
-                    <p>{{$products[count($products) - 4]->name}}</p>
-                    <p>$ {{$products[count($products) - 4]->sale_price}}</p>
-                    <button style="color: var(--green);">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
-
-            <div class="new-arrival-card">
-                <div class="card-upper">
-                    <img src="{{ asset('storage/' . $products[count($products) - 5]->image) }}" alt="">
-                </div>
-                <div class="card-lower">
-                    <p>{{$products[count($products) - 5]->name}}</p>
-                    <p>$ {{$products[count($products) - 5]->sale_price}}</p>
-                    <button style="color: var(--green);">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
+            @endfor
         </div>
-     </div>
+    </section>
 @endsection
 
 @push('scripts')
     <script>
-        const slideContainer = document.getElementById('slideContainer');
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        let index = 0;
+        class CarouselManager {
+            constructor() {
+                this.slideContainer = document.getElementById('slideContainer');
+                this.slides = document.querySelectorAll('.slide');
+                this.dots = document.querySelectorAll('.dot');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.currentIndex = 0;
+                this.isAutoPlaying = true;
+                this.autoPlayInterval = null;
+                
+                this.init();
+            }
 
-        function showSlide(i) {
-            if (i < 0) index = slides.length - 1;
-            else if (i >= slides.length) index = 0;
-            else index = i;
+            init() {
+                this.bindEvents();
+                this.startAutoPlay();
+                this.showSlide(0);
+            }
 
-            slideContainer.style.transform = `translateX(${-index * 100}%)`;
+            bindEvents() {
+                this.prevBtn.addEventListener('click', () => {
+                    this.pauseAutoPlay();
+                    this.prevSlide();
+                });
 
-            dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === index);
+                this.nextBtn.addEventListener('click', () => {
+                    this.pauseAutoPlay();
+                    this.nextSlide();
+                });
+
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        this.pauseAutoPlay();
+                        this.showSlide(index);
+                    });
+                });
+
+                // Pause on hover
+                this.slideContainer.addEventListener('mouseenter', () => {
+                    this.pauseAutoPlay();
+                });
+
+                this.slideContainer.addEventListener('mouseleave', () => {
+                    this.startAutoPlay();
+                });
+
+                // Touch/swipe support
+                this.addTouchSupport();
+            }
+
+            showSlide(index) {
+                if (index < 0) {
+                    this.currentIndex = this.slides.length - 1;
+                } else if (index >= this.slides.length) {
+                    this.currentIndex = 0;
+                } else {
+                    this.currentIndex = index;
+                }
+
+                const translateX = -this.currentIndex * 100;
+                this.slideContainer.style.transform = `translateX(${translateX}%)`;
+
+                // Update dots
+                this.dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === this.currentIndex);
+                });
+            }
+
+            nextSlide() {
+                this.showSlide(this.currentIndex + 1);
+            }
+
+            prevSlide() {
+                this.showSlide(this.currentIndex - 1);
+            }
+
+            startAutoPlay() {
+                if (!this.isAutoPlaying) return;
+                
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000);
+            }
+
+            pauseAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+            }
+
+            addTouchSupport() {
+                let startX = 0;
+                let startY = 0;
+                let endX = 0;
+                let endY = 0;
+                const minSwipeDistance = 50;
+
+                this.slideContainer.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                });
+
+                this.slideContainer.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    endY = e.changedTouches[0].clientY;
+
+                    const deltaX = startX - endX;
+                    const deltaY = startY - endY;
+
+                    // Check if horizontal swipe is more significant than vertical
+                    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                        if (deltaX > 0) {
+                            this.nextSlide();
+                        } else {
+                            this.prevSlide();
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CarouselManager();
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
-        }
-
-        function nextSlide() {
-            showSlide(index + 1);
-        }
-
-        function prevSlide() {
-            showSlide(index - 1);
-        }
-
-        setInterval(nextSlide, 5000);
-        showSlide(index);
+        });
     </script>
 @endpush
