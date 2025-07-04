@@ -218,10 +218,21 @@
                             Out of Stock
                         @endif
                     </p>
+
                     <p class="product-category">Category: {{ $product->category->name }}</p>
                     <p class="product-price">Price: ${{ $product->sale_price }}</p>
                     <div class="product-buttons">
-                        <a href="" class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Add To Cart</a>
+                        <button class="add-to-cart add-to-cart-btn"
+                            data-product-id="{{ $product->id }}"
+                            data-product-name="{{ $product->name }}"
+                            data-price="{{ $product->sale_price }}"
+                            data-image="{{ asset('storage/' . $product->image) }}"
+                            data-category="{{ $product->category->name }}"
+                            data-stock="{{ $product->qty }}"
+                        >
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Add To Cart</span>
+                        </button>
                         <a href="{{ route('customer.product_list') }}" class="back"><i class="fa-solid fa-arrow-left"></i> Back</a>
                     </div>
                     <div class="options">
@@ -229,7 +240,6 @@
                         <p><i class="fa-solid fa-arrow-rotate-right"></i> &nbsp;&nbsp; Standard Return Within 28 Days</p>
                     </div>
                 </div>
-                
             </div>
             <div class="lower">
                 <p>Product Description</p>
