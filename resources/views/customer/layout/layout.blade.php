@@ -259,6 +259,12 @@
       background: var(--bg-dark-1);
     }
 
+    @media (max-width: 1024px) {
+      .nav-menu {
+        gap: 0;
+      }
+    }
+
     @media (max-width: 768px) {
       .top-nav {
         padding: 1rem;
@@ -277,7 +283,8 @@
         padding: 0 1rem;
         border-top: 1px solid transparent;
         box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        transition: all 0.4s ease
+        transition: all 0.4s ease;
+        gap: 2rem;
       }
 
       .nav-menu.show {
@@ -310,6 +317,21 @@
       .profile-btn img {
         width: 28px;
         height: 28px;
+      }
+
+      nav.top-nav {
+        padding: 1rem;
+      }
+
+      .nav-left,
+      .nav-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .profile-dropdown {
+        right: -90px;
+        min-width: 180px;
       }
     }
 
@@ -415,6 +437,138 @@
       font-size: 0.9rem;
       color: var(--text-light);
     }
+
+    .cart-container {
+      position: relative;
+    }
+
+    .cart-btn {
+      background: none;
+      border: none;
+      position: relative;
+      color: var(--text-light);
+      font-size: 1.25rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .cart-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    .cart-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bg-dark-3);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      min-width: 250px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .cart-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .cart-item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    .cart-item-details strong {
+      font-size: 16px;
+    }
+
+    .cart-item-details span {
+      color: var(--text-9);
+    }
+
+    .remove-cart-btn {
+      background: transparent;
+      border: none;
+      color: var(--red);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0.25rem 0;
+      align-self: flex-end;
+      transition: 0.3s;
+    }
+
+    .remove-cart-btn:hover {
+      text-decoration: underline;
+    }
+
+    .cart-dropdown {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.qty-btn {
+  background: var(--bg-5);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.qty-btn:hover {
+  background: var(--green);
+}
+
+.qty-btn:disabled {
+  background: #555;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-to-cart {
+  background: var(--green);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.add-to-cart:hover {
+  background-color: #3e8e41;
+}
+
   </style>
 </head>
 <body>
@@ -448,16 +602,33 @@
         <div class="profile-dropdown" id="profileDropdown">
             <a href="#"><i class="fas fa-sign-in-alt"></i>Login</a>
             <a href="#"><i class="fas fa-user-plus"></i>Register</a>
-
+            
+            <a href="#"><i class="fa-solid fa-clock-rotate-left"></i>Purchase History</a>
             <a href="#"><i class="fas fa-user"></i>Profile</a>
             <a href="#"><i class="fas fa-cog"></i>Settings</a>
             <a href="#"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
       </div>
-      <a href="#" class="cart-icon">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="cart-count">2</span>
-      </a>
+
+      <!-- Cart -->
+      <div class="cart-container">
+        <button class="cart-btn" id="cartBtn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+
+        <!-- Cart Dropdown -->
+        <div class="cart-dropdown" id="cartDropdown">
+          <div id="cart-items"></div>
+          <div id="cart-total" style="padding: 0.75rem; font-weight: bold; text-align: right; border-top: 1px solid var(--border-dark);">
+            Total: $0.00
+          </div>
+          <div style="padding: 0.75rem; text-align: center;">
+            <a href="" class="add-to-cart" style="width: 100%; display: inline-block;">Go to Cart</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </nav>
 
@@ -515,47 +686,192 @@
     </div>
   </footer>
 
-  <script>
-    const profileBtn = document.getElementById('profileBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navMenu = document.getElementById('navMenu');
+<script>
+  // ====== DOM Elements ======
+  const profileBtn = document.getElementById('profileBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  const cartBtn = document.getElementById('cartBtn');
+  const cartDropdown = document.getElementById('cartDropdown');
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const navMenu = document.getElementById('navMenu');
+  const cartCountEl = document.getElementById('cart-count');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartTotalEl = document.getElementById('cart-total');
 
-    profileBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      profileDropdown.classList.toggle('show');
-    });
+  // ====== Cart State ======
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    mobileMenuToggle.addEventListener('click', e => {
-      e.stopPropagation();
-      navMenu.classList.toggle('show');
-    });
+  // ====== UI Toggles ======
+  profileBtn?.addEventListener('click', e => {
+  e.stopPropagation();
+  profileDropdown?.classList.toggle('show');
+  });
 
-    document.addEventListener('click', e => {
-      if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-        profileDropdown.classList.remove('show');
+  cartBtn?.addEventListener('click', e => {
+  e.stopPropagation();
+  cartDropdown?.classList.toggle('show');
+  });
+
+  mobileMenuToggle?.addEventListener('click', e => {
+  e.stopPropagation();
+  navMenu?.classList.toggle('show');
+  });
+
+  document.addEventListener('click', e => {
+  if (!profileBtn?.contains(e.target) && !profileDropdown?.contains(e.target)) {
+    profileDropdown?.classList.remove('show');
+  }
+  if (!mobileMenuToggle?.contains(e.target) && !navMenu?.contains(e.target)) {
+    navMenu?.classList.remove('show');
+  }
+  if (!cartBtn?.contains(e.target) && !cartDropdown?.contains(e.target)) {
+    cartDropdown?.classList.remove('show');
+  }
+  });
+
+  window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    navMenu?.classList.remove('show');
+  }
+  });
+
+  // ====== Smooth Scroll for Anchor Links ======
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+  });
+
+  // ====== Cart Logic ======
+
+  function updateCartCount() {
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartCountEl.textContent = totalItems;
+  }
+
+  function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 3000);
+  }
+
+  function updateCartDropdown() {
+  cartItemsContainer.innerHTML = '';
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p style="padding: 1rem;">Your cart is empty.</p>';
+    cartTotalEl.textContent = 'Total: $0.00';
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const itemEl = document.createElement('div');
+    itemEl.className = 'cart-item';
+    total += item.price * item.quantity;
+
+    const disableMinus = item.quantity <= 1 ? 'disabled' : '';
+    const disablePlus = item.quantity >= item.stockQty ? 'disabled' : '';
+
+    itemEl.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div class="cart-item-details">
+        <strong>${item.name}</strong>
+        <span>Category: ${item.category}</span>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
+          <span>${item.quantity}</span>
+          <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
+        </div>
+        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+        <button class="remove-cart-btn" data-index="${index}">Remove</button>
+      </div>
+    `;
+
+    cartItemsContainer.appendChild(itemEl);
+  });
+
+  cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
+  }
+
+  // ====== Cart Event Listeners ======
+
+  document.addEventListener('click', function (e) {
+  // Add to Cart
+  const addBtn = e.target.closest('.add-to-cart-btn');
+  if (addBtn) {
+    const productId = addBtn.dataset.productId;
+    const productName = addBtn.dataset.productName;
+    const price = parseFloat(addBtn.dataset.price);
+    const image = addBtn.dataset.image;
+    const category = addBtn.dataset.category;
+    const stockQty = parseInt(addBtn.dataset.stock);
+
+    const existingItem = cart.find(item => item.id === productId);
+
+    if (existingItem) {
+      if (existingItem.quantity < stockQty) {
+        existingItem.quantity += 1;
+      } else {
+        showNotification("Maximum stock reached.");
+        return;
       }
-      if (!mobileMenuToggle.contains(e.target) && !navMenu.contains(e.target)) {
-        navMenu.classList.remove('show');
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) {
-        navMenu.classList.remove('show');
-      }
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
+    } else {
+      cart.push({
+        id: productId,
+        name: productName,
+        price,
+        quantity: 1,
+        image,
+        category,
+        stockQty
       });
-    });
-  </script>
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+    showNotification(`${productName} added to cart!`);
+  }
+
+  // Quantity Update
+  if (e.target.classList.contains('qty-btn')) {
+    const index = parseInt(e.target.dataset.index);
+    const action = e.target.dataset.action;
+    const item = cart[index];
+
+    if (action === 'increase' && item.quantity < item.stockQty) {
+      item.quantity += 1;
+    } else if (action === 'decrease' && item.quantity > 1) {
+      item.quantity -= 1;
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+  }
+
+  // Remove Item
+  if (e.target.classList.contains('remove-cart-btn')) {
+    const index = e.target.dataset.index;
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+    showNotification("Item removed from cart");
+  }
+  });
+
+  // ====== Init on Load ======
+  updateCartCount();
+  updateCartDropdown();
+</script>
   @stack('scripts')
 </body>
 </html>

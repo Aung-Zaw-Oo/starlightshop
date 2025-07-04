@@ -122,18 +122,10 @@
         gap: 15px;
     }
 
-    .search-status {
-        background-color: var(--green);
-        color: #fff;
-        padding: 8px 16px;
-        font-size: 12px;
-        font-weight: 500;
-        border-radius: 8px;
-    }
-
     .search-bar {
         position: relative;
         flex: 1;
+        width: 100%;
     }
 
     .search-bar input,
@@ -525,7 +517,6 @@
             <div class="header">
                 <div class="search-section">
                     <button class="mobile-menu-btn" id="menuBtn">☰</button>
-                    <div class="search-status">Searching</div>
                     <div class="search-bar">
                         <input type="text" placeholder="Search Product......" id="searchInput">
                     </div>
@@ -577,7 +568,6 @@
     const maxPriceInput = document.getElementById('maxPrice');
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
-
 
     function applyViewMode() {
         const isListView = productsGrid.classList.contains('list-view');
