@@ -6,6 +6,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -37,6 +38,16 @@ Route::prefix('customer')->group(function () {
 
     Route::get('/products_list/search', [ProductListController::class, 'ajaxSearch'])->name('customer.products.ajaxSearch');
 
+    Route::get('/cart', function(){
+        return view('customer.cart');
+    })->name('customer.cart');
+
+    Route::get('/checkout', function(){
+        return view('customer.checkout');
+    })->name('customer.checkout');
+
+    Route::post('payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+    Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 });
 
 
