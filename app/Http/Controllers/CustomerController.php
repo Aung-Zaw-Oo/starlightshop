@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use App\Models\Customer;
+use Stripe\PaymentIntent;
 use App\Models\Credential;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

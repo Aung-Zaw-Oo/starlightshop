@@ -624,7 +624,7 @@
             Total: $0.00
           </div>
           <div style="padding: 0.75rem; text-align: center;">
-            <a href="" class="add-to-cart" style="width: 100%; display: inline-block;">Go to Cart</a>
+            <a href="{{ route('customer.cart') }}" class="add-to-cart" style="width: 100%; display: inline-block;">Go to Cart</a>
           </div>
         </div>
       </div>
