@@ -339,7 +339,7 @@
         existingTotals.innerHTML = `
             <p>Subtotal: ${total.toFixed(2)}</p>
             <p style="font-weight:bold; border-top: 1px solid #fff">Grand Total: ${total.toFixed(2)}</p>
-            <a href="{{ route('customer.checkout') }}" class="add-to-cart" style="width: 100%; display: inline-block; text-align: center;">Checkout</a>
+            <a href="{{ route('payment.checkout') }}" class="add-to-cart" style="width: 100%; display: inline-block; text-align: center;">Checkout</a>
             <a href="{{ route('customer.product_list') }}" class="cancel-btn" style="width: 100%; display: inline-block; text-align: center; background-color: red; border-radius: 4px; padding: 0.5rem 1rem;">Cancel</a>
         `;
     }

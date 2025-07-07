@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    // Checkout
+    public function checkout()
+    {
+        return view('customer.checkout');
+    }
+
      // Stripe Payment
     public function processPayment(Request $request)
     {
@@ -20,7 +26,7 @@ class PaymentController extends Controller
                 'payment_method' => $request->paymentMethodId,
                 'confirmation_method' => 'manual',
                 'confirm' => true,
-                'return_url' => route('payment.success'),  // add your own success route here
+                'return_url' => route('payment.success'),
             ]);
 
 
