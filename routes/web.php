@@ -38,11 +38,12 @@ Route::prefix('customer')->group(function () {
     Route::get('product_list', [ProductListController::class, 'index'])->name('customer.product_list');
     Route::get('product_detail/{id}', [ProductListController::class, 'productDetail'])->name('customer.product_detail');
     Route::get('/products_list/search', [ProductListController::class, 'ajaxSearch'])->name('customer.products.ajaxSearch');
-    Route::get('/cart', function(){
-        return view('customer.cart');
-    })->name('customer.cart');
 
     Route::middleware(CustomerMiddleware::class)->group(function () {
+        Route::get('cart', [OrderController::class, 'cart'])->name('customer.cart');
+
+        Route::get('order/history', [OrderController::class, 'orderHistory'])->name('order.history');
+
         Route::get('payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 
         Route::post('payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');

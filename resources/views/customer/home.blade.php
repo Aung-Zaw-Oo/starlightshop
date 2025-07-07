@@ -54,7 +54,7 @@
             margin: 0;
         }
 
-        .slide-content button {
+        .slide-content a {
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
@@ -67,7 +67,7 @@
             align-self: flex-start;
         }
 
-        .slide-content button:hover {
+        .slide-content a:hover {
             background: rgba(255, 255, 255, 0.3);
             border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-2px);
@@ -449,7 +449,7 @@
             <div class="slide">
                 <div class="slide-content">
                     <h2>{{ $products[count($products) - 3]->description }}</h2>
-                    <button type="button">Shop Collection</button>
+                    <a href="{{ route('customer.product_detail', $products[count($products) - 3]->id) }}">Shop Collection</a>
                 </div>
                 <div class="slide-image">
                     <img src="{{ asset('storage/' . $products[count($products) - 3]->image) }}" alt="{{ $products[count($products) - 3]->name }}">
@@ -458,7 +458,7 @@
             <div class="slide">
                 <div class="slide-content">
                     <h2>{{ $products[count($products) - 2]->description }}</h2>
-                    <button type="button">Shop Collection</button>
+                    <a href="{{ route('customer.product_detail', $products[count($products) - 2]->id) }}">Shop Collection</a>
                 </div>
                 <div class="slide-image">
                     <img src="{{ asset('storage/' . $products[count($products) - 2]->image) }}" alt="{{ $products[count($products) - 2]->name }}">
@@ -467,7 +467,7 @@
             <div class="slide">
                 <div class="slide-content">
                     <h2>{{ $products[count($products) - 1]->description }}</h2>
-                    <button type="button">Shop Collection</button>
+                    <a href="{{ route('customer.product_detail', $products[count($products) - 1]->id) }}">Shop Collection</a>
                 </div>
                 <div class="slide-image">
                     <img src="{{ asset('storage/' . $products[count($products) - 1]->image) }}" alt="{{ $products[count($products) - 1]->name }}">
@@ -511,7 +511,7 @@
                 <div class="card-description">
                     <h3>{{ $topSellings[0]->name }}</h3>
                     <button class="shop-now-btn">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{ route('customer.product_detail', $topSellings[0]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                     </button>
                 </div>
             </div>
@@ -521,7 +521,7 @@
                 <div class="card-description">
                     <h3>{{ $topSellings[1]->name }}</h3>
                     <button class="shop-now-btn">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{ route('customer.product_detail', $topSellings[1]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                     </button>
                 </div>
             </div>
@@ -531,7 +531,7 @@
                 <div class="card-description">
                     <h3>{{ $topSellings[2]->name }}</h3>
                     <button class="shop-now-btn">
-                        <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{ route('customer.product_detail', $topSellings[2]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                     </button>
                 </div>
             </div>
