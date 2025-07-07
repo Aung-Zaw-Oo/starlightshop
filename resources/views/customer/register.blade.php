@@ -219,7 +219,8 @@
 @section('content')
     <div>
         <h2 style="text-align:center;">CUSTOMER REGESTRATION</h2>
-        <form action="" method="post">
+        <form action="{{ route('customer.registerProcess') }}" method="post">
+            @csrf
             <div class="input-box">
                 <label for="name">Customer Name:</label>
                 <input type="text" name="name" id="name" placeholder="Enter Your Name">
@@ -266,8 +267,8 @@
                 <input type="password" name="password" id="password" placeholder="Enter Your Password">
             </div>
             <div class="input-box">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Enter Your Password Again">
+                <label for="password_confirmation">Confirm Password:</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Enter Your Password Again">
             </div>
             <div class="input-box">
                 <label for="image">Customer Image:</label>
@@ -278,7 +279,7 @@
                 </div>
             </div>
             <button type="submit">Register</button>
-            <a href="#">Already have an account? <span style="color: var(--green);">Login Now.</span></a>
+            <a href="{{ route('customer.loginForm') }}">Already have an account? <span style="color: var(--green);">Login Now.</span></a>
         </form>
     </div>
 

@@ -134,6 +134,15 @@
                 margin: 0 auto;
             }
         }
+
+        .alert-error {
+            color: #b00020;
+            background-color: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
     </style>
 @endpush
 
@@ -146,7 +155,21 @@
             </div>
             <div class="right">
                 <h2>Login</h2>
-                <form action="">
+                <form action="{{ route('customer.loginProcess') }}" method="post">
+                    @csrf
+
+                    <!-- Error Message -->
+                    @if (session('error'))
+                        <div class="alert alert-error">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <!-- Redirect URL -->
+                    @if(session('redirectTo'))
+                        <input type="hidden" name="redirectTo" value="{{ session('redirectTo') }}">
+                    @endif
+
                     <div class="email-box">
                         <label for="email">Email:</label>
                         <input type="email" name="email" id="email" required>
@@ -160,7 +183,7 @@
                         <label for="remember-me">Remember me</label>
                     </div>
                     <button type="submit">Login</button>
-                    <a href="#">Don't have an account? <span style="color: var(--green);">Register Now.</span></a>
+                    <a href="{{ route('customer.registerForm') }}">Don't have an account? <span style="color: var(--green);">Register Now.</span></a>
                 </form>
             </div>
         </div>

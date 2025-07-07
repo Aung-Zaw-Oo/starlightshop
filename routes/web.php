@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\CustomerMiddleware;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderDetailController;
@@ -18,36 +19,36 @@ Route::get('/', function () {
 });
 
 Route::prefix('customer')->group(function () {
-    Route::get('layout', function () {
-        return view('customer.layout.layout');
-    });
+    // Get Register Form
+    Route::get('register', [CustomerController::class, 'registerForm'])->name('customer.registerForm');
 
-    Route::get('login', function(){
-        return view('customer.login');
-    })->name('customer.login');
+    // Register Process
+    Route::post('register/process', [CustomerController::class, 'registerProcess'])->name('customer.registerProcess');
 
-    Route::get('register', function(){
-        return view('customer.register');
-    })->name('customer.register');
+    // Get Login Form
+    Route::get('login', [CustomerController::class, 'loginForm'])->name('customer.loginForm');
+
+    // Login Process
+    Route::post('login/process', [CustomerController::class, 'loginProcess'])->name('customer.loginProcess');
+
+    // Logout
+    Route::get('logout', [CustomerController::class, 'logout'])->name('customer.logout');
 
     Route::get('home', [HomeController::class, 'index'])->name('customer.home');
-
     Route::get('product_list', [ProductListController::class, 'index'])->name('customer.product_list');
-
     Route::get('product_detail/{id}', [ProductListController::class, 'productDetail'])->name('customer.product_detail');
-
     Route::get('/products_list/search', [ProductListController::class, 'ajaxSearch'])->name('customer.products.ajaxSearch');
-
     Route::get('/cart', function(){
         return view('customer.cart');
     })->name('customer.cart');
 
-    Route::get('/checkout', function(){
-        return view('customer.checkout');
-    })->name('customer.checkout');
+    Route::middleware(CustomerMiddleware::class)->group(function () {
+        Route::get('payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 
-    Route::post('payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-    Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+        Route::post('payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+
+        Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    });
 });
 
 

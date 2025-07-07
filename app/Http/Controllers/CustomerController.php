@@ -7,6 +7,7 @@ use App\Models\Customer;
 use Stripe\PaymentIntent;
 use App\Models\Credential;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -168,5 +169,102 @@ class CustomerController extends Controller
         } else {
             return view('admin.customer.partials.customer-table', compact('customers'))->render();
         }
+    }
+
+    
+    // Register Form
+    public function registerForm(){
+        return view('customer.register');
+    }
+
+    // Register Process
+    public function registerProcess(Request $request){
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:credentials',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'day' => 'required|integer|min:1|max:31',
+            'month' => 'required|integer|min:1|max:12',
+            'year' => 'required|integer|min:1900|max:9999',
+            'password' => 'required|string|min:6|confirmed',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public');
+            $validated['image'] = $imagePath;
+        }
+
+        $dob = $validated['year'] . '-' . $validated['month'] . '-' . $validated['day'];
+
+        $credential = Credential::create([
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $customer = Customer::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'address' => $validated['address'],
+            'phone' => $validated['phone'],
+            'dob' => $dob,
+            'day' => $validated['day'],
+            'month' => $validated['month'],
+            'year' => $validated['year'],
+            'image' => $imagePath,
+            'credential_id' => $credential->id,
+        ]);
+
+        return redirect()->route('customer.loginForm');
+    }
+
+    // Login Form
+    public function loginForm()
+    {
+        return view('customer.login');
+    }
+
+    // Login Process
+    public function loginProcess(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
+
+    $credential = Credential::where('email', $request->email)->first();
+
+    if ($credential && Hash::check($request->password, $credential->password)) {
+        $customer = $credential->customer;
+
+        if ($customer) {
+            session()->put([
+                'customer_id' => $customer->id,
+                'customer_name' => $customer->name,
+                'customer_email' => $customer->credential->email,
+                'customer_address' => $customer->address,
+                'customer_phone' => $customer->phone,
+                'customer_dob' => $customer->dob,
+                'customer_image' => $customer->image
+            ]);
+
+            $redirectTo = session('redirectTo', route('payment.checkout'));
+
+            return redirect()->to($redirectTo);
+        }
+    }
+
+    return redirect()->route('customer.login')->with('error', 'Invalid credentials');
+}
+
+
+    // Logout
+    public function logout(Request $request)
+    {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('customer.home');
     }
 }

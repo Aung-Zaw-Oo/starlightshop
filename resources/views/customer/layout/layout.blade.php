@@ -574,7 +574,7 @@
 <body>
   <nav class="top-nav">
     <div class="nav-left">
-      <a href="#" class="logo">
+      <a href="{{ route('customer.home') }}" class="logo">
         <img src="{{ asset('icons/logo.svg') }}" alt="" />
         StarLight Store
       </a>
@@ -600,13 +600,13 @@
           <span>Account</span>
         </button>
         <div class="profile-dropdown" id="profileDropdown">
-            <a href="#"><i class="fas fa-sign-in-alt"></i>Login</a>
-            <a href="#"><i class="fas fa-user-plus"></i>Register</a>
+            <a href="{{ route('customer.loginForm') }}"><i class="fas fa-sign-in-alt"></i>Login</a>
+            <a href="{{ route('customer.registerForm') }}"><i class="fas fa-user-plus"></i>Register</a>
             
             <a href="#"><i class="fa-solid fa-clock-rotate-left"></i>Purchase History</a>
             <a href="#"><i class="fas fa-user"></i>Profile</a>
             <a href="#"><i class="fas fa-cog"></i>Settings</a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <a href="{{ route('customer.logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
       </div>
 
