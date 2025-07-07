@@ -593,20 +593,32 @@
     </div>
     <div class="nav-right">
       <div class="profile-container">
+
         <button class="profile-btn" id="profileBtn">
           <a href="#">
             <i class="fa-solid fa-user-gear"></i>
           </a>
-          <span>Account</span>
+          <span>
+            @if (session('customer_name'))
+              {{ session('customer_name') }}
+            @else
+              Account
+            @endif
+          </span>
         </button>
+
         <div class="profile-dropdown" id="profileDropdown">
-            <a href="{{ route('customer.loginForm') }}"><i class="fas fa-sign-in-alt"></i>Login</a>
-            <a href="{{ route('customer.registerForm') }}"><i class="fas fa-user-plus"></i>Register</a>
-            
-            <a href="#"><i class="fa-solid fa-clock-rotate-left"></i>Purchase History</a>
+
+          @if (session('customer_name'))
+            <a href="{{ route('order.history') }}"><i class="fa-solid fa-clock-rotate-left"></i>Purchase History</a>
             <a href="#"><i class="fas fa-user"></i>Profile</a>
             <a href="#"><i class="fas fa-cog"></i>Settings</a>
             <a href="{{ route('customer.logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+          @else
+            <a href="{{ route('customer.loginForm') }}"><i class="fas fa-sign-in-alt"></i>Login</a>
+            <a href="{{ route('customer.registerForm') }}"><i class="fas fa-user-plus"></i>Register</a>
+          @endif
+
         </div>
       </div>
 
@@ -868,9 +880,25 @@
   }
   });
 
+  // Remove Cart Items On Delete
+  @if(session('logged_out'))
+    localStorage.removeItem('cart');
+    sessionStorage.removeItem('cart');
+    console.log('Cart cleared after logout.');
+
+    // Optional: update UI if needed before reload
+    updateCartCount();
+    updateCartDropdown();
+
+    // Reload the page to reflect cleared cart
+    window.location.reload();
+  @endif
+
+
   // ====== Init on Load ======
   updateCartCount();
   updateCartDropdown();
+
 </script>
   @stack('scripts')
 </body>

@@ -163,6 +163,7 @@
         }
 
         .empty-cart {
+            width: 100%;
             text-align: center;
             padding: 2rem;
             color: #aaa;
@@ -315,7 +316,7 @@
                         },
                         body: JSON.stringify({
                             paymentMethodId: paymentMethod.id,
-                            amount: Math.round(total * 100), // Convert to cents
+                            amount: Math.round(total * 100),
                             cart: cart
                         })
                     });

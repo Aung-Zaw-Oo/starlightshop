@@ -170,7 +170,6 @@ class CustomerController extends Controller
             return view('admin.customer.partials.customer-table', compact('customers'))->render();
         }
     }
-
     
     // Register Form
     public function registerForm(){
@@ -228,43 +227,40 @@ class CustomerController extends Controller
 
     // Login Process
     public function loginProcess(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    $credential = Credential::where('email', $request->email)->first();
+        $credential = Credential::where('email', $request->email)->first();
 
-    if ($credential && Hash::check($request->password, $credential->password)) {
-        $customer = $credential->customer;
+        if ($credential && Hash::check($request->password, $credential->password)) {
+            $customer = $credential->customer;
 
-        if ($customer) {
-            session()->put([
-                'customer_id' => $customer->id,
-                'customer_name' => $customer->name,
-                'customer_email' => $customer->credential->email,
-                'customer_address' => $customer->address,
-                'customer_phone' => $customer->phone,
-                'customer_dob' => $customer->dob,
-                'customer_image' => $customer->image
-            ]);
+            if ($customer) {
+                session()->put([
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'customer_email' => $customer->credential->email,
+                    'customer_address' => $customer->address,
+                    'customer_phone' => $customer->phone,
+                    'customer_dob' => $customer->dob,
+                    'customer_image' => $customer->image
+                ]);
 
-            $redirectTo = session('redirectTo', route('payment.checkout'));
-
-            return redirect()->to($redirectTo);
+                return redirect()->to(route('customer.home'))->with('success', 'Login successful');
+            }
         }
+
+        return redirect()->route('customer.loginForm')->with('error', 'Invalid credentials');
     }
-
-    return redirect()->route('customer.login')->with('error', 'Invalid credentials');
-}
-
 
     // Logout
     public function logout(Request $request)
     {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('customer.home');
+        return redirect()->route('customer.home')->with('logged_out', true);
     }
 }

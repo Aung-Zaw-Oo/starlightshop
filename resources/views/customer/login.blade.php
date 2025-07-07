@@ -113,6 +113,15 @@
             text-decoration: underline;
         }
 
+        .alert-error {
+            color: #b00020;
+            background-color: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .login-container {
                 flex-direction: column;
@@ -134,15 +143,6 @@
                 margin: 0 auto;
             }
         }
-
-        .alert-error {
-            color: #b00020;
-            background-color: #ffe6e6;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
     </style>
 @endpush
 
@@ -163,11 +163,6 @@
                         <div class="alert alert-error">
                             {{ session('error') }}
                         </div>
-                    @endif
-
-                    <!-- Redirect URL -->
-                    @if(session('redirectTo'))
-                        <input type="hidden" name="redirectTo" value="{{ session('redirectTo') }}">
                     @endif
 
                     <div class="email-box">
