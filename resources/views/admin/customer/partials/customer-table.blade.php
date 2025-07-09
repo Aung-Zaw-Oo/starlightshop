@@ -16,7 +16,7 @@
         <td>{{ $customer->credential->email ?? 'N/A' }}</td>
         <td>{{ $customer->item_bought }}</td>
         <td>${{ number_format($customer->money_spent, 2) }}</td>
-        <td>{{ optional($customer->credential)->last_login ? \Carbon\Carbon::parse($customer->credential->last_login)->diffForHumans() : 'Never' }}</td>
+        <td>{{ optional($customer->credential)->updated_at ? \Carbon\Carbon::parse($customer->credential->updated_at)->diffForHumans() : 'Never' }}</td>
     </tr>
     @endforeach
 @endif

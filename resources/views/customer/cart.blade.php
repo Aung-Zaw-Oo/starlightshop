@@ -159,6 +159,31 @@
 @endpush
 
 @section('content')
+
+    @php
+        $sessionCart = session('cart', []);
+    @endphp
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-error">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
+    <script>
+        const laravelCart = @json($sessionCart);
+        if (!localStorage.getItem('cart') || localStorage.getItem('cart') === '[]') {
+            localStorage.setItem('cart', JSON.stringify(laravelCart));
+        }
+    </script>
+
     <div class="cart-box">
         <div class="cart-header">
             <h3>ADD TO CART</h3>

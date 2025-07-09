@@ -41,7 +41,6 @@
             font-weight: 600;
             margin-bottom: 1.5rem;
             text-align: center;
-            color: #FCA311;
         }
 
         form {
@@ -103,14 +102,9 @@
         form a {
             margin-top: 1rem;
             font-size: 0.9rem;
-            color: #FCA311;
             text-align: center;
             display: block;
             text-decoration: none;
-        }
-
-        form a:hover {
-            text-decoration: underline;
         }
 
         .alert-error {

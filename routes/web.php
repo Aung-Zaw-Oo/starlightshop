@@ -42,6 +42,8 @@ Route::prefix('customer')->group(function () {
     Route::middleware(CustomerMiddleware::class)->group(function () {
         Route::get('cart', [OrderController::class, 'cart'])->name('customer.cart');
 
+        Route::post('order/reorder/{productId}', [OrderController::class, 'reorder'])->name('order.reorder');
+
         Route::get('order/history', [OrderController::class, 'orderHistory'])->name('order.history');
 
         Route::get('payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');

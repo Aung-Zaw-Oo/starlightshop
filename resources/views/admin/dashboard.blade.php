@@ -351,6 +351,11 @@
                 flex-direction: column;
             }
         }
+
+        rect {
+            fill: none;
+            display: none;
+        }
     </style>
 @endpush
 
@@ -378,7 +383,7 @@
                 <i class="fa-solid fa-chart-line"></i>
             </div>
             <div class="kpi-content">
-                <h3>--K</h3>
+                <h3>{{ number_format($totalIncome, 2) }}</h3>
                 <p>Income</p>
             </div>
         </div>
@@ -388,7 +393,7 @@
                 <i class="fa-solid fa-bag-shopping"></i>
             </div>
             <div class="kpi-content">
-                <h3>---</h3>
+                <h3>{{ $orderCount }}</h3>
                 <p>Order Count</p>
             </div>
         </div>
@@ -398,7 +403,7 @@
                 <i class="fa-solid fa-arrow-trend-up"></i>
             </div>
             <div class="kpi-content">
-                <h3>--K</h3>
+                <h3>{{ number_format($totalProfit, 2) }}</h3>
                 <p>Profit</p>
             </div>
         </div>
@@ -408,7 +413,7 @@
                 <i class="fa-solid fa-file-pen"></i>
             </div>
             <div class="kpi-content">
-                <h3>---</h3>
+                <h3>{{ $signupCount }}</h3>
                 <p>Sign Up</p>
             </div>
         </div>
@@ -429,7 +434,7 @@
             <div class="pie-chart-section">
                 <div>
                     <div class="pie-placeholder">
-                        Pie Chart Area
+                            <div id="piechart"></div>
                     </div>
                 </div>
                 <div class="legend-placeholder">
@@ -468,3 +473,30 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Devices', 'Count'],
+          ['Mobile', {{11}}],
+          ['Desktop', 2],
+          ['Tablet', 2]
+        ]);
+
+        var options = {
+        //   title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+@endpush
