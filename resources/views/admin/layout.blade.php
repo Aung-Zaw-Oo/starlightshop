@@ -91,6 +91,55 @@
 
 <!-- Main Content -->
 <main class="main-content" id="mainContent">
+    <!-- Breadcrumb -->
+    @if (Route::currentRouteName() == 'admin.dashboard')
+        <div class="breadcrumb-bar">
+            <div class="breadcrumb-left">
+                <span><i class="fa-solid fa-house"></i> Home</span>
+                <span> > </span>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="breadcrumb-center"></div>
+            
+            <div class="breadcrumb-right">
+                <div class="mode-toggle">
+                    <button class="mode-btn-active">7</button>
+                    <span>M</span>
+                </div>
+            </div>
+        </div>
+    
+    @elseif (Route::currentRouteName() == 'admin.order')
+    <div class="breadcrumb-bar">
+        <div class="breadcrumb-left">
+            <span><i class="fa-solid fa-house"></i> Home</span>
+            <span> > </span>
+            <span>Orders</span>
+        </div>
+
+        <div class="breadcrumb-center">
+            <div class="date-box">
+                <input type="date" id="from-date" name="from_date" placeholder="From Date" />
+                <i class="fa-regular fa-calendar"></i>
+            </div>
+            <div class="date-box">
+                <input type="date" id="to-date" name="to_date" placeholder="To Date" />
+                <i class="fa-regular fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="breadcrumb-right">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search" placeholder="Search customers..." />
+            </div>
+        </div>
+    </div>
+    
+    @endif    
+
+
     @yield('content')
 </main>
 
