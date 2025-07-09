@@ -315,7 +315,12 @@
                                 <td data-label="Card Number">{{ $order->payment_type }}</td>
                                 <td data-label="Status">{{ ucfirst($order->order_status) }}</td>
                                 <td data-label="Reorder">
-                                    <a href="{{ route('customer.reorder', $order->id) }}" role="button" class="reorder-btn" aria-label="Reorder {{ $detail->product->name ?? 'this item' }}">Reorder</a>
+                                    <form action="{{ route('order.reorder', $detail->product->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="reorder-btn" aria-label="Reorder {{ $detail->product->name ?? 'this item' }}">
+                                            Reorder
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

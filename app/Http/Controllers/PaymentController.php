@@ -28,7 +28,6 @@ class PaymentController extends Controller
         try {
             Stripe::setApiKey(config('services.stripe.secret'));
 
-            // Create Stripe PaymentIntent
             $paymentIntent = PaymentIntent::create([
                 'amount' => $request->amount,
                 'currency' => 'usd',
@@ -38,7 +37,6 @@ class PaymentController extends Controller
                 'return_url' => route('payment.success'),
             ]);
 
-            // Only save order if payment is good to go
             if (in_array($paymentIntent->status, ['requires_action', 'succeeded'])) {
                 $order = Order::create([
                     'customer_id'   => session('customer_id'),

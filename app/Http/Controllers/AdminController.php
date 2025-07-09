@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credential;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -57,8 +60,26 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $details = OrderDetail::with('product', 'order')->get();
+        $orderCount = Order::count();
+        $signupCount = Customer::count();
+
+        $totalIncome = 0;
+        $totalProfit = 0;
+    
+
+        foreach ($details as $detail) {
+            $qty = $detail->qty;
+            $salePrice = $detail->product->sale_price ?? 0;
+            $purchasePrice = $detail->product->purchase_price ?? 0;
+
+            $totalIncome += $qty * $salePrice;
+            $totalProfit += $qty * ($salePrice - $purchasePrice);
+        }
+
+        return view('admin.dashboard', compact('totalIncome', 'orderCount', 'totalProfit', 'signupCount'));
     }
+
 
     public function order()
     {
