@@ -1,13 +1,13 @@
 @extends('admin.layout')
 
-@section('title', 'Customers')
+@section('title', 'Orders')
 
 <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
 @push('styles')
     @push('styles')
     <style>
         /* Shared Styles */
-        img.avatar {
+        /* img.avatar {
             width: 40px;
             height: 40px;
             border-radius: 6px;
@@ -361,7 +361,10 @@
             font-weight: 600;
         }
 
-        .desktop-only { display: block; }
+        .desktop-only { 
+            display: block; 
+        }
+
         .mobile-only, .clickable-card {
             display: none;
         }
@@ -399,107 +402,76 @@
             color: var(--color-8);
         }
 
+        /* Breadcrumb */
+        .order-breadcrumb {
+            height: 50px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: repeat(3, 1fr);
+            margin-bottom: 20px;
+        }
+
+        .order-beadcrumb-right {
+            margin-left: auto;
+        }
+
+        .order-beadcrumb-center {
+            margin: 0 auto;
+        }
+
+        .order-beadcrumb-left {
+            margin-right: auto;
+        }
+
+        .desktop-only {
+            display: block;
+        }
+
+        .mobile-only {
+            display: none;
+        } */
+
         /* Responsive */
-        @media (max-width: 768px) {
-            .desktop-only { display: none; }
-            .mobile-only, .clickable-card {
+        @media screen and (max-width: 1024px) {
+            .desktop-only {
+                display: none;
+            }
+
+            .mobile-only {
                 display: block;
-                margin-bottom: 10px;
-            }
-
-            .breadcrumb-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-            }
-
-            .breadcrumb-center {
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .breadcrumb-center label {
-                font-size: 0.8rem;
-            }
-
-            .breadcrumb-center input[type="date"] {
-                min-width: 120px;
-                font-size: 0.8rem;
-                padding: 6px 8px;
-            }
-
-            .breadcrumb-right .btn,
-            .search-box input {
-                width: 100%;
-            }
-
-            img.avatar {
-                width: 30px;
-                height: 30px;
-            }
-
-            .status {
-                font-size: 0.75rem;
-                padding: 2px 6px;
-            }
-
-            .notification {
-                top: 10px;
-                right: 10px;
-                left: 10px;
-                max-width: none;
-                transform: translateY(-100px);
-            }
-
-            .notification.show {
-                transform: translateY(0);
-            }
-
-            .search-box {
-                max-width: unset;
-            }
-
-            .date-box {
-                max-width: 100%;
-            }
-
-            .date-box input[type="date"] {
-                font-size: 0.85rem;
-                padding: 6px 36px 6px 10px;
             }
         }
 
-        /* Very small screens */
-        @media (max-width: 480px) {
-            .breadcrumb-center {
-                flex-direction: column;
-                gap: 8px;
-                align-items: stretch;
-            }
-
-            .breadcrumb-center > div {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .breadcrumb-center input[type="date"] {
-                flex: 1;
-                min-width: auto;
-            }
+        @media screen and (max-width: 600px) {
+            
         }
     </style>
 @endpush
 @endpush
 
 @section('content')
-<!-- Flash Messages for non-JS fallback -->
-@if(session('info'))
-    <div class="alert alert-info">
-        <i class="fa-solid fa-circle-info"></i>
-        {{ session('info') }}
+
+<!-- Breadcrumb -->
+<div class="order-breadcrumb">
+    <div class="order-beadcrumb-left">
+        <span><i class="fa-solid fa-house"></i> Home</span>
+        <span> > </span>
+        <span>Orders</span>
     </div>
-@endif
+    <div class="order-beadcrumb-center">
+        <label for="from-date">From:</label>
+        <input type="date" name="from-date" id="from-date">
+        <label for="to-date">To:</label>
+        <input type="date" name="to-date" id="to-date">
+    </div>
+    <div class="order-beadcrumb-right">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" id="search" placeholder="search">
+        </div>
+    </div>
+</div>
+
 <!-- Desktop Table -->
 <div class="table-container desktop-only">
     <table>
@@ -563,20 +535,20 @@
                 // Build URL with parameters
                 const params = new URLSearchParams();
                 if (query) params.append('query', query);
-                if (fromDate) params.append('from_date', fromDate);
-                if (toDate) params.append('to_date', toDate);
+                if (fromDate) params.append('from-date', fromDate);
+                if (toDate) params.append('to-date', toDate);
 
                 const url = `{{ route('admin.order.ajaxSearch') }}?${params.toString()}`;
 
                 fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-Device': window.innerWidth <= 768 ? 'mobile' : 'desktop'
+                        'X-Device': window.innerWidth <= 1024 ? 'mobile' : 'desktop'
                     }
                 })
                 .then(response => response.text())
                 .then(html => {
-                    if (window.innerWidth <= 768) {
+                    if (window.innerWidth <= 1024) {
                         document.querySelector('#order-card-list').innerHTML = html;
                     } else {
                         document.querySelector('#order-table-body').innerHTML = html;

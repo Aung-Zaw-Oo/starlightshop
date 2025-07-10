@@ -10,8 +10,8 @@ class OrderDetailController extends Controller
 {
     public function index()
     {
-        $orderdetails = OrderDetail::with(['order.customer', 'product'])->paginate(5);
-        $orders = Order::with(['customer.credential', 'orderDetails.product'])->paginate(5);
+        $orderdetails = OrderDetail::with(['order.customer', 'product'])->paginate(10);
+        $orders = Order::with(['customer.credential', 'orderDetails.product'])->paginate(10);
         return view('admin.order', compact('orderdetails', 'orders'));
     }
 
