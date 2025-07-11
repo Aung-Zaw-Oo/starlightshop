@@ -1,9 +1,7 @@
 @if ($orders->isEmpty())
-    <tr>
-        <td colspan="9" class="text-center" style="padding: 20px; font-style: italic; color: gray;">
-            No order found.
-        </td>
-    </tr>
+    <div class="no-orders-message" style="padding: 20px; font-style: italic; color: gray; text-align: center;">
+        No orders found.
+    </div>
 @else
     <div class="card-container">
         @foreach ($orders as $order)
@@ -13,7 +11,7 @@
                     $productImage = $product->image;
                 @endphp
 
-            <div class="staff-card clickable-card" data-href="{{ route('admin.order.edit', $order->id) }}">
+            <div class="order-card clickable-card" data-href="{{ route('admin.order.edit', $order->id) }}">
                 <div class="card-header">
                     <img class="avatar"
                          src="{{ asset('storage/' . ($productImage ?? 'uploads/default-item.png')) }}"
@@ -34,4 +32,14 @@
             </div>
         @endforeach
     </div>
+@endif
+
+@if ($orders->hasPages())
+    <tr>
+        <td colspan="9">
+            <div class="pagination-wrapper">
+                {{ $orders->appends(request()->all())->onEachSide(1)->links('vendor.pagination.custom') }}
+            </div>
+        </td>
+    </tr>
 @endif

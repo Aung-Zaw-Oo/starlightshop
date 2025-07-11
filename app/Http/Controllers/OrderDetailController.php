@@ -10,47 +10,62 @@ class OrderDetailController extends Controller
 {
     public function index()
     {
-        $orderdetails = OrderDetail::with(['order.customer', 'product'])->paginate(10);
-        $orders = Order::with(['customer.credential', 'orderDetails.product'])->paginate(10);
-        return view('admin.order', compact('orderdetails', 'orders'));
+        $orders = Order::with(['customer.credential', 'orderDetails.product'])
+            ->orderByDesc('created_at')
+            ->paginate(10)
+            ->appends(request()->all());
+
+        // Only load order details for shown orders
+        $orderIds = $orders->pluck('id');
+        $orderdetails = OrderDetail::whereIn('order_id', $orderIds)
+            ->with(['product', 'order.customer.credential'])
+            ->get();
+
+        return view('admin.order', compact('orders', 'orderdetails'));
     }
 
     public function ajaxSearch(Request $request)
     {
         $query = $request->get('query');
-        $fromDate = $request->get('from_date');
-        $toDate = $request->get('to_date');
+        $fromDate = $request->get('from-date');
+        $toDate = $request->get('to-date');
 
-        $orders = Order::with(['customer.credential', 'orderDetails.product', 'orderDetails.order'])
+        $ordersQuery = Order::with(['customer.credential', 'orderDetails.product'])
             ->when($query, function ($q) use ($query) {
-                $q->where(function ($subQuery) use ($query) {
-                    $subQuery->whereHas('customer', function ($customerQuery) use ($query) {
-                        $customerQuery->where('name', 'like', "%$query%");
+                $keywords = preg_split('/\s+/', $query);
+
+                $q->where(function ($subQuery) use ($keywords, $query) {
+                    // Customer name matches all keywords
+                    $subQuery->whereHas('customer', function ($q1) use ($keywords) {
+                        foreach ($keywords as $word) {
+                            $q1->where('name', 'like', "%{$word}%");
+                        }
                     })
-                    ->orWhereHas('orderDetails.product', function ($productQuery) use ($query) {
-                        $productQuery->where('name', 'like', "%$query%");
+                    // Customer email matches query
+                    ->orWhereHas('customer.credential', function ($q2) use ($query) {
+                        $q2->where('email', 'like', "%{$query}%");
                     })
-                    ->orWhereHas('orderDetails.order', function ($orderQuery) use ($query) {
-                        $orderQuery->where('qty', 'like', "%$query%");
+                    // Product name matches all keywords
+                    ->orWhereHas('orderDetails.product', function ($q3) use ($keywords) {
+                        foreach ($keywords as $word) {
+                            $q3->where('name', 'like', "%{$word}%");
+                        }
                     })
-                    ->orWhereHas('orderDetails.order', function ($orderQuery) use ($query) {
-                        $orderQuery->where('order_status', 'like', "%$query%");
-                    })
-                    ->orWhereHas('customer.credential', function ($credentialQuery) use ($query) {
-                        $credentialQuery->where('email', 'like', "%$query%");
-                    });
+                    // Order fields
+                    ->orWhere('order_status', 'like', "%{$query}%")
+                    ->orWhere('qty', 'like', "%{$query}%");
                 });
             })
-            ->when($fromDate, function ($q) use ($fromDate) {
-                $q->whereDate('created_at', '>=', $fromDate);
-            })
-            ->when($toDate, function ($q) use ($toDate) {
-                $q->whereDate('created_at', '<=', $toDate);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->when($fromDate, fn($q) => $q->whereDate('created_at', '>=', $fromDate))
+            ->when($toDate, fn($q) => $q->whereDate('created_at', '<=', $toDate))
+            ->orderByDesc('created_at');
 
-        // Get order details for the paginated orders
+        $orders = $ordersQuery->paginate(10)->appends([
+            'query' => $query,
+            'from-date' => $fromDate,
+            'to-date' => $toDate,
+        ]);
+
         $orderIds = $orders->pluck('id');
         $orderdetails = OrderDetail::whereIn('order_id', $orderIds)
             ->with(['product', 'order.customer.credential'])
@@ -60,8 +75,8 @@ class OrderDetailController extends Controller
 
         if ($device === 'mobile') {
             return view('admin.order.partials.order-cards', compact('orders', 'orderdetails'))->render();
-        } else {
-            return view('admin.order.partials.order-table', compact('orders', 'orderdetails'))->render();
         }
+
+        return view('admin.order.partials.order-table', compact('orders', 'orderdetails'))->render();
     }
 }
