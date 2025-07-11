@@ -1,0 +1,122 @@
+/* Pagination */
+.pagination-wrapper {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    background-color: var(--color-2);
+    color: var(--color-8);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+.pagination li {
+    border: 1px solid var(--primary);
+}
+
+.pagination li:first-of-type {
+    border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.pagination li:last-of-type {
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.page-link:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.pagination .active .page-link {
+    background-color: var(--primary);
+    color: white;
+    cursor: default;
+    pointer-events: none;
+}
+
+.pagination .disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Breadcrumb */
+.order-breadcrumb {
+    height: 50px;
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto auto auto;
+    margin-bottom: 20px;
+}
+
+.order-beadcrumb-left, .order-beadcrumb-center, .order-beadcrumb-right {
+    grid-column: span 1;
+}
+
+.order-beadcrumb-left {
+    margin-right: auto;
+}
+
+.order-beadcrumb-center {
+    text-align: center;
+}
+
+.order-beadcrumb-center input[type="date"] {
+    border: 1px solid var(--bg-dark);
+}
+
+.order-beadcrumb-right {
+    margin-left: auto;
+}
+
+/* Table */
+.desktop-only table {
+    width: 100%;
+}
+
+th, td {
+    text-wrap: wrap;
+}
+
+.avatar {
+    max-width: 50px;
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
+    .order-breadcrumb {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only,
+    .clickable-card {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .order-breadcrumb {
+        grid-template-columns: 1fr;
+    }
+}

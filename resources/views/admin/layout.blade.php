@@ -6,6 +6,8 @@
     <title>@yield('title', 'Dashboard')</title>
     <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/order.css') }}">
     @stack('styles')
 </head>
 <body>
