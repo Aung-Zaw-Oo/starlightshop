@@ -7,19 +7,19 @@
 }
 
 /* Breadcrumb */
-.order-breadcrumb {
+.product-breadcrumb {
     height: 50px;
     display: grid;
     align-items: center;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: 20px;
 }
 
-.order-beadcrumb-left {
+.product-beadcrumb-left {
     margin-right: auto;
 }
 
-.order-beadcrumb-center {
+.product-beadcrumb-center {
     height: 100%;
     display: flex;
     justify-content: center;
@@ -27,15 +27,15 @@
     gap: var(--gap);
 }
 
-.order-beadcrumb-center div,
-.order-beadcrumb-right .search-box {
+.product-beadcrumb-center div,
+.product-beadcrumb-right .search-box {
     border: var(--border);
     padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
     border-radius: var(--radius);
     color: var(--text-grey);
 }
 
-.order-beadcrumb-right {
+.product-beadcrumb-right {
     margin-left: auto;
 }
 
@@ -54,20 +54,14 @@ td {
     border-bottom: var(--border);
 }
 
-.product-image {
-    width: 150px;
-    height: auto;
-    border-radius: var(--radius);
-}
-
-/* Order Card */
+/* Product Card */
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--gap);
 }
 
-.order-card {
+.product-card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -84,7 +78,7 @@ td {
     cursor: pointer;
 }
 
-.order-card .card-header {
+.product-card .card-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -92,7 +86,7 @@ td {
     margin-bottom: var(--margin);
 }
 
-.order-card .card-header .avatar {
+.product-card .card-header .avatar {
     width: 250px;
     height: 250px;
     border-radius: var(--radius);
@@ -101,7 +95,7 @@ td {
     background-color: var(--bg-dark);
 }
 
-.order-card .card-header .name {
+.product-card .card-header .name {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-light);
@@ -109,7 +103,7 @@ td {
     word-break: break-word;
 }
 
-.order-card .card-body {
+.product-card .card-body {
     display: flex;
     flex-direction: column;
     gap: var(--gap);
@@ -117,8 +111,8 @@ td {
     color: var(--text-grey);
 }
 
-.order-card .card-body .info-row,
-.order-card .card-body .status-row {
+.product-card .card-body .info-row,
+.product-card .card-body .status-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -128,31 +122,30 @@ td {
     border-radius: var(--radius);
     font-size: 0.9rem;
 }
-
-.status-pending {
-    color: var(--warning);
-}
-
-.status-delivered {
+.status-active {
     color: var(--success);
 }
 
-.status-cancelled {
+.status-inactive {
     color: var(--danger);
 }
 
 /* Responsive */
 @media screen and (max-width: 1024px) {
-    .order-breadcrumb {
-        grid-template-columns: 1fr;
+    .product-breadcrumb {
+        grid-template-columns: 1fr 1fr;
         height: auto;
         gap: var(--gap);
         width: 100%;
     }
 
-    .order-beadcrumb-left,
-    .order-beadcrumb-center,
-    .order-beadcrumb-right {
+    .product-beadcrumb-left {
+        grid-column: span 2;
+    }
+
+    .product-beadcrumb-left,
+    .product-beadcrumb-center,
+    .product-beadcrumb-right {
         display: flex;
         justify-content: flex-start;
         align-items: center;
@@ -160,7 +153,7 @@ td {
         width: 100%;
     }
 
-    .order-beadcrumb-center {
+    .product-beadcrumb-center {
         justify-content: center;
     }
 
@@ -178,7 +171,6 @@ td {
 
     .mobile-only {
         display: grid;
-        grid-template-columns: 1fr 1fr;
     }
 
     .clickable-card {
@@ -187,13 +179,17 @@ td {
 }
 
 @media screen and (max-width: 768px) {
-    #order-table-body .product-image {
+    #product-table-body .product-image {
         width: 100%;
     }
 }
 
-@media screen and (max-width: 430px) {
-    .order-beadcrumb-center {
-        font-size: 0.8rem;
+@media screen and (max-width: 480px) {
+    .product-breadcrumb {
+        grid-template-columns: 1fr;
+    }
+
+    .product-beadcrumb-left {
+        grid-column: span 1;
     }
 }

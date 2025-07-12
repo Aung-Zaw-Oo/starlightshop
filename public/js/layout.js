@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Sidebar Navbar Toggles
     const menuToggle = document.getElementById("menuToggle");
     const sidebar = document.getElementById("sidebar");
     const mainContent = document.getElementById("mainContent");
@@ -62,4 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
             mainContent.classList.remove("expanded");
         }
     });
+
+    // Clickable Row
+    const handleClickable = () => {
+        document
+            .querySelectorAll(".clickable-row, .clickable-card")
+            .forEach((el) => {
+                el.addEventListener("click", () => {
+                    window.location.href = el.dataset.href;
+                });
+            });
+    };
+
+    handleClickable();
 });

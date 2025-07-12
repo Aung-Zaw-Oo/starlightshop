@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Stripe\Stripe;
 use App\Models\Customer;
-use Stripe\PaymentIntent;
 use App\Models\Credential;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,8 +12,8 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::with(['credential'])->paginate(5);
-        return view('admin.customer', compact('customers'));
+        $customers = Customer::with(['credential'])->paginate(6);
+        return view('admin.customer.customer', compact('customers'));
     }
 
     /**
@@ -86,7 +83,7 @@ class CustomerController extends Controller
 
         $customer = Customer::with(['credential'])->findOrFail($id);
 
-        return view('admin.customer_edit', compact('customer'));
+        return view('admin.customer.customer_edit', compact('customer'));
     }
 
     /**
@@ -142,33 +139,6 @@ class CustomerController extends Controller
         $credential->delete();
 
         return redirect()->route('admin.customer')->with('success', 'Customer deleted successfully.');
-    }
-
-    public function ajaxSearch(Request $request)
-    {
-        $query = $request->get('query');
-
-        if (!empty($query)) {
-            $customers = Customer::where('name', 'like', "%$query%")
-                ->orWhere('phone', 'like', "%$query%")
-                ->orWhereHas('credential', function ($q) use ($query) {
-                    $q->where('email', 'like', "%$query%");
-                })
-                // ->orWhere('item_bought', 'like', "%$query%")
-                // ->orWhere('money_spent', 'like', "%$query%")
-                ->with('credential')
-                ->paginate(5);
-        } else {
-            $customers = Customer::with('credential')->paginate(5);
-        }
-
-        $device = $request->header('X-Device');
-
-        if ($device === 'mobile') {
-            return view('admin.customer.partials.customer-cards', compact('customers'))->render();
-        } else {
-            return view('admin.customer.partials.customer-table', compact('customers'))->render();
-        }
     }
     
     // Register Form
@@ -262,5 +232,32 @@ class CustomerController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('customer.home')->with('logged_out', true);
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        $query = $request->get('query');
+
+        $customers = Customer::where('name', 'like', "%$query%")
+                ->orWhere('phone', 'like', "%$query%")
+                ->orWhereHas('credential', function ($q) use ($query) {
+                    $q->where('email', 'like', "%$query%");
+                })
+                ->orWhereHas('orders', function ($q) use ($query) {
+                    $q->where('total_price', 'like', "%$query%");
+                })
+                ->orWhereHas('orders', function ($q) use ($query) {
+                    $q->where('qty', 'like', "%$query%");
+                })
+                ->with('credential')
+                ->paginate(10);
+
+        $device = $request->header('X-Device');
+
+        if ($device === 'mobile') {
+            return view('admin.customer.partials.customer-cards', compact('customers'))->render();
+        } else {
+            return view('admin.customer.partials.customer-table', compact('customers'))->render();
+        }
     }
 }

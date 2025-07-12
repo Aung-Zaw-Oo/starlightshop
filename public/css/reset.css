@@ -44,7 +44,6 @@ a {
 /* Button reset */
 button,
 input,
-select,
 textarea {
     font-family: inherit;
     font-size: 100%;
@@ -54,6 +53,15 @@ textarea {
     padding: 0;
     margin: 0;
     outline: none;
+}
+
+select {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    appearance: none;
 }
 
 /* Remove focus outline but allow visible on keyboard nav */
@@ -81,29 +89,64 @@ table {
     border-spacing: 0;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-light);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: var(--radius);
+}
+
+/* Hide Calender Default Icon */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Hide number input arrows */
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* Root default variables */
 :root {
     --bg-dark: #303641;
     --bg-light: #353c47;
+    --bg-grey: #898c93;
 
     --text-light: #fff;
+    --text-dark: #000;
+    --text-grey: #ccc;
 
     --primary: #20b1f5;
     --primary-hover: #1da1f2;
     --secondary: #334858;
     --secondary-hover: #3b4e61;
+    --danger: #dc3545;
+    --danger-hover: #c82333;
 
     --success: #28a745;
     --info: #17a2b8;
     --warning: #ffc107;
-    --danger: #dc3545;
 
     --radius: 8px;
     --padding: 16px;
     --margin: 16px;
-    --gap: 10px;
+    --gap: 8px;
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
+    --border: 1px solid #4a5568;
+    --background: #2d3748;
+    --hover: 0 0 10px var(--primary-hover);
 }
 
 /* Set base body */
@@ -121,4 +164,32 @@ body {
 html,
 body {
     height: calc(100% - 70px);
+}
+
+/* Buttons */
+.primary {
+    background-color: var(--primary);
+    color: var(--text-white);
+}
+
+.primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.secondary {
+    background-color: var(--secondary);
+    color: var(--text-white);
+}
+
+.secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+.danger {
+    background-color: var(--danger);
+    color: var(--text-white);
+}
+
+.danger:hover {
+    background-color: var(--danger-hover);
 }

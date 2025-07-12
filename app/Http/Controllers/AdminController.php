@@ -77,7 +77,7 @@ class AdminController extends Controller
             $totalProfit += $qty * ($salePrice - $purchasePrice);
         }
 
-        return view('admin.dashboard', compact('totalIncome', 'orderCount', 'totalProfit', 'signupCount'));
+        return view('admin.dashboard.dashboard', compact('totalIncome', 'orderCount', 'totalProfit', 'signupCount'));
     }
 
 

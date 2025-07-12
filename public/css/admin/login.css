@@ -1,0 +1,125 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--bg-light);
+}
+
+.box {
+    width: 425px;
+    padding: var(--padding);
+    border-radius: var(--radius);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: var(--padding);
+}
+
+.logo img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+form {
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--padding) * 1.5);
+    border-radius: var(--radius);
+    gap: calc(var(--gap) * 2);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    background-color: none;
+    border-radius: var(--radius);
+    transition: all 0.3s ease-in-out;
+    height: 45px;
+}
+
+.input-group:hover {
+    box-shadow: var(--shadow);
+}
+
+.input-group i {
+    border: 1px solid var(--bg-grey);
+    font-size: 1.5rem;
+    padding: calc(var(--padding) / 2) var(--padding);
+    border-radius: var(--radius) 0 0 var(--radius);
+    height: 100%;
+    color: var(--text-grey);
+}
+
+.input-group input {
+    border: 1px solid var(--bg-grey);
+    padding: calc(var(--padding) / 2) var(--padding);
+    width: 100%;
+    height: 100%;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--color-8);
+    background-color: transparent;
+    color: var(--text-grey);
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg-dark) inset !important;
+    box-shadow: 0 0 0 1000px var(--bg-dark) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.forgot {
+    text-align: right;
+    color: var(--text-grey);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.forgot:hover {
+    color: var(--primary);
+}
+
+.btn {
+    border: none;
+    padding: calc(var(--padding) / 1.5) var(--padding);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--color-8);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow);
+}
+
+.alert-error {
+    color: var(--danger);
+    background-color: #fff;
+    padding: calc(var(--padding) / 1.5) var(--padding);
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.field-error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin: 4px 0 8px 0;
+}

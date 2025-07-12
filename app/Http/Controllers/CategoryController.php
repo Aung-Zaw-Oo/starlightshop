@@ -16,8 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(5);
-        return view('admin.category', compact('categories'));
+        $categories = Category::paginate(10);
+        return view('admin.category.category', compact('categories'));
     }
 
     /**
@@ -33,7 +33,7 @@ class CategoryController extends Controller
         }
 
         $category = Category::where('status', 'active')->get();
-        return view('admin.category_create', compact('category'));
+        return view('admin.category.category_create', compact('category'));
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends Controller
             $imagePath = $request->file('image')->store('uploads', 'public');
         }
 
-        // Create category with uploaded image path
+        // Create category with uploaded image path        
         $category = Category::create([
             'name' => $validated['name'],
             'image' => $imagePath,
@@ -82,7 +82,7 @@ class CategoryController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to edit categories.');
         }
 
-        return view('admin.category_edit', compact('category'));
+        return view('admin.category.category_edit', compact('category'));
     }
 
     /**
@@ -143,13 +143,9 @@ class CategoryController extends Controller
     {
         $query = $request->get('query');
 
-        if (!empty($query)) {
-            $categories = Category::where('name', 'like', "%$query%")
-                        ->paginate(5);
-        } else {
-            // If query is empty, return full paginated list
-            $categories = Category::paginate(5);
-        }
+        $categories = Category::where('name', 'like', "%$query%")
+            ->orWhere('status', 'like', "%$query%")
+                        ->paginate(10);
 
         $device = $request->header('X-Device');
 

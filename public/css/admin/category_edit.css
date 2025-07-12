@@ -1,0 +1,106 @@
+.category-edit-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.category-edit-form-wrapper {
+    border-radius: var(--radius);
+    padding: calc(var(--padding) * 2);
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+}
+
+.category-edit-form-row {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    margin-bottom: calc(var(--margin) * 2);
+    align-items: flex-start;
+}
+
+.category-edit-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-section {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    align-items: flex-start;
+    margin-bottom: calc(var(--margin) * 2);
+}
+
+.category-edit-form-wrapper .category-image {
+    width: 150px;
+    height: 150px;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-edit-form-row label {
+    display: block;
+    margin-bottom: var(--margin);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.category-edit-form-group input,
+select {
+    width: 100%;
+    padding: var(--padding);
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
+}
+.category-edit-form-group input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-hover);
+    box-shadow: var(--shadow);
+}
+
+.category-edit-form-group input::placeholder {
+    color: var(--text-grey);
+}
+
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+@media (max-width: 768px) {
+    .file-upload-wrapper {
+        width: 100%;
+    }
+
+    .category-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .category-edit-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .category-edit-form-group {
+        width: 100%;
+    }
+}

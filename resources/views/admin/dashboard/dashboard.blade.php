@@ -8,15 +8,15 @@
     <div class="dashboard-breadcrumb">
         <div class="dashboard-beadcrumb-left">
             <span><i class="fa-solid fa-house"></i> Home</span>
-            <span> > </span>
+            <span>&nbsp;>&nbsp;</span>
             <span>Dashboard</span>
         </div>
         <div class="dashboard-beadcrumb-center">
             <!-- NA -->
         </div>
         <div class="dashboard-beadcrumb-right">
-            <button class="btn primary">7D</button>
-            <button class="btn secondary">M</button>
+            <button class="mode-btn primary">7D</button>
+            <button class="mode-btn secondary">M</button>
         </div>
     </div>
 
@@ -95,101 +95,43 @@
         </div>
 
         <!-- Browser Stats Table -->
-        <table class="card chart-card browser-stats-table">
-            <thead>
-                <tr>
-                    <th>Browser</th>
-                    <th>Visits</th>
-                    <th>%</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <i class="fa-brands fa-chrome"></i>
-                        <span>Chrome</span>
-                    </td>
-                    <td>100</td>
-                    <td>50%</td>
-                </tr>
-                <tr>
-                    <td>
-                        <i class="fa-brands fa-firefox"></i>
-                        <span>Firefox</span>
-                    </td>
-                    <td>50</td>
-                    <td>25%</td>
-                </tr>
-                <tr>
-                    <td>
-                        <i class="fa-brands fa-safari"></i>
-                        <span>Safari</span>
-                    </td>
-                    <td>50</td>
-                    <td>25%</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <!-- Row 2: Line Chart -->
-
-        <!-- Row 2: Pie Chart Section -->
-        <!-- <div class="card chart-card">
-            <div class="pie-chart-section">
-                <div>
-                    <div id="piechart"></div>
-                </div>
-                <div class="legend-placeholder" id="legend-placeholder"></div>
-            </div>
-        </div> -->
-
-        <!-- Row 3: Column Chart -->
-        <!-- <div class="card chart-card income-chart-card">
-            <div class="chart-header">
-                <div class="chart-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
-                <h3 class="chart-title">Income Profit</h3>
-            </div>
-            <div>
-                <div id="columnchart"></div>
-            </div>
-        </div> -->
-
-        <!-- Row 3: Browser Stats Table -->
-        <!-- <div class="card table-card">
-            <div class="table-header">
-                <h3 class="chart-title">Browser Stats</h3>
-            </div>
-            <div class="browser-table-wrapper">
-                <table class="browser-table">
-                    <thead>
-                        <tr>
-                            <th>Browser</th>
-                            <th>Visits</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><i class="fa-brands fa-chrome"></i> &nbsp; Chrome</td>
-                            <td>50</td>
-                            <td>33%</td>
-                        </tr>
-                        <tr>
-                            <td><i class="fa-brands fa-firefox"></i> &nbsp; Firefox</td>
-                            <td>50</td>
-                            <td>33%</td>
-                        </tr>
-                        <tr>
-                            <td><i class="fa-brands fa-safari"></i> &nbsp; Safari</td>
-                            <td>50</td>
-                            <td>33%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="card chart-card">
+            <table class="browser-stats-table">
+                <thead>
+                    <tr>
+                        <th>Browser</th>
+                        <th>Visits</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <i class="fa-brands fa-chrome"></i>
+                            <span>Chrome</span>
+                        </td>
+                        <td>100</td>
+                        <td>50%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="fa-brands fa-firefox"></i>
+                            <span>Firefox</span>
+                        </td>
+                        <td>50</td>
+                        <td>25%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="fa-brands fa-safari"></i>
+                            <span>Safari</span>
+                        </td>
+                        <td>50</td>
+                        <td>25%</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </div> -->
 @endsection
 
 

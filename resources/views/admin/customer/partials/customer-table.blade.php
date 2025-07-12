@@ -9,7 +9,7 @@
     <tr class="clickable-row" data-href="{{ route('admin.customer.edit', $customer->id) }}">
         <td>{{ ($customers->currentPage() - 1) * $customers->perPage() + $loop->iteration }}</td>
         <td>
-                <img class="avatar" src="{{ asset('storage/' . ($customer->image ?? 'uploads/default-avatar.png')) }}" alt="Avatar">
+                <img class="customer-image" src="{{ asset('storage/' . ($customer->image ?? 'uploads/default-avatar.png')) }}" alt="customer-image">
                 <div class="name">{{ $customer->name }}</div>
         </td>
         <td>{{ $customer->phone }}</td>
@@ -19,4 +19,19 @@
         <td>{{ optional($customer->credential)->updated_at ? \Carbon\Carbon::parse($customer->credential->updated_at)->diffForHumans() : 'Never' }}</td>
     </tr>
     @endforeach
+    <tr>
+        <td colspan="9" class="" style="padding: 10px; font-weight: bold; text-align: center;">
+            Showing {{ $customers->count() }} of {{ $customers->total() }} customers.
+        </td>
+    </tr>
+
+    @if ($customers->hasPages())
+        <tr>
+            <td colspan="9" style="text-align:center; padding: 0; margin: 0; border: none">
+                <div class="pagination-wrapper">
+                    {{ $customers->appends(request()->all())->onEachSide(1)->links('vendor.pagination.custom') }}
+                </div>
+            </td>
+        </tr>
+    @endif
 @endif
