@@ -17,7 +17,7 @@
 .nav-left {
     display: flex;
     align-items: center;
-    gap: var(--gap);
+    gap: calc(var(--gap) * 2);
 }
 
 .menu-toggle {
@@ -34,7 +34,6 @@
 .nav-right {
     display: flex;
     align-items: center;
-    gap: var(--gap);
 }
 
 .profile-container {
@@ -147,6 +146,8 @@
     font-size: 1.25rem;
     text-align: center;
     margin-right: 0.5rem;
+    width: 30px;
+    height: auto;
 }
 
 .order-count {
@@ -207,7 +208,7 @@
     max-width: 400px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--gap);
 }
 
 .notification.show {
@@ -266,6 +267,87 @@
 
 .notification-close:hover {
     opacity: 1;
+}
+
+.clickable-row,
+.clickable-card {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickable-row:hover,
+.clickable-card:hover {
+    background-color: var(--background);
+}
+
+.btn {
+    padding: calc(var(--padding) / 1.5) var(--padding);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 100px;
+    border: none;
+    text-align: center;
+}
+
+/* Pagination */
+.pagination-wrapper {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    background-color: var(--color-2);
+    color: var(--color-8);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+.pagination li {
+    border: 1px solid var(--primary);
+}
+
+.pagination li:first-of-type {
+    border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.pagination li:last-of-type {
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.page-link:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.pagination .active .page-link {
+    background-color: var(--primary);
+    color: white;
+    cursor: default;
+    pointer-events: none;
+}
+
+.pagination .disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Responsive */

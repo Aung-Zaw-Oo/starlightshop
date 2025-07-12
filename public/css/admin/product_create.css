@@ -1,0 +1,113 @@
+.product-create-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.product-create-form-wrapper {
+    border-radius: var(--radius);
+    padding: calc(var(--padding) * 2);
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+}
+
+.product-create-form-row {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    margin-bottom: calc(var(--margin) * 2);
+    align-items: flex-start;
+}
+
+.product-create-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-section {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    align-items: flex-start;
+    margin-bottom: calc(var(--margin) * 2);
+}
+
+.product-create-form-wrapper .product-image {
+    width: 150px;
+    height: 150px;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image i {
+    font-size: 3rem;
+    color: var(--text-grey);
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-upload-wrapper {
+    flex: 1;
+}
+
+.product-create-form-row label {
+    display: block;
+    margin-bottom: var(--margin);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.product-create-form-group input,
+select,
+textarea {
+    width: 100%;
+    padding: var(--padding);
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.product-create-form-group input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-hover);
+    box-shadow: var(--shadow);
+}
+
+.product-create-form-group input::placeholder {
+    color: var(--text-grey);
+}
+
+.product-create-form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+@media (max-width: 768px) {
+    .product-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product-create-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .product-create-form-group {
+        width: 100%;
+    }
+}

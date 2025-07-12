@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category')->paginate(10);
-        return view('admin.product', compact('products'));
+        return view('admin.product.product', compact('products'));
     }
 
     public function create()
@@ -23,7 +23,7 @@ class ProductController extends Controller
         }
 
         $categories = Category::where('status', 'active')->get();
-        return view('admin.product_create', compact('categories'));
+        return view('admin.product.product_create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -72,7 +72,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
         $categories = Category::where('status', 'active')->get();
-        return view('admin.product_edit', compact('product', 'categories'));
+        return view('admin..product.product_edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -148,7 +148,7 @@ class ProductController extends Controller
         $device = $request->header('X-Device');
 
         if ($device === 'mobile') {
-            return view('admin.product.partials.product-cards', compact('products'))->render();
+            return view('admin.product.partials.product-card', compact('products'))->render();
         } else {
             return view('admin.product.partials.product-table', compact('products'))->render();
         }
