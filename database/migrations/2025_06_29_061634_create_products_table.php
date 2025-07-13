@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('sale_price', 10, 2);
             $table->decimal('purchase_price', 10, 2);
             $table->integer('qty');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('image')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

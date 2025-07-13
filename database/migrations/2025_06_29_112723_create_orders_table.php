@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamp('order_date')->nullable();
             $table->decimal('total_price', 10, 2);
             $table->integer('qty');
-            $table->enum('order_status', ['pending', 'delivered', 'cancelled'])->default('pending');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('order_status')->default('pending');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

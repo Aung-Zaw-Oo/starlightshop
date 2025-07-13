@@ -3,80 +3,35 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Credential;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Customer::create([
-            'name' => 'Customer One',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 4,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
+        for ($i = 1; $i <= 20; $i++) {
+            $name = fake()->name();
+            $slug = Str::slug($name, '');
+            $email = $slug . $i . '@example.com';
 
-        Customer::create([
-            'name' => 'Customer Two',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 5,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
+            $credential = Credential::create([
+                'email' => $email,
+                'password' => Hash::make('password'),
+            ]);
 
-        Customer::create([
-            'name' => 'Customer Three',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 6,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
-
-        Customer::create([
-            'name' => 'Customer Four',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 7,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
-
-        Customer::create([
-            'name' => 'Customer Five',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 8,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
-
-        Customer::create([
-            'name' => 'Customer Six',
-            'address' => 'Customer St',
-            'phone' => '1234567890',
-            'dob' => '1990-01-01',
-            'credential_id' => 9,
-            'last_login' => null,
-            'image' => null,
-            'status' => 'active'
-        ]);
+            Customer::create([
+                'name' => $name,
+                'address' => fake()->address(),
+                'phone' => '09' . fake()->numberBetween(400000000, 999999999),
+                'dob' => fake()->dateTimeBetween('-60 years', '-20 years')->format('Y-m-d'),
+                'credential_id' => $credential->id,
+                'last_login' => null,
+                'image' => null,
+                'status' => 'active',
+            ]);
+        }
     }
 }
