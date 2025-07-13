@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`{{ route('admin.customer.ajaxSearch') }}?${params.toString()}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-Device': window.innerWidth <= 768 ? 'mobile' : 'desktop'
+                'X-Device': window.innerWidth <= 1024 ? 'mobile' : 'desktop'
             }
         })
         .then(response => response.text())
         .then(html => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1024) {
                 document.querySelector('#customer-card-list').innerHTML = html;
             } else {
                 document.querySelector('#customer-table-body').innerHTML = html;

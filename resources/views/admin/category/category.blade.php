@@ -70,12 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`{{ route('admin.category.ajaxSearch') }}?query=${encodeURIComponent(query)}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-Device': window.innerWidth <= 768 ? 'mobile' : 'desktop'
+                    'X-Device': window.innerWidth <= 1024 ? 'mobile' : 'desktop'
                 }
             })
             .then(response => response.text())
             .then(html => {
-                if (window.innerWidth <= 768) {
+                if (window.innerWidth <= 1024) {
                     document.querySelector('#category-card-list').innerHTML = html;
                 } else {
                     document.querySelector('#category-table-body').innerHTML = html;

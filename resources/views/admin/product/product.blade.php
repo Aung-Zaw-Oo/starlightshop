@@ -68,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`{{ route('admin.product.ajaxSearch') }}?${params.toString()}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-Device': window.innerWidth <= 768 ? 'mobile' : 'desktop'
+                'X-Device': window.innerWidth <= 1024 ? 'mobile' : 'desktop'
             }
         })
         .then(response => response.text())
         .then(html => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1024) {
                 document.querySelector('#product-card-list').innerHTML = html;
             } else {
                 document.querySelector('#product-table-body').innerHTML = html;
@@ -99,7 +99,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
-
 </script>
 @endpush
