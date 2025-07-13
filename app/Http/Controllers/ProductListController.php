@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ProductListController extends Controller
 {
     public function index(){
-        $products = Product::paginate(12);
+        $products = Product::paginate(10);
         $categories = Category::all();
         return view('customer.product_list', compact('products', 'categories'));
     }
@@ -65,7 +65,7 @@ class ProductListController extends Controller
                 $query->orderBy('created_at', 'desc');
         }
 
-        $products = $query->paginate(12)->appends($request->except('page'));
+        $products = $query->paginate(10)->appends($request->except('page'));
         $view = view('customer.product.partials.product_list', compact('products'))->render();
         $pagination = $products->onEachSide(1)->links('vendor.pagination.custom')->render();
 

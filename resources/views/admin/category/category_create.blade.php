@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('admin.layout.layout')
 
 @section('title', 'Add New Category')
 

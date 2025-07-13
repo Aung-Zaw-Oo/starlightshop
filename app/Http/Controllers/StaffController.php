@@ -16,8 +16,8 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staff = Staff::with(['role', 'credential'])->paginate(5);
-        return view('admin.employee', compact('staff'));
+        $staff = Staff::with(['role', 'credential'])->paginate(10);
+        return view('admin.employee.employee', compact('staff'));
     }
 
     /**
@@ -26,11 +26,11 @@ class StaffController extends Controller
     public function create()
     {
         if (session('role') === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to create staffs accounts.');
+            return redirect()->back()->with('error', 'You are not authorized to create employees.');
         }
 
         $roles = Role::where('status', 'active')->get();
-        return view('admin.employee_create', compact('roles'));
+        return view('admin.employee.employee_create', compact('roles'));
     }
 
     /**
@@ -118,7 +118,7 @@ class StaffController extends Controller
             $roles = Role::where('status', 'Active')->get();
         }
 
-        return view('admin.employee_edit', compact('staff', 'roles'));
+        return view('admin.employee.employee_edit', compact('staff', 'roles'));
     }
 
     /**
@@ -213,25 +213,20 @@ class StaffController extends Controller
     {
         $query = $request->get('query');
 
-        if (!empty($query)) {
-            $staff = Staff::where('first_name', 'like', "%$query%")
+        $staff = Staff::where('first_name', 'like', "%$query%")
                         ->orWhere('last_name', 'like', "%$query%")
                         ->orWhereHas('role', function ($q) use ($query) {
                             $q->where('name', 'like', "%$query%");
                         })
                         ->with(['role', 'credential'])
-                        ->paginate(5);
-        } else {
-            // If query is empty, return full paginated list
-            $staff = Staff::with(['role', 'credential'])->paginate(5);
-        }
+                        ->paginate(10);
 
         $device = $request->header('X-Device');
 
         if ($device === 'mobile') {
-            return view('admin.staff.partials.staff-cards', compact('staff'))->render();
+            return view('admin.employee.partials.employee-card', compact('staff'))->render();
         } else {
-            return view('admin.staff.partials.staff-table', compact('staff'))->render();
+            return view('admin.employee.partials.employee-table', compact('staff'))->render();
         }
     }
 }
