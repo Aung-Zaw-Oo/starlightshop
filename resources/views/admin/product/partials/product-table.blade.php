@@ -19,7 +19,7 @@
             <td>{{ $product->qty }}</td>
             <td>
                 <span class="status-{{ strtolower($product->status) }}"> 
-                    @if ($product->qty > 0 && $product->status == 'Active')
+                    @if ($product->qty > 0 && $product->status == 'active')
                         Available
                     @else
                         Out of Stock

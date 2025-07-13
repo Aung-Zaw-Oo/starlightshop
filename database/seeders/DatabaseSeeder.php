@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             CredentialSeeder::class,
             StaffSeeder::class,
-            CategorySeeder::class,
             CustomerSeeder::class,
-            // ProductSeeder::class,
-            // OrderSeeder::class,
-            // OrderDetailSeeder::class
+            CategorySeeder::class,
+            ProductSeeder::class,
+            OrderSeeder::class,
+            OrderDetailSeeder::class
         ]);
     }
 }

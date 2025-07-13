@@ -26,15 +26,9 @@
                     <strong>Qty:</strong> 
                     {{ $product->qty }}
                 </div>
-                <div class="status-row">
+                <div class="info-row">
                     <strong>Status:</strong> 
-                    <span class="status-{{ strtolower($product->status) }}">
-                        @if ($product->qty > 0 && $product->status == 'Active')
-                            Available
-                        @else
-                            Out of Stock
-                        @endif 
-                    </span>
+                    {{ $product->status }}
                 </div>
                 <div class="info-row">
                     <strong>Last Updated:</strong> 
