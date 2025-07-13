@@ -150,7 +150,7 @@ class CategoryController extends Controller
         $device = $request->header('X-Device');
 
         if ($device === 'mobile') {
-            return view('admin.category.partials.category-cards', compact('categories'))->render();
+            return view('admin.category.partials.category-card', compact('categories'))->render();
         } else {
             return view('admin.category.partials.category-table', compact('categories'))->render();
         }

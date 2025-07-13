@@ -1,8 +1,6 @@
-@extends('admin.layout')
+@extends('admin.layout.layout')
 
 @section('title', 'Add New Product')
-
-<link rel="stylesheet" href="{{ asset('css/admin/product_create.css') }}">
 
 @section('content')
 <!-- Breadcrumb -->

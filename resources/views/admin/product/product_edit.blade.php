@@ -1,11 +1,8 @@
-@extends('admin.layout')
+@extends('admin.layout.layout')
 
 @section('title', 'Edit Product')
 
-<link rel="stylesheet" href="{{ asset('css/admin/product_edit.css') }}">
-
 @section('content')
-
 <!-- Breadcrumb -->
 <div class="product-breadcrumb">
     <div class="product-beadcrumb-left">
@@ -130,24 +127,6 @@
         </form>
     </div>
 </div>
-
-<!-- Custom Delete Confirmation Modal -->
-<div id="delete-modal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Confirm Delete</h3>
-            <button type="button" class="modal-close" onclick="hideDeleteModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete this Product Record?</p>
-            <p style="color: #a0aec0; font-size: 14px; margin-top: 12px;">This action cannot be undone and will permanently remove all associated data.</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn modal-btn-cancel" onclick="hideDeleteModal()">Cancel</button>
-            <button type="button" class="btn modal-btn-delete" onclick="confirmDelete()">Delete</button>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -174,42 +153,6 @@
             if (icon) icon.style.display = 'block';
             label.innerHTML = '<span>Choose File</span><span style="margin-left: auto; color: #a0aec0;">No file chosen</span>';
         }
-    }
-
-    // Modal Functions
-    function showDeleteModal() {
-        const modal = document.getElementById('delete-modal');
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    }
-
-    function hideDeleteModal() {
-        const modal = document.getElementById('delete-modal');
-        modal.classList.remove('show');
-        document.body.style.overflow = 'auto'; // Restore scrolling
-    }
-
-    function confirmDelete() {
-        document.getElementById('delete-form').submit();
-    }
-
-    // Close modal when clicking on overlay
-    document.getElementById('delete-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            hideDeleteModal();
-        }
-    });
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            hideDeleteModal();
-        }
-    });
-
-    // Legacy function for backward compatibility
-    function deleteStaff() {
-        showDeleteModal();
     }
 </script>
 @endpush

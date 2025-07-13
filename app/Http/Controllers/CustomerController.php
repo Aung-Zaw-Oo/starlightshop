@@ -12,7 +12,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::with(['credential'])->paginate(6);
+        $customers = Customer::with(['credential'])->paginate(10);
         return view('admin.customer.customer', compact('customers'));
     }
 
@@ -243,19 +243,13 @@ class CustomerController extends Controller
                 ->orWhereHas('credential', function ($q) use ($query) {
                     $q->where('email', 'like', "%$query%");
                 })
-                ->orWhereHas('orders', function ($q) use ($query) {
-                    $q->where('total_price', 'like', "%$query%");
-                })
-                ->orWhereHas('orders', function ($q) use ($query) {
-                    $q->where('qty', 'like', "%$query%");
-                })
                 ->with('credential')
                 ->paginate(10);
 
         $device = $request->header('X-Device');
 
         if ($device === 'mobile') {
-            return view('admin.customer.partials.customer-cards', compact('customers'))->render();
+            return view('admin.customer.partials.customer-card', compact('customers'))->render();
         } else {
             return view('admin.customer.partials.customer-table', compact('customers'))->render();
         }

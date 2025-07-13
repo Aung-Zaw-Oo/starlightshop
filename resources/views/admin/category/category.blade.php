@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('admin.layout.layout')
 
 @section('title', 'Categories')
 
@@ -42,7 +42,7 @@
 
 <!-- Mobile Cards -->
 <div class="mobile-only" id="category-card-list">
-    @include('admin.category.partials.category-cards', ['categories' => $categories])
+    @include('admin.category.partials.category-card', ['categories' => $categories])
 </div>
 @endsection
 

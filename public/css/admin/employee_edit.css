@@ -1,0 +1,156 @@
+/* Breadcrumb */
+.employee-edit-breadcrumb {
+    display: grid;
+    height: 50px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.employee-edit-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.employee-edit-form-wrapper {
+    border-radius: var(--radius);
+    padding: calc(var(--padding) * 2);
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+}
+
+.employee-edit-form-row {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    margin-bottom: calc(var(--margin) * 2);
+    align-items: flex-start;
+}
+
+.employee-edit-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-section {
+    display: flex;
+    gap: calc(var(--gap) * 2);
+    align-items: flex-start;
+    margin-bottom: calc(var(--margin) * 2);
+}
+
+.employee-edit-form-wrapper .employee-image {
+    width: 150px;
+    height: 150px;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.employee-image i {
+    font-size: 3rem;
+    color: var(--text-grey);
+}
+
+.employee-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-upload-wrapper {
+    flex: 1;
+}
+
+.employee-edit-form-row label {
+    display: block;
+    margin-bottom: var(--margin);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.employee-edit-form-group input,
+select,
+textarea {
+    width: 100%;
+    padding: var(--padding);
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.employee-edit-form-group input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-hover);
+    box-shadow: var(--shadow);
+}
+
+.employee-edit-form-group input::placeholder {
+    color: var(--text-grey);
+}
+
+.employee-edit-form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+@media (max-width: 768px) {
+    .file-upload-wrapper {
+        width: 100%;
+    }
+
+    .employee-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .employee-edit-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .employee-edit-form-group {
+        width: 100%;
+    }
+
+    .date-group {
+        flex-direction: row;
+        width: 100%;
+        gap: var(--gap);
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
