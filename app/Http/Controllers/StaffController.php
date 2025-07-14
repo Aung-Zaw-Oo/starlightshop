@@ -213,13 +213,30 @@ class StaffController extends Controller
     {
         $query = $request->get('query');
 
-        $staff = Staff::where('first_name', 'like', "%$query%")
-                        ->orWhere('last_name', 'like', "%$query%")
-                        ->orWhereHas('role', function ($q) use ($query) {
-                            $q->where('name', 'like', "%$query%");
-                        })
-                        ->with(['role', 'credential'])
-                        ->paginate(10);
+        $names = explode(' ', $query);
+
+        $staff = Staff::where(function($q) use ($names, $query) {
+            if (count($names) >= 2) {
+                $first = $names[0];
+                $last = $names[count($names) - 1];
+
+                $q->where(function ($q2) use ($first, $last) {
+                    $q2->where('first_name', 'like', "%$first%")
+                    ->where('last_name', 'like', "%$last%");
+                });
+            } else {
+                $q->where('first_name', 'like', "%$query%")
+                ->orWhere('last_name', 'like', "%$query%");
+            }
+        })
+        ->orWhereHas('role', function ($q) use ($query) {
+            $q->where('name', 'like', "%$query%");
+        })
+        ->orWhereHas('credential', function ($q) use ($query) {
+            $q->where('email', 'like', "%$query%");
+        })
+        ->with(['role', 'credential'])
+        ->paginate(10);
 
         $device = $request->header('X-Device');
 

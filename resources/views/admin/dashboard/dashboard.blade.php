@@ -107,7 +107,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <i class="fa-brands fa-chrome"></i>
+                            <img src="{{ asset('storage/uploads/chrome.png') }}" alt="">
                             <span>Chrome</span>
                         </td>
                         <td>100</td>
@@ -115,7 +115,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <i class="fa-brands fa-firefox"></i>
+                            <img src="{{ asset('storage/uploads/firefox.png') }}" alt="">
                             <span>Firefox</span>
                         </td>
                         <td>50</td>
@@ -123,7 +123,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <i class="fa-brands fa-safari"></i>
+                            <img src="{{ asset('storage/uploads/safari.png') }}" alt="">
                             <span>Safari</span>
                         </td>
                         <td>50</td>
@@ -157,20 +157,14 @@
 
     // Line Chart
     function lineChart() {
+        const orderChartData = @json($ordersPerDay);
+
         lineChartData = new google.visualization.DataTable();
         lineChartData.addColumn('string', 'Day');
         lineChartData.addColumn('number', 'Orders');   // For the line
         lineChartData.addColumn('number', 'Orders');   // For the points
 
-        lineChartData.addRows([
-            ['Mon', 5, 5],
-            ['Tue', 6, 6],
-            ['Wed', 8, 8],
-            ['Thur', 7, 7],
-            ['Fri', 9, 9],
-            ['Sat', 10, 10],
-            ['Sun', 8, 8],
-        ]);
+        lineChartData.addRows(orderChartData);
 
         lineChartOptions = {
             backgroundColor: 'transparent',
@@ -258,21 +252,11 @@
 
     // Column Chart
     function columnChart() {
-        columnChartData = google.visualization.arrayToDataTable([
-            ['Month', 'Income', 'Expenses'],
-            ['Jan', 1100, 450],
-            ['Feb', 1250, 520],
-            ['Mar', 980, 610],
-            ['Apr', 1040, 430],
-            ['May', 890, 390],
-            ['Jun', 1350, 720],
-            ['Jul', 760, 300],
-            ['Aug', 970, 510],
-            ['Sep', 880, 460],
-            ['Oct', 1190, 690],
-            ['Nov', 1070, 540],
-            ['Dec', 930, 400]
-        ]);
+        const monthlyChartData = @json($monthlyChartData);
+
+        const data = [['Month', 'Income', 'Expenses'], ...monthlyChartData];
+
+        const columnChartData = google.visualization.arrayToDataTable(data);
 
         columnChartOptions = {
             backgroundColor: 'transparent',

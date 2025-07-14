@@ -21,14 +21,14 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            RoleSeeder::class,
-            CredentialSeeder::class,
-            StaffSeeder::class,
-            CategorySeeder::class,
-            CustomerSeeder::class,
+            // RoleSeeder::class,
+            // CredentialSeeder::class,
+            // StaffSeeder::class,
+            // CategorySeeder::class,
+            // CustomerSeeder::class,
             // ProductSeeder::class,
-            // OrderSeeder::class,
-            // OrderDetailSeeder::class
+            OrderSeeder::class,
+            OrderDetailSeeder::class
         ]);
     }
 }

@@ -117,6 +117,11 @@
     padding: var(--padding) calc(var(--padding) / 2);
 }
 
+.browser-stats-table img {
+    width: 1rem;
+    display: inline;
+}
+
 /* Button */
 .mode-btn {
     padding: calc(var(--padding) / 3) calc(var(--padding) / 2);
