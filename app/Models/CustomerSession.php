@@ -10,7 +10,7 @@ class CustomerSession extends Model
     use HasFactory;
 
     protected $fillable = [
-        'customer_id',
+        'credential_id',
         'browser',
         'device',
         'visit_count',
@@ -27,5 +27,10 @@ class CustomerSession extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function credential()
+    {
+        return $this->belongsTo(Credential::class);
     }
 }

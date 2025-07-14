@@ -13,7 +13,7 @@
                     {{ $product->name }}
                 </div>
                 <div class="product-price">
-                    {{ $product->sale_price }}
+                    $ {{ number_format($product->sale_price,2) }}
                 </div>
                 <div class="product-category">
                     {{ $product->category->name }}

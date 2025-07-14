@@ -203,11 +203,12 @@
         background-color: var(--color-2);
         border-radius: 8px;
         padding: 15px;
-        display: flex;
-        flex-direction: column;
         transition: 0.2s;
         cursor: pointer;
         gap: 1rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
     }
 
     .product-card:hover {
@@ -219,7 +220,7 @@
         width: 100%;
         height: 180px;
         background-color: #404040;
-        border-radius: 6px;
+        border-radius: var(--radius);
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -231,10 +232,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
+        
     }
     .card-header img {
         width: 75%;
+        border-radius: var(--radius);
     }
 
     .product-card.list-item .product-image {
