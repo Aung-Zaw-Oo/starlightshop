@@ -11,8 +11,8 @@ class OrderSeeder extends Seeder
     {
         for ($i = 1; $i <= 10; $i++) {
             Order::create([
-                'customer_id' => rand(1, 6),
-                'payment_type' => 'cash',
+                'customer_id' => rand(1, 20),
+                'payment_type' => '4242-xxxx-xxxx-xxxx',
                 'order_date' => now(),
                 'total_price' => 0,
                 'qty' => 0,
