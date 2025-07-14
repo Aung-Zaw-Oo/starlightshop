@@ -14,7 +14,7 @@
         <span>Products</span>
         <div>
             <select name="category" id="category" required>
-                <option value="">Select Category</option>
+                <option value="" selected>Select Category</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">
                         {{ $category->name }}
@@ -65,13 +65,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search');
+    const categorySelect = document.getElementById('category');
     let typingTimer;
     const typingDelay = 500;
 
     function sendSearchRequest(page = 1) {
         const query = searchInput.value.trim();
+        const category = categorySelect.value;
+
         const params = new URLSearchParams({
             query: query,
+            category: category,
             page: page
         });
 
@@ -93,10 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Search error:', error));
     }
 
-    // Trigger AJAX when typing
+    // Trigger AJAX on typing in search input
     searchInput.addEventListener('keyup', () => {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => sendSearchRequest(), typingDelay);
+    });
+
+    // Trigger AJAX on category change
+    categorySelect.addEventListener('change', () => {
+        sendSearchRequest();
     });
 
     // Handle pagination clicks

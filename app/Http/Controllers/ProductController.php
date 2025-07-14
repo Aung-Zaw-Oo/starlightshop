@@ -132,17 +132,23 @@ class ProductController extends Controller
     public function ajaxSearch(Request $request)
     {
         $query = $request->get('query');
+        $categoryId = $request->get('category');
 
         $products = Product::with('category')
             ->when($query, function ($q) use ($query) {
-                $q->where('name', 'like', "%$query%")
-                    ->orWhere('sale_price', 'like', "%$query%")
-                    ->orWhere('purchase_price', 'like', "%$query%")
-                    ->orWhere('qty', 'like', "%$query%")
-                    ->orWhere('status', 'like', "%$query%")
-                    ->orWhereHas('category', function ($q2) use ($query) {
-                        $q2->where('name', 'like', "%$query%");
-                    });
+                $q->where(function ($q2) use ($query) {
+                    $q2->where('name', 'like', "%$query%")
+                        ->orWhere('sale_price', 'like', "%$query%")
+                        ->orWhere('purchase_price', 'like', "%$query%")
+                        ->orWhere('qty', 'like', "%$query%")
+                        ->orWhere('status', 'like', "%$query%")
+                        ->orWhereHas('category', function ($q3) use ($query) {
+                            $q3->where('name', 'like', "%$query%");
+                        });
+                });
+            })
+            ->when($categoryId, function ($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
             })
             ->paginate(10);
 
@@ -154,4 +160,5 @@ class ProductController extends Controller
             return view('admin.product.partials.product-table', compact('products'))->render();
         }
     }
+
 }
