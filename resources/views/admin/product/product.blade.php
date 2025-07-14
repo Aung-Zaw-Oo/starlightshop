@@ -12,6 +12,16 @@
         <span><i class="fa-solid fa-house"></i> Home</span>
         <span>&nbsp;>&nbsp;</span>
         <span>Products</span>
+        <div>
+            <select name="category" id="category" required>
+                <option value="">Select Category</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="product-beadcrumb-center">
         <div class="search-box">
