@@ -373,4 +373,15 @@
         margin-left: 0;
         padding: 10px;
     }
+
+    .page-link {
+        min-width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-link {
+        padding: 0 10px;
+    }
 }

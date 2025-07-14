@@ -238,13 +238,33 @@ class CustomerController extends Controller
     {
         $query = $request->get('query');
 
-        $customers = Customer::where('name', 'like', "%$query%")
+        $customers = Customer::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('name', 'like', "%$query%")
                 ->orWhere('phone', 'like', "%$query%")
                 ->orWhereHas('credential', function ($q) use ($query) {
                     $q->where('email', 'like', "%$query%");
                 })
-                ->with('credential')
-                ->paginate(10);
+                // Total amount spent
+                ->orWhereIn('id', function ($sub) use ($query) {
+                    $sub->select('customers.id')
+                        ->from('customers')
+                        ->join('orders', 'customers.id', '=', 'orders.customer_id')
+                        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                        ->groupBy('customers.id')
+                        ->havingRaw('SUM(order_details.price * order_details.qty) LIKE ?', ["%$query%"]);
+                })
+                // Total items bought
+                ->orWhereIn('id', function ($sub) use ($query) {
+                    $sub->select('customers.id')
+                        ->from('customers')
+                        ->join('orders', 'customers.id', '=', 'orders.customer_id')
+                        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                        ->groupBy('customers.id')
+                        ->havingRaw('SUM(order_details.qty) LIKE ?', ["%$query%"]);
+                });
+        })
+        ->with('credential')
+        ->paginate(10);
 
         $device = $request->header('X-Device');
 

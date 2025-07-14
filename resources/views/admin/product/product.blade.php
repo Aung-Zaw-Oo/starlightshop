@@ -14,7 +14,8 @@
         <span>Products</span>
         <div>
             <select name="category" id="category" required>
-                <option value="" selected>Select Category</option>
+                <option value="" selected disabled>Select Category</option>
+                <option value="">All Categories</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">
                         {{ $category->name }}

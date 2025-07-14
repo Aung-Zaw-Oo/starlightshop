@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -67,7 +68,7 @@ class AdminController extends Controller
         $totalIncome = 0;
         $totalProfit = 0;
     
-
+        // Dashboard Cards KPI Data Calculation
         foreach ($details as $detail) {
             $qty = $detail->qty;
             $salePrice = $detail->product->sale_price ?? 0;
@@ -77,7 +78,70 @@ class AdminController extends Controller
             $totalProfit += $qty * ($salePrice - $purchasePrice);
         }
 
-        return view('admin.dashboard.dashboard', compact('totalIncome', 'orderCount', 'totalProfit', 'signupCount'));
+        // Dashboard Order Chart Dynamic Data
+        $ordersThisWeek = Order::selectRaw('DAYNAME(order_date) as day, COUNT(*) as count')
+            ->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->groupBy('day')
+            ->pluck('count', 'day'); // ['Monday' => 30, ...]
+
+        $dayMap = [
+            'Mon' => 'Monday',
+            'Tue' => 'Tuesday',
+            'Wed' => 'Wednesday',
+            'Thu' => 'Thursday',
+            'Fri' => 'Friday',
+            'Sat' => 'Saturday',
+            'Sun' => 'Sunday',
+        ];
+
+        $ordersPerDay = collect($dayMap)->map(function ($full, $short) use ($ordersThisWeek) {
+            $count = $ordersThisWeek[$full] ?? 0;
+            return [$short, $count, $count];
+        })->values();
+
+        $todayName = now()->format('l'); // e.g., 'Monday'
+        $todayOrderCount = $ordersThisWeek[$todayName] ?? 0;
+
+        // Dashboard Profit Chart Dynamic Data
+        $monthlyData = OrderDetail::with('product', 'order')
+            ->whereYear('created_at', now()->year)
+            ->get()
+            ->groupBy(function ($detail) {
+                return Carbon::parse($detail->order->order_date)->format('M'); // Jan, Feb, etc.
+            })
+            ->map(function ($details) {
+                $income = $details->sum(function ($d) {
+                    return $d->qty * ($d->product->sale_price ?? 0);
+                });
+
+                $expense = $details->sum(function ($d) {
+                    return $d->qty * ($d->product->purchase_price ?? 0);
+                });
+
+                return [
+                    'income' => $income,
+                    'expense' => $expense
+                ];
+            });
+
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        $monthlyChartData = collect($months)->map(function ($month) use ($monthlyData) {
+            $income = $monthlyData[$month]['income'] ?? 0;
+            $expense = $monthlyData[$month]['expense'] ?? 0;
+            return [$month, $income, $expense];
+        });
+
+
+        return view('admin.dashboard.dashboard', compact(
+            'totalIncome',
+            'orderCount',
+            'totalProfit',
+            'signupCount',
+            'todayOrderCount',
+            'ordersPerDay',
+            'monthlyChartData'
+        ));
     }
 
 

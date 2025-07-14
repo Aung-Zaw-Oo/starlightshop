@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('device');
             $table->integer('visit_count')->default(1);
             $table->float('percentage')->default(0);
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
