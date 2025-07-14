@@ -110,6 +110,15 @@
     box-shadow: var(--shadow);
 }
 
+.sidebar .menu-item:nth-child(1){
+    margin-top: calc(var(--margin) * 4);
+}
+
+.sidebar .menu-item:nth-child(2),
+.sidebar .menu-item:nth-child(4){
+    margin-top: calc(var(--margin) * 2);
+}
+
 .sidebar.collapsed {
     transform: translateX(-250px);
 }
