@@ -11,7 +11,7 @@
     height: 50px;
     display: grid;
     align-items: center;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: auto 1fr 1fr;
     margin-bottom: 20px;
 }
 
@@ -20,6 +20,11 @@
     display: flex;
     align-items: center;
     gap: var(--gap);
+}
+
+.product-beadcrumb-left select {
+    background-color: var(--bg-light);
+    padding: calc(var(--padding) / 1.35);
 }
 
 .product-beadcrumb-center {
