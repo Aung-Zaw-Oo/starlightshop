@@ -7,6 +7,8 @@ use App\Models\Credential;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Models\CustomerSession;
+use Jenssegers\Agent\Agent;
 
 class CustomerController extends Controller
 {
@@ -212,12 +214,59 @@ class CustomerController extends Controller
                 session()->put([
                     'customer_id' => $customer->id,
                     'customer_name' => $customer->name,
-                    'customer_email' => $customer->credential->email,
+                    'customer_email' => $credential->email,
                     'customer_address' => $customer->address,
                     'customer_phone' => $customer->phone,
                     'customer_dob' => $customer->dob,
                     'customer_image' => $customer->image
                 ]);
+
+                // Use Agent to detect browser and device type
+                $agent = new Agent();
+                $browser = $agent->browser();
+
+                // Detect device type as Mobile / Tablet / Desktop
+                if ($agent->isDesktop()) {
+                    $device = 'Desktop';
+                } elseif ($agent->isTablet()) {
+                    $device = 'Tablet';
+                } elseif ($agent->isMobile()) {
+                    $device = 'Mobile';
+                } else {
+                    $device = 'Other';
+                }
+
+                $existingSession = CustomerSession::where('credential_id', $credential->id)->first();
+
+                if ($existingSession) {
+                    $existingSession->increment('visit_count');
+
+                    $existingSession->update([
+                        'browser' => $browser,
+                        'device' => $device,
+                    ]);
+                } else {
+                    CustomerSession::create([
+                        'credential_id' => $credential->id,
+                        'browser' => $browser,
+                        'device' => $device,
+                        'visit_count' => 1,
+                        'percentage' => 0,
+                        'status' => 'active',
+                    ]);
+                }
+
+                // Recalculate percentage for ALL sessions
+                $totalVisits = CustomerSession::sum('visit_count');
+                $allSessions = CustomerSession::all();
+
+                foreach ($allSessions as $session) {
+                    $percentage = $totalVisits > 0
+                        ? round(($session->visit_count / $totalVisits) * 100, 2)
+                        : 0;
+
+                    $session->update(['percentage' => $percentage]);
+                }
 
                 return redirect()->to(route('customer.home'))->with('success', 'Login successful');
             }
@@ -225,6 +274,7 @@ class CustomerController extends Controller
 
         return redirect()->route('customer.loginForm')->with('error', 'Invalid credentials');
     }
+
 
     // Logout
     public function logout(Request $request)

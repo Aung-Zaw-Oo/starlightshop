@@ -111,7 +111,7 @@
 }
 
 .sidebar .menu-item:nth-child(1){
-    margin-top: calc(var(--margin) * 4);
+    margin-top: calc(var(--margin) * 4.3);
 }
 
 .sidebar .menu-item:nth-child(2),

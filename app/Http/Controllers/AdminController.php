@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Credential;
 use App\Models\Customer;
+use App\Models\CustomerSession;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -64,6 +65,40 @@ class AdminController extends Controller
         $details = OrderDetail::with('product', 'order')->get();
         $orderCount = Order::count();
         $signupCount = Customer::count();
+        $sessions = CustomerSession::get();
+
+        // Device Count
+        $mobileCount = 0;
+        $desktopCount = 0;
+        $tabletCount = 0;
+
+        // Browser Count
+        $chromeCount = 0;
+        $firefoxCount = 0;
+        $safariCount = 0;
+        $otherCount = 0;
+
+        foreach ($sessions as $session) {
+            $device = $session->device;
+            if ($device == 'Mobile') {
+                $mobileCount++;
+            } elseif ($device == 'Desktop') {
+                $desktopCount++;
+            } elseif ($device == 'Tablet') {
+                $tabletCount++;
+            }
+
+            $browser = $session->browser;
+            if ($browser == 'Chrome') {
+                $chromeCount++;
+            } elseif ($browser == 'Firefox') {
+                $firefoxCount++;
+            } elseif ($browser == 'Safari') {
+                $safariCount++;
+            } else {
+                $otherCount++;
+            }
+        }
 
         $totalIncome = 0;
         $totalProfit = 0;
@@ -140,7 +175,14 @@ class AdminController extends Controller
             'signupCount',
             'todayOrderCount',
             'ordersPerDay',
-            'monthlyChartData'
+            'monthlyChartData',
+            'mobileCount',
+            'desktopCount',
+            'tabletCount',
+            'chromeCount',
+            'firefoxCount',
+            'safariCount',
+            'otherCount'
         ));
     }
 

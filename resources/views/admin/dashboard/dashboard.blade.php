@@ -110,24 +110,56 @@
                             <img src="{{ asset('storage/uploads/chrome.png') }}" alt="">
                             <span>Chrome</span>
                         </td>
-                        <td>100</td>
-                        <td>50%</td>
+                        <td>{{ $chromeCount }}</td>
+                        <td>
+                            @php
+                                $totalVisits = $chromeCount + $firefoxCount + $safariCount + $otherCount;
+                                $percentage = ($chromeCount / $totalVisits) * 100;
+                                echo number_format($percentage, 2) . '%';
+                            @endphp
+                        </td>
                     </tr>
                     <tr>
                         <td>
                             <img src="{{ asset('storage/uploads/firefox.png') }}" alt="">
                             <span>Firefox</span>
                         </td>
-                        <td>50</td>
-                        <td>25%</td>
+                        <td>{{ $firefoxCount }}</td>
+                        <td>
+                            @php
+                                $totalVisits = $chromeCount + $firefoxCount + $safariCount + $otherCount;
+                                $percentage = ($firefoxCount / $totalVisits) * 100;
+                                echo number_format($percentage, 2) . '%';
+                            @endphp
+                        </td>
                     </tr>
                     <tr>
                         <td>
                             <img src="{{ asset('storage/uploads/safari.png') }}" alt="">
                             <span>Safari</span>
                         </td>
-                        <td>50</td>
-                        <td>25%</td>
+                        <td>{{ $safariCount }}</td>
+                        <td>
+                            @php
+                                $totalVisits = $chromeCount + $firefoxCount + $safariCount + $otherCount;
+                                $percentage = ($safariCount / $totalVisits) * 100;
+                                echo number_format($percentage, 2) . '%';
+                            @endphp
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{{ asset('storage/uploads/web.png') }}" alt="">
+                            <span>Other</span>
+                        </td>
+                        <td>{{ $otherCount }}</td>
+                        <td>
+                            @php
+                                $totalVisits = $chromeCount + $firefoxCount + $safariCount + $otherCount;
+                                $percentage = ($otherCount / $totalVisits) * 100;
+                                echo number_format($percentage, 2) . '%';
+                            @endphp
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -207,12 +239,15 @@
     }
 
     // Pie Chart
+    const mobileCount = @json($mobileCount);
+    const desktopCount = @json($desktopCount);
+    const tabletCount = @json($tabletCount);
     function pieChart() {
     pieChartData = google.visualization.arrayToDataTable([
         ['Devices', 'Count'],
-        ['Mobile', 11],
-        ['Desktop', 2],
-        ['Tablet', 2]
+        ['Mobile', mobileCount],
+        ['Desktop', desktopCount],
+        ['Tablet', tabletCount]
     ]);
 
     pieChartOptions = {
