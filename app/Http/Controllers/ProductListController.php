@@ -8,11 +8,20 @@ use Illuminate\Http\Request;
 
 class ProductListController extends Controller
 {
-    public function index(){
-        $products = Product::paginate(12);
+    public function index(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        $products = $query->paginate(12)->withQueryString();
         $categories = Category::all();
+
         return view('customer.product_list', compact('products', 'categories'));
     }
+
 
     public function productDetail($id){
         $product = Product::findOrFail($id);

@@ -41,8 +41,9 @@ nav.top-nav {
 }
 
 .nav-menu a:hover {
-    background: var(--primary-hover);
+    background: var(--primary);
     color: var(--text-dark);
+    box-shadow: var(--hover);
 }
 
 .nav-menu a.active {
@@ -81,8 +82,9 @@ nav.top-nav {
 }
 
 .profile-btn:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--primary);
     color: var(--text-dark);
+    box-shadow: var(--hover);
 }
 
 .profile-dropdown {
@@ -118,13 +120,13 @@ nav.top-nav {
 }
 
 .profile-dropdown a:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--primary);
     color: var(--text-dark);
     padding-left: 1.25rem;
 }
 
 .profile-dropdown i {
-    width: 16px;
+    width: 1rem;
     font-size: 0.9rem;
 }
 
@@ -190,21 +192,11 @@ footer {
 .subscribe-container input[type="email"] {
     flex: 1;
     padding: 0.5rem;
-    background-color: var(--bg-3);
-    border: 1px solid var(--border-dark);
-    border-radius: 4px;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--radius);
     color: var(--text-light);
     min-width: 150px;
-}
-
-.subscribe-container button {
-    padding: 0.5rem 1rem;
-    background: var(--green);
-    color: var(--text-light);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap;
 }
 
 .social-icons {
@@ -220,7 +212,7 @@ footer {
 }
 
 .social-icons i:hover {
-    color: var(--btn-primary);
+    color: var(--primary);
 }
 
 .footer-lower {
@@ -241,21 +233,22 @@ footer {
     color: var(--text-light);
     font-size: 1.25rem;
     padding: 0.5rem;
-    border-radius: 50%;
+    border-radius: var(--radius);
     cursor: pointer;
     transition: 0.3s;
 }
 
 .cart-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background-color: var(--background);
     transform: scale(1.1);
+    box-shadow: var(--hover);
 }
 
 .cart-dropdown {
     position: absolute;
     top: 100%;
     right: 0;
-    background: var(--bg-dark-3);
+    background: var(--bg-dark);
     border: 1px solid var(--border-dark);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -327,7 +320,7 @@ footer {
 .qty-btn {
     background: var(--bg-5);
     border: none;
-    color: #fff;
+    color: var(--text-light);
     width: 24px;
     height: 24px;
     border-radius: 4px;
@@ -337,28 +330,13 @@ footer {
 }
 
 .qty-btn:hover {
-    background: var(--green);
+    background-color: var(--primary);
 }
 
 .qty-btn:disabled {
     background: #555;
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-.add-to-cart {
-    background: var(--green);
-    border: none;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.add-to-cart:hover {
-    background-color: #3e8e41;
 }
 
 @media (max-width: 1024px) {

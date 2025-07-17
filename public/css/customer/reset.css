@@ -139,9 +139,7 @@ input:-webkit-autofill {
     --text-grey: #ccc;
 
     --primary: #98fb98ff;
-    --primary-hover: #76d976ff;
     --secondary: #334858;
-    --secondary-hover: #3b4e61;
     --danger: #dc3545;
     --danger-hover: #c82333;
 
@@ -157,7 +155,7 @@ input:-webkit-autofill {
     --transition: all 0.3s ease;
     --border: 1px solid #4a5568;
     --background: #2d3748;
-    --hover: 0 0 10px var(--primary-hover);
+    --hover: 0 0 10px var(--primary);
 }
 
 /* Set base body */
@@ -178,13 +176,26 @@ body {
 }
 
 /* Buttons */
+.btn {
+    padding: calc(var(--padding) / 2) var(--padding);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    transition: var(--transition);
+    width: fit-content;
+}
+
+.btn:hover {
+    background: var(--primary);
+    color: var(--text-dark);
+    box-shadow: var(--hover);
+    transform: translateY(-2px);
+}
+
 .primary {
     background-color: var(--primary);
     color: var(--text-dark);
-}
-
-.primary:hover {
-    background-color: var(--primary-hover);
 }
 
 .secondary {
@@ -192,9 +203,6 @@ body {
     color: var(--text-white);
 }
 
-.secondary:hover {
-    background-color: var(--secondary-hover);
-}
 
 .danger {
     background-color: var(--danger);
