@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/customer/home.css') }}">
 
 @section('content')
+    <!-- Carousel -->
     <div class="carousel-container">
         <div class="carousel">
             <!-- Slides Container -->
@@ -16,8 +17,8 @@
                 @foreach ($latestProducts as $index => $product)
                     <div class="slide">
                         <div class="slide-content">
-                            <h2>{{ $product['name'] }}</h2>
-                            <p>{{ $product['description'] }}</p>
+                            <p class="slide-title">{{ $product['name'] }}</p>
+                            <p class="slide-description">{{ $product['description'] }}</p>
                             <a href="{{ route('customer.product_detail', $product['id']) }}" class="btn primary">Shop Collection</a>
                         </div>
                         <div class="slide-image">
@@ -46,11 +47,11 @@
 
     <!-- Categories -->
     <section class="categories">
-        <h2>CATEGORIES</h2>
+        <p class="section-title">CATEGORIES</p> 
         <div class="category-tags">
             @foreach ($categories as $category)
                 <div class="tag">
-                    <a href="/category/{{ $category->id }}" title="{{ $category->name }}">
+                    <a href="{{ route('customer.product_list', ['category' => $category->id]) }}">
                         <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
                     </a>
                 </div>
@@ -58,60 +59,48 @@
         </div>
     </section>
 
-    <!-- Top Selling -->
-    <!-- <section class="top-selling">
-        <h2>TOP SELLING</h2>
-        <div class="selling-cards">
-            <div class="selling-card featured">
-                <img src="{{ asset('storage/' . $topSellings[0]->image) }}" alt="{{ $topSellings[0]->name }}">
-                <div class="card-description">
-                    <h3>{{ $topSellings[0]->name }}</h3>
-                    <button class="shop-now-btn">
-                        <a href="{{ route('customer.product_detail', $topSellings[0]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
+    <!-- Top Sellings -->
+    <section class="top-selling">
+    <p class="section-title">TOP SELLING</p>
+        <div class="top-selling-cards-container">
+            @foreach ($topSellings as $product)
+                <div class="top-selling-card">
+                    <div class="top-selling-card-image">
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                    </div>
+                    <div class="top-selling-card-description">
+                        <h3>{{ $product->name }}</h3>
+                        <button class="btn primary">
+                            <a href="{{ route('customer.product_detail', $product->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="selling-card">
-                <img src="{{ asset('storage/' . $topSellings[1]->image) }}" alt="{{ $topSellings[1]->name }}">
-                <div class="card-description">
-                    <h3>{{ $topSellings[1]->name }}</h3>
-                    <button class="shop-now-btn">
-                        <a href="{{ route('customer.product_detail', $topSellings[1]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="selling-card">
-                <img src="{{ asset('storage/' . $topSellings[2]->image) }}" alt="{{ $topSellings[2]->name }}">
-                <div class="card-description">
-                    <h3>{{ $topSellings[2]->name }}</h3>
-                    <button class="shop-now-btn">
-                        <a href="{{ route('customer.product_detail', $topSellings[2]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
-                    </button>
-                </div>
-            </div>
+            @endforeach
         </div>
-    </section> -->
+    </section>
 
     <!-- New Arrivals -->
-    <!-- <section class="new-arrivals">
-        <h2>NEW ARRIVALS</h2>
-        <div class="arrival-cards-container">
+    <section class="new-arrivals">
+        <p class="section-title">NEW ARRIVALS</p>
+        <div class="new-arrival-cards-container">
             @for ($i = 1; $i <= 5; $i++)
                 <div class="new-arrival-card">
-                    <img src="{{ asset('storage/' . $products[count($products) - $i]->image) }}" alt="{{ $products[count($products) - $i]->name }}">
-                    <div class="card-details">
-                        <h3>{{ $products[count($products) - $i]->name }}</h3>
-                        <p class="price">${{ $products[count($products) - $i]->sale_price }}</p>
-                        <button class="shop-now-btn">
+                    <div class="new-arrival-card-image">
+                        <img src="{{ asset('storage/' . $products[count($products) - $i]->image) }}" alt="{{ $products[count($products) - $i]->name }}">
+                    </div>
+                    <div class="new-arrival-card-description">
+                        <div>
+                            <h3>{{ $products[count($products) - $i]->name }}</h3>
+                            <p class="price">$ {{ number_format($products[count($products) - $i]->sale_price, 2) }}</p>
+                        </div>
+                        <button class="btn primary">
                             <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                         </button>
                     </div>
                 </div>
             @endfor
         </div>
-    </section> -->
+    </section>
 @endsection
 
 @push('scripts')

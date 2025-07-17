@@ -73,7 +73,7 @@
             Total: $0.00
           </div>
           <div style="padding: 0.75rem; text-align: center;">
-            <a href="{{ route('customer.cart') }}" class="add-to-cart" style="width: 100%; display: inline-block;">Go to Cart</a>
+            <a href="{{ route('customer.cart') }}" class="btn primary" style="width: 100%; display: inline-block;">Go to Cart</a>
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
             <p>Receive updates, hot deals, discounts sent straight in your inbox daily</p>
             <div class="subscribe-container">
                 <input type="email" name="subscribe" id="subscribe" placeholder="Email Address">
-                <button>Subscribe</button>
+                <button class="btn primary">Subscribe</button>
             </div>
             <div class="social-icons">
                 <i class="fa-brands fa-square-facebook"></i>
