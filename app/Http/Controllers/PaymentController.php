@@ -40,7 +40,7 @@ class PaymentController extends Controller
             if (in_array($paymentIntent->status, ['requires_action', 'succeeded'])) {
                 $order = Order::create([
                     'customer_id'   => session('customer_id'),
-                    'payment_type'  => 'stripe',
+                    'payment_type'  => '4242-xxxx-xxxx-xxxx',
                     'order_date'    => now(),
                     'total_price'   => $request->amount / 100,
                     'qty'           => collect($request->cart)->sum('quantity'),

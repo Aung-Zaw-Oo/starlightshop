@@ -116,7 +116,7 @@
                 </div>
                 <div class="right-group">
                     <a href="{{ route('admin.product') }}" class="btn secondary">Cancel</a>
-                    <button type="submit" class="btn primary">Save</button>
+                    <button type="submit" class="btn primary">Update</button>
                 </div>
             </div>
         </form>

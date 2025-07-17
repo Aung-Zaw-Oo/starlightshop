@@ -75,7 +75,7 @@
             <span class="icon"><i class="fa-solid fa-bag-shopping"></i></span>
             <span class="text">Orders</span>
             <span class="order-count">
-                {{ \App\Models\Order::count() }}
+                {{ \App\Models\Order::where('order_status', 'pending')->count() }}
             </span>
         </a>
 

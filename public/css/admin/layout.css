@@ -110,12 +110,12 @@
     box-shadow: var(--shadow);
 }
 
-.sidebar .menu-item:nth-child(1){
+.sidebar .menu-item:nth-child(1) {
     margin-top: calc(var(--margin) * 4.3);
 }
 
 .sidebar .menu-item:nth-child(2),
-.sidebar .menu-item:nth-child(4){
+.sidebar .menu-item:nth-child(4) {
     margin-top: calc(var(--margin) * 2);
 }
 

@@ -127,6 +127,8 @@ input:-webkit-autofill {
 
 /* Root default variables */
 :root {
+    --carosel-bg: #151414;
+
     --bg-black: #000000;
     --bg-dark: #303641;
     --bg-light: #353c47;
@@ -136,8 +138,8 @@ input:-webkit-autofill {
     --text-dark: #000;
     --text-grey: #ccc;
 
-    --primary: #20b1f5;
-    --primary-hover: #1da1f2;
+    --primary: #98fb98ff;
+    --primary-hover: #76d976ff;
     --secondary: #334858;
     --secondary-hover: #3b4e61;
     --danger: #dc3545;
@@ -162,7 +164,7 @@ input:-webkit-autofill {
 body {
     font-family: "Roboto", sans-serif;
     line-height: 1.5;
-    background-color: var(--bg-light);
+    background-color: var(--bg-black);
     color: var(--text-light);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -178,7 +180,7 @@ body {
 /* Buttons */
 .primary {
     background-color: var(--primary);
-    color: var(--text-white);
+    color: var(--text-dark);
 }
 
 .primary:hover {

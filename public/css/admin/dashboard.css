@@ -64,7 +64,7 @@
 }
 
 .kpi-card-right span:first-child {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
@@ -136,9 +136,19 @@
 }
 
 /* Responsive */
+@media screen and (max-width: 1212px) {
+    .kpi-card {
+        grid-column: span 2;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpi-card {
+        grid-column: span 1;
     }
 
     .chart-card {
@@ -151,6 +161,9 @@
 }
 
 @media screen and (max-width: 600px) {
+    .dashboard-breadcrumb {
+        grid-template-columns: auto 1fr;
+    }
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
