@@ -19,6 +19,11 @@ Route::get('/', function () {
 });
 
 Route::prefix('customer')->group(function () {
+    // Layout
+    Route::get('layout', function(){
+        return view('customer.layout.layout');
+    });
+
     // Get Register Form
     Route::get('register', [CustomerController::class, 'registerForm'])->name('customer.registerForm');
 

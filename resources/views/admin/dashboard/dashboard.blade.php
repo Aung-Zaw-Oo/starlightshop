@@ -29,7 +29,11 @@
                 <span>Income</span>
             </div>
             <div class="kpi-card-right">
-                <span>$ {{ number_format($totalIncome, 2) }}</span>
+                @if ($totalIncome >= 100000)
+                    <span>$ {{ number_format($totalIncome / 1000, 2) }}K</span>
+                @else
+                    <span>$ {{ number_format($totalIncome, 2) }}</span>
+                @endif    
             </div>
         </div>
 
@@ -49,7 +53,11 @@
                 <span>Profit</span>
             </div>
             <div class="kpi-card-right">
-                <span>$ {{ number_format($totalProfit, 2) }}</span>
+                @if ($totalProfit >= 100000)
+                    <span>$ {{ number_format($totalProfit / 1000, 2) }}K</span>
+                @else
+                    <span>$ {{ number_format($totalProfit, 2) }}</span>
+                @endif
             </div>
         </div>
 
