@@ -124,7 +124,6 @@ input:-webkit-autofill {
     -webkit-text-fill-color: var(--text-light) !important;
 }
 
-
 /* Root default variables */
 :root {
     --carosel-bg: #151414;
@@ -184,6 +183,7 @@ body {
     backdrop-filter: blur(8px);
     transition: var(--transition);
     width: fit-content;
+    text-align: center;
 }
 
 .btn:hover {
@@ -203,7 +203,6 @@ body {
     color: var(--text-white);
 }
 
-
 .danger {
     background-color: var(--danger);
     color: var(--text-white);
@@ -211,4 +210,22 @@ body {
 
 .danger:hover {
     background-color: var(--danger-hover);
+}
+
+.detail-btn {
+    text-align: start;
+}
+
+.detail-btn a {
+    color: var(--primary);
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.detail-btn a:hover {
+    color: var(--success);
+    transform: translateX(5px);
 }

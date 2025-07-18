@@ -10,7 +10,7 @@
             </div>
             <div class="card-body">
                 <div class="product-title">
-                    {{ $product->name }}
+                    {{ \Illuminate\Support\Str::limit($product->name,30) }}
                 </div>
                 <div class="product-price">
                     $ {{ number_format($product->sale_price,2) }}
