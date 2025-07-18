@@ -70,7 +70,7 @@
                     </div>
                     <div class="top-selling-card-description">
                         <h3>{{ $product->name }}</h3>
-                        <button class="btn primary">
+                        <button class="detail-btn">
                             <a href="{{ route('customer.product_detail', $product->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                         </button>
                     </div>
@@ -90,11 +90,13 @@
                     </div>
                     <div class="new-arrival-card-description">
                         <div>
-                            <h3>{{ $products[count($products) - $i]->name }}</h3>
+                            <h3>
+                                {{ \Illuminate\Support\Str::limit($products[count($products) - $i]->name,30) }}
+                            </h3>
                             <p class="price">$ {{ number_format($products[count($products) - $i]->sale_price, 2) }}</p>
                         </div>
-                        <button class="btn primary">
-                            <a href="#">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <button class="detail-btn">
+                            <a href="{{ route('customer.product_detail', $products[count($products) - $i]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                         </button>
                     </div>
                 </div>

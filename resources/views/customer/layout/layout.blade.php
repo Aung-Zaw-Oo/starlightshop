@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="{{ asset('css/customer/reset.css') }}"/>
   <link rel="stylesheet" href="{{ asset('css/customer/layout.css') }}">
+  @stack('styles')
 </head>
 <body>
   <nav class="top-nav">
@@ -231,7 +232,9 @@
     itemEl.innerHTML = `
       <img src="${item.image}" alt="${item.name}">
       <div class="cart-item-details">
-        <strong>${item.name}</strong>
+        <strong>
+          ${item.name}
+        </strong>
         <span>Category: ${item.category}</span>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
           <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
