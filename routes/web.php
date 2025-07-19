@@ -51,6 +51,8 @@ Route::prefix('customer')->group(function () {
 
         Route::get('order/history', [OrderController::class, 'orderHistory'])->name('order.history');
 
+        Route::patch('/order/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
+
         Route::get('payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 
         Route::post('payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');

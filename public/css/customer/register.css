@@ -1,0 +1,206 @@
+.main-content > div {
+    padding: calc(var(--padding) * 2) var(--padding);
+}
+
+.main-content > div h2 {
+    text-align: center;
+    margin-bottom: var(--margin);
+}
+
+.form-container {
+    padding-top: calc(var(--padding) * 2) var(--padding);
+}
+
+form {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: calc(var(--padding) * 4) calc(var(--padding) * 8);
+    background-color: var(--bg-dark);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--color-8);
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: calc(var(--margin) * 2);
+    gap: calc(var(--gap) * 2);
+}
+
+.input-box label {
+    width: 180px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.input-box:nth-child(4) {
+    align-items: flex-start;
+}
+
+.input-box input[type="text"],
+.input-box input[type="email"],
+.input-box input[type="tel"],
+.input-box input[type="password"],
+.input-box input[type="number"],
+.input-box input[type="file"],
+.input-box textarea {
+    flex: 1;
+    border: var(--border);
+    padding: calc(var(--padding) * 0.75) calc(var(--padding) * 1);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.input-box textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.input-box input:focus,
+.input-box textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.dob-dmy {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.dob-dmy input {
+    width: 100%;
+}
+
+.dob-dmy input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+form a {
+    display: block;
+    text-align: center;
+    margin-top: 1.2rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: var(--text-grey);
+}
+
+form a span {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.dob-dmy select {
+    width: 100%;
+    padding: 0.65rem;
+    border: var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    appearance: none;
+}
+
+.dob-dmy select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Custom File Input */
+.custom-file-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.custom-file-wrapper input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.custom-file-label {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--bg-light);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+#file-chosen {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-grey);
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1.5rem;
+}
+
+.button-group button {
+    padding: calc(var(--padding) * 0.5) calc(var(--padding) * 2.5);
+}
+
+@media (max-width: 768px) {
+    .input-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-box label {
+        width: 100%;
+    }
+
+    .input-box input[type="text"],
+    .input-box input[type="email"],
+    .input-box input[type="tel"],
+    .input-box input[type="password"],
+    .input-box input[type="number"],
+    .input-box input[type="file"],
+    .input-box textarea {
+        width: 100%;
+    }
+
+    form {
+        padding: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .dob-dmy {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .button-group {
+        flex-direction: column;
+        gap: var(--gap);
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+}

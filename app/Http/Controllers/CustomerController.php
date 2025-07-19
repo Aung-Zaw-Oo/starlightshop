@@ -199,81 +199,90 @@ class CustomerController extends Controller
 
     // Login Process
     public function loginProcess(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+{
+    // Validate the incoming request data
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
 
-        $credential = Credential::where('email', $request->email)->first();
+    // Find the credential record by email
+    $credential = Credential::where('email', $validated['email'])->first();
 
-        if ($credential && Hash::check($request->password, $credential->password)) {
-            $customer = $credential->customer;
+    // Check if credential exists and the password matches the hashed password in DB
+    if ($credential && Hash::check($validated['password'], $credential->password)) {
+        // Get the associated customer model
+        $customer = $credential->customer;
 
-            if ($customer) {
-                session()->put([
-                    'customer_id' => $customer->id,
-                    'customer_name' => $customer->name,
-                    'customer_email' => $credential->email,
-                    'customer_address' => $customer->address,
-                    'customer_phone' => $customer->phone,
-                    'customer_dob' => $customer->dob,
-                    'customer_image' => $customer->image
-                ]);
+        if ($customer) {
+            // Store relevant customer info in session
+            session()->put([
+                'customer_id' => $customer->id,
+                'customer_name' => $customer->name,
+                'customer_email' => $credential->email,
+                'customer_address' => $customer->address,
+                'customer_phone' => $customer->phone,
+                'customer_dob' => $customer->dob,
+                'customer_image' => $customer->image
+            ]);
 
-                // Use Agent to detect browser and device type
-                $agent = new Agent();
-                $browser = $agent->browser();
+            // Detect browser and device info using Agent package
+            $agent = new Agent();
+            $browser = $agent->browser();
 
-                // Detect device type as Mobile / Tablet / Desktop
-                if ($agent->isDesktop()) {
-                    $device = 'Desktop';
-                } elseif ($agent->isTablet()) {
-                    $device = 'Tablet';
-                } elseif ($agent->isMobile()) {
-                    $device = 'Mobile';
-                } else {
-                    $device = 'Other';
-                }
-
-                $existingSession = CustomerSession::where('credential_id', $credential->id)->first();
-
-                if ($existingSession) {
-                    $existingSession->increment('visit_count');
-
-                    $existingSession->update([
-                        'browser' => $browser,
-                        'device' => $device,
-                    ]);
-                } else {
-                    CustomerSession::create([
-                        'credential_id' => $credential->id,
-                        'browser' => $browser,
-                        'device' => $device,
-                        'visit_count' => 1,
-                        'percentage' => 0,
-                        'status' => 'active',
-                    ]);
-                }
-
-                // Recalculate percentage for ALL sessions
-                $totalVisits = CustomerSession::sum('visit_count');
-                $allSessions = CustomerSession::all();
-
-                foreach ($allSessions as $session) {
-                    $percentage = $totalVisits > 0
-                        ? round(($session->visit_count / $totalVisits) * 100, 2)
-                        : 0;
-
-                    $session->update(['percentage' => $percentage]);
-                }
-
-                return redirect()->to(route('customer.home'))->with('success', 'Login successful');
+            if ($agent->isDesktop()) {
+                $device = 'Desktop';
+            } elseif ($agent->isTablet()) {
+                $device = 'Tablet';
+            } elseif ($agent->isMobile()) {
+                $device = 'Mobile';
+            } else {
+                $device = 'Other';
             }
-        }
 
-        return redirect()->route('customer.loginForm')->with('error', 'Invalid credentials');
+            // Check if a CustomerSession already exists for this credential
+            $existingSession = CustomerSession::where('credential_id', $credential->id)->first();
+
+            if ($existingSession) {
+                // Increment visit count and update browser/device info
+                $existingSession->increment('visit_count');
+                $existingSession->update([
+                    'browser' => $browser,
+                    'device' => $device,
+                ]);
+            } else {
+                // Create a new session record if none exists
+                CustomerSession::create([
+                    'credential_id' => $credential->id,
+                    'browser' => $browser,
+                    'device' => $device,
+                    'visit_count' => 1,
+                    'percentage' => 0,
+                    'status' => 'active',
+                ]);
+            }
+
+            // Recalculate the visit percentage for all sessions
+            $totalVisits = CustomerSession::sum('visit_count');
+            $allSessions = CustomerSession::all();
+
+            foreach ($allSessions as $session) {
+                $percentage = $totalVisits > 0
+                    ? round(($session->visit_count / $totalVisits) * 100, 2)
+                    : 0;
+
+                $session->update(['percentage' => $percentage]);
+            }
+
+            // Redirect to home with success message after login
+            return redirect()->to(route('customer.home'))->with('success', 'Login successful');
+        }
     }
+
+    // Redirect back to login form with generic error if credentials invalid
+    return redirect()->route('customer.loginForm')->with('error', 'Invalid credentials');
+}
+
 
 
     // Logout

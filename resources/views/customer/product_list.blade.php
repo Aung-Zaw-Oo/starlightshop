@@ -163,8 +163,6 @@
             page
         });
 
-        document.getElementById('ajaxProductContainer').innerHTML = '<p>Loading...</p>';
-
         fetch(`{{ route('customer.products.ajaxSearch') }}?${params.toString()}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -214,5 +212,6 @@
     sortSelect.addEventListener('change', filterProducts);
 
     attachPaginationLinks();
+    handleClickable();
 </script>
 @endpush

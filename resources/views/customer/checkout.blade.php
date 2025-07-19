@@ -2,205 +2,12 @@
 
 @section('title', 'Checkout')
 
-<link rel="stylesheet" href="{{ asset('css/reset.css') }}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-
-@push('styles')
-    <style>
-        /* ========== Container ========== */
-        .payment-box {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            color: #fff;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .payment-box h3 {
-            width: 100%;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: #FCA311;
-        }
-
-        /* ========== Left Info Panel ========== */
-        .payment-left {
-            flex: 1;
-            min-width: 280px;
-            background-color: var(--green);
-            border-radius: 8px;
-            color: #000;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .payment-left div {
-            margin-bottom: 1rem;
-            border-bottom: 5px solid #fff;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .payment-left p {
-            margin: 0;
-            font-size: 1rem;
-        }
-
-        .payment-left span {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 0.3rem;
-            display: inline-block;
-        }
-
-        /* ========== Right Stripe Panel ========== */
-        .payment-right {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        /* Stripe form */
-        #payment-form {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 300px;
-        }
-
-        /* Stripe card input */
-        #card-element {
-            background: #2a2a2a;
-            padding: 1rem;
-            border-radius: 8px;
-            min-height: 45px;
-            color: #fff;
-            border: 2px solid #333;
-            transition: border-color 0.3s ease;
-        }
-
-        #card-element:focus-within {
-            border-color: #4CAF50;
-        }
-
-        .StripeElement {
-            font-size: 16px;
-            color: #fff;
-            background: transparent;
-            border: none;
-            outline: none;
-        }
-
-        /* ========== Buttons ========== */
-        .payment-btns {
-            display: flex;
-            flex-direction: column;
-            margin-top: auto;
-        }
-
-        .checkout-btn {
-            background: linear-gradient(135deg, #4CAF50, #388e3c);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .checkout-btn:hover:not(:disabled) {
-            background: linear-gradient(135deg, #43a047, #2e7d32);
-        }
-
-        .checkout-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .cancel-btn {
-            display: block;
-            text-align: center;
-            padding: 0.7rem 0;
-            border-radius: 6px;
-            background: #444;
-            color: #eee;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .cancel-btn:hover {
-            background: #666;
-            color: #fff;
-        }
-
-        /* ========== Icons and Errors ========== */
-        .payment-icons {
-            margin-bottom: 1rem;
-            font-size: 2rem;
-            text-align: end;
-        }
-
-        #card-errors {
-            font-size: 0.9rem;
-            color: #ff4444;
-            margin-top: 0.5rem;
-            min-height: 1.2rem;
-        }
-
-        .loading {
-            opacity: 0.6;
-        }
-
-        .empty-cart {
-            width: 100%;
-            text-align: center;
-            padding: 2rem;
-            color: #aaa;
-        }
-
-        .empty-cart a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-
-        .empty-cart a:hover {
-            text-decoration: underline;
-        }
-
-        /* ========== Responsive ========== */
-        @media (max-width: 768px) {
-            .payment-box {
-                flex-direction: column;
-                padding: 1.5rem;
-            }
-
-            .checkout-btn, .cancel-btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            #payment-form {
-                min-height: max-content;
-            }
-        }
-    </style>
-@endpush
+<link rel="stylesheet" href="{{ asset('css/customer/checkout.css') }}">
 
 @section('content')
+<div class="checkout-box">
+    <h2>Welcome To Our Payment</h2>
     <div class="payment-box">
-        <h3>Welcome To Our Payment</h3>
-        
         <div id="empty-cart-message" class="empty-cart" style="display: none;">
             <p>Your cart is empty. Please add items to your cart before proceeding to checkout.</p>
             <a href="{{ route('customer.product_list') }}">Continue Shopping</a>
@@ -232,8 +39,7 @@
                     <i class="fa-brands fa-cc-visa"></i>
                 </div>
                 <div class="payment-btns">
-                    <button id="submit-button" class="checkout-btn" type="submit">Pay Now</button>
-                    <a href="{{ route('customer.cart') }}" class="cancel-btn">Cancel</a>
+                    <button id="submit-button" class="btn primary" type="submit">Pay Now</button>
                 </div>
             </form>
         </div>
@@ -261,7 +67,7 @@
             });
 
             // Update UI
-            document.getElementById('payment-amount').textContent = `$ ${total.toFixed(2)}`;
+            document.getElementById('payment-amount').textContent = `$ ${parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             document.querySelector('.transaction-time').textContent = new Date().toLocaleString();
 
             // Initialize Stripe
@@ -280,7 +86,22 @@
                 }
             });
 
-            const cardElement = elements.create('card');
+            const cardElement = elements.create('card', {
+                style: {
+                    base: {
+                        color: '#ffffff',
+                        fontFamily: 'Roboto, sans-serif',
+                        fontSize: '16px',
+                        '::placeholder': {
+                            color: '#cccccc'
+                        }
+                    },
+                    invalid: {
+                        color: '#ff5252'
+                    }
+                }
+            });
+
             cardElement.mount('#card-element');
 
             // Handle form submission

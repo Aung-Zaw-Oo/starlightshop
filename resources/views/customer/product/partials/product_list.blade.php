@@ -1,9 +1,10 @@
 <div class="products-grid grid-view" id="productsGrid">
     @foreach ($products as $product)
-        <div class="product-card list-item"
+        <div class="product-card list-item clickable-card"
             data-name="{{ strtolower($product->name) }}"
             data-category-id="{{ $product->category_id }}"
             data-price="{{ $product->sale_price }}"
+            data-href="{{ route('customer.product_detail', $product->id) }}"
         >
             <div class="card-header">
                 <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image">

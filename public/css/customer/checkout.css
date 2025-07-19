@@ -1,0 +1,139 @@
+.main-content {
+    min-height: calc(100vh - 300px) !important;
+    height: fit-content !important;
+}
+
+.checkout-box {
+    padding: calc(var(--padding) * 1);
+}
+
+.payment-box {
+    max-width: 900px;
+    margin: calc(var(--margin) * 2) auto;
+    background-color: var(--bg-light);
+    border-radius: var(--radius);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    box-shadow: var(--shadow);
+}
+
+h2 {
+    margin: 1.5rem;
+    text-align: center;
+}
+
+/* ========== Left Info Panel ========== */
+.payment-left {
+    flex: 1;
+    min-width: 280px;
+    background-color: var(--primary);
+    border-radius: var(--radius);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: calc(var(--padding) * 4) calc(var(--padding) * 2);
+    color: var(--text-dark);
+}
+
+.payment-left div {
+    margin-bottom: var(--margin);
+    border-bottom: var(--border);
+}
+
+.payment-left p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.payment-left span {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: var(--margin);
+    display: inline-block;
+}
+
+/* ========== Right Stripe Panel ========== */
+.payment-right {
+    flex: 1;
+    min-width: 280px;
+    padding: calc(var(--padding) * 4) calc(var(--padding) * 2);
+}
+
+/* Stripe form */
+#payment-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 300px;
+    justify-content: space-between;
+}
+
+/* Stripe card input */
+#card-element {
+    background: var(--bg-dark);
+    padding: var(--padding);
+    border-radius: var(--radius);
+    min-height: 45px;
+    border: var(--border);
+}
+
+/* ========== Buttons ========== */
+.payment-btns .btn {
+    width: 100%;
+}
+
+/* ========== Icons and Errors ========== */
+.payment-icons {
+    margin-bottom: var(--margin);
+    font-size: 1.5rem;
+    text-align: end;
+}
+
+#card-errors {
+    color: var(--danger);
+    margin-top: 0.5rem;
+    min-height: 1.2rem;
+}
+
+.loading {
+    opacity: 0.6;
+}
+
+.empty-cart {
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+}
+
+.empty-cart a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.empty-cart a:hover {
+    text-decoration: underline;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    .payment-box {
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: calc(var(--gap) * 4);
+    }
+
+    .payment-left {
+        border-radius: var(--radius);
+    }
+
+    .payment-right {
+        padding: 0;
+    }
+
+    #payment-form {
+        min-height: max-content;
+    }
+}

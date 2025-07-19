@@ -19,7 +19,6 @@
       <button class="mobile-menu-toggle" id="mobileMenuToggle">
         <i class="fas fa-bars"></i>
       </button>
-      
     </div>
     <div class="nav-center">
         <ul class="nav-menu" id="navMenu">
@@ -31,11 +30,8 @@
     </div>
     <div class="nav-right">
       <div class="profile-container">
-
-        <button class="profile-btn" id="profileBtn">
-          <a href="#">
-            <i class="fa-solid fa-user-gear"></i>
-          </a>
+        <button class="profile-btn" id="profileBtn" type="button">
+          <i class="fa-solid fa-user-gear"></i>
           <span>
             @if (session('customer_name'))
               {{ \Illuminate\Support\Str::limit(session('customer_name'), 10) }}
@@ -46,17 +42,15 @@
         </button>
 
         <div class="profile-dropdown" id="profileDropdown">
-
           @if (session('customer_name'))
             <a href="{{ route('order.history') }}"><i class="fa-solid fa-clock-rotate-left"></i>Purchase History</a>
-            <a href="#"><i class="fas fa-user"></i>Profile</a>
+            <a href=""><i class="fas fa-user"></i>Profile</a>
             <a href="#"><i class="fas fa-cog"></i>Settings</a>
             <a href="{{ route('customer.logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
           @else
             <a href="{{ route('customer.loginForm') }}"><i class="fas fa-sign-in-alt"></i>Login</a>
             <a href="{{ route('customer.registerForm') }}"><i class="fas fa-user-plus"></i>Register</a>
           @endif
-
         </div>
       </div>
 
@@ -69,7 +63,7 @@
 
         <!-- Cart Dropdown -->
         <div class="cart-dropdown" id="cartDropdown">
-          <div id="cart-items"></div>
+          <div id="cart-items" style="justify-items: center;"></div>
           <div id="cart-total" style="padding: 0.75rem; font-weight: bold; text-align: right; border-top: 1px solid var(--border-dark);">
             Total: $0.00
           </div>
@@ -93,19 +87,15 @@
             <ul>
                 <li>
                     <i class="fa-solid fa-location-arrow"></i>
-                    <span>
-                        No. 33, Pansodan, Upper BLock, Yangon Myanmar
-                    </span>
+                    <a href="https://maps.app.goo.gl/rB27Zx6Kdp2aJqtc7" target="_blank">No. 33, Pansodan, Upper BLock, Yangon Myanmar</a>
                 </li>
                 <li>
                     <i class="fa-solid fa-phone"></i>
-                    <span>+95 948 383 383</span>
+                    <a href="tel:+95948383383">+95 948 383 383</a>
                 </li>
                 <li>
                     <i class="fa-solid fa-envelopes-bulk"></i>
-                    <span>
-                        starlight@shopping.com.mm
-                    </span>
+                    <a href="mailto:starlight@shopping.com.mm">starlight@shopping.com.mm</a>
                 </li>
             </ul>
         </div>
