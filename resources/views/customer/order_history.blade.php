@@ -54,9 +54,9 @@
                                 </td>
 
                                 <td data-label="Reorder">
-                                    <form action="{{ route('order.reorder', $detail->product->id) }}" method="POST">
+                                    <form action="{{ route('order.reorder', $order->id) }}" method="POST" class="reorder-form">
                                         @csrf
-                                        <button type="submit" class="reorder-btn" aria-label="Reorder {{ $detail->product->name ?? 'this item' }}">
+                                        <button type="submit" class="reorder-btn">
                                             Reorder
                                         </button>
                                     </form>
@@ -90,6 +90,59 @@
                     this.parentNode.innerHTML = 'N/A';
                 };
             });
+
+            const forms = document.querySelectorAll('.reorder-form');
+
+            forms.forEach(form => {
+                form.addEventListener('submit', async e => {
+                    e.preventDefault();
+
+                    const url = form.action;
+                    const token = form.querySelector('input[name="_token"]').value;
+
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': token,
+                            },
+                            body: JSON.stringify({})
+                        });
+
+                        if (!res.ok) {
+                            throw new Error(`Server error: ${res.status}`);
+                        }
+
+                        const items = await res.json();
+
+                        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+                        items.forEach(newItem => {
+                            const existing = cart.find(item => item.id === newItem.id);
+                            if (existing) {
+                                existing.quantity += newItem.quantity;
+                            } else {
+                                cart.push(newItem);
+                            }
+                        });
+
+                        localStorage.setItem('cart', JSON.stringify(cart));
+
+                        updateCartCount();
+                        updateCartDropdown();
+
+                        window.location.href = '{{ route("customer.cart") }}';
+
+                    } catch (err) {
+                        console.error('Reorder failed:', err);
+                        alert('Failed to reorder items.');
+                    }
+                });
+            });
+
+
         });
     </script>
 @endpush

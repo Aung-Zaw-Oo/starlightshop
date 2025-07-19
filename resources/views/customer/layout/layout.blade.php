@@ -310,20 +310,24 @@
   }
   });
 
-  // Remove Cart Items On Delete
   @if(session('logged_out'))
     localStorage.removeItem('cart');
     sessionStorage.removeItem('cart');
     console.log('Cart cleared after logout.');
 
-    // Optional: update UI if needed before reload
     updateCartCount();
     updateCartDropdown();
 
-    // Reload the page to reflect cleared cart
     window.location.reload();
   @endif
 
+  const handleClickable = () => {
+      document.querySelectorAll('.clickable-row, .clickable-card').forEach(el => {
+          el.addEventListener('click', () => {
+              window.location.href = el.dataset.href;
+          });
+      });
+  };
 
   // ====== Init on Load ======
   updateCartCount();
