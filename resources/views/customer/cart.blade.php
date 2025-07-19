@@ -2,180 +2,13 @@
 
 @section('title', 'Cart')
 
-<link rel="stylesheet" href="{{ asset('css/reset.css') }}">
-
-@push('styles')
-<style>
-    .cart-box {
-        max-width: 1200px;
-        margin: auto;
-        padding: 1rem;
-    }
-
-    .cart-header {
-        text-align: center;
-        padding: 2rem 1rem;
-    }
-
-    .cart-header h3 {
-        margin-bottom: 1rem;
-        font-size: 2rem;
-        color: #fff;
-    }
-
-    .cart-header h4 {
-        font-size: 1.2rem;
-        color: #ccc;
-    }
-
-    .cart-body {
-        background-color: #1a1a1a;
-        border-radius: 8px;
-        padding: 1rem;
-    }
-
-    .cart-body-titles,
-    .cart-body-items {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr;
-        gap: 1rem;
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--color-8);
-        color: #eee;
-        align-items: center;
-    }
-
-    .cart-body-titles {
-        font-weight: bold;
-        color: #aaa;
-        font-size: 0.95rem;
-    }
-
-    .cart-body-titles p {
-        text-align: start;
-    }
-
-    .cart-body-items img {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-        margin-right: 1rem;
-        background-color: #333;
-    }
-
-    .cart-body-items > div:first-child {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .cart-body-items p {
-        color: #fff;
-        font-size: 0.95rem;
-        text-align: start;
-    }
-
-    .cart-body-items i {
-        color: #ff5555;
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
-
-    .cart-body-items i:hover {
-        color: red;
-    }
-
-    .qty-btn {
-        background-color: #333;
-        border: 1px solid #555;
-        color: #fff;
-        padding: 0.3rem 0.6rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-    }
-
-    .qty-btn:hover:not(:disabled) {
-        background-color: #555;
-    }
-
-    .qty-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    .mobile {
-        display: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 992px) {
-        .cart-body-titles,
-        .cart-body-items {
-            grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 0.5fr;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .cart-body-titles,
-        .cart-body-items {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto auto;
-            row-gap: 1rem;
-        }
-
-        .cart-body-items > div:first-child {
-            grid-column: 1 / -1;
-            justify-content: center;
-        }
-
-        .cart-body-titles {
-            display: none;
-        }
-
-        .cart-body-items {
-            border: 1px solid #333;
-            padding: 1rem;
-            border-radius: 8px;
-            background-color: #222;
-            margin-bottom: 1rem;
-        }
-
-        .cart-body-items p {
-            text-align: left;
-        }
-
-        .cart-body-items i {
-            grid-column: 2;
-            justify-self: end;
-        }
-
-        .mobile {
-            display: inline;
-        }
-    }
-</style>
-@endpush
+<link rel="stylesheet" href="{{ asset('css/customer/cart.css') }}">
 
 @section('content')
 
     @php
         $sessionCart = session('cart', []);
     @endphp
-
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
-
 
     <script>
         const laravelCart = @json($sessionCart);
@@ -186,7 +19,7 @@
 
     <div class="cart-box">
         <div class="cart-header">
-            <h3>ADD TO CART</h3>
+            <h2>ADD TO CART</h2>
             <h4>Your Cart (<span>0</span> items)</h4>
         </div>
         <div class="cart-body">
@@ -198,15 +31,16 @@
                 <p>Total</p>
                 <p>Action</p>
             </div>
-
-            <div class="cart-body-items-container"><!-- JS DATA INJECTION --></div>
+            <div class="cart-body-items-container">
+                <!-- JS DATA INJECTION -->
+            </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
     const cartContainer = document.querySelector('.cart-body-items-container');
     const cartCount = document.querySelector('.cart-header span');
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -236,47 +70,56 @@
 
     // Function to update dropdown cart items
     function updateCartDropdown() {
-        // Update dropdown cart items (adjust selector based on your dropdown structure)
-        const dropdownContainer = document.querySelector('.cart-dropdown-items, .navbar-cart-items, #cart-dropdown-items');
-        
-        if (dropdownContainer) {
-            dropdownContainer.innerHTML = '';
-            
-            if (cart.length === 0) {
-                dropdownContainer.innerHTML = '<p style="text-align:center; color:#aaa; padding:1rem;">Your cart is empty.</p>';
-            } else {
-                cart.forEach((item, index) => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'dropdown-cart-item';
-                    itemEl.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border-bottom: 1px solid #333;">
-                            <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;">
-                            <div style="flex: 1; min-width: 0;">
-                                <p style="font-size: 0.85rem; margin: 0; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name}</p>
-                                <p style="font-size: 0.8rem; margin: 0; color: #aaa;">${item.quantity} × $${item.price.toFixed(2)}</p>
-                            </div>
-                            <button onclick="removeFromDropdown(${index})" style="background: none; border: none; color: #ff5555; cursor: pointer; padding: 0.2rem;">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                    dropdownContainer.appendChild(itemEl);
-                });
-            }
+        cart = JSON.parse(localStorage.getItem('cart')) || []; // ⬅ Force reload
+
+        cartItemsContainer.innerHTML = '';
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+            <p style="padding: 1rem;">Your cart is empty.</p>
+            <img src="{{ asset('storage/uploads/empty-cart.png') }}"></img>
+            `;
+            cartTotalEl.textContent = 'Total: $0.00';
+            return;
         }
-        
-        // Update dropdown total
-        const dropdownTotal = document.querySelector('.cart-dropdown-total, .navbar-cart-total, #cart-dropdown-total');
-        if (dropdownTotal) {
-            const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            dropdownTotal.textContent = `$${total.toFixed(2)}`;
+
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const itemEl = document.createElement('div');
+            itemEl.className = 'cart-item';
+            total += item.price * item.quantity;
+
+            const disableMinus = item.quantity <= 1 ? 'disabled' : '';
+            const disablePlus = item.quantity >= item.stockQty ? 'disabled' : '';
+
+            itemEl.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="cart-item-details">
+                <strong>${item.name}</strong>
+                <span>Category: ${item.category}</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
+                <span>${item.quantity}</span>
+                <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
+                </div>
+                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                <button class="remove-cart-btn" data-index="${index}">Remove</button>
+            </div>
+            `;
+            cartItemsContainer.appendChild(itemEl);
+        });
+
+        cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
         }
-    }
 
     // Function to remove item from dropdown
     window.removeFromDropdown = function(index) {
         cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
+
+        // 🔥 Reload cart from localStorage (to keep in sync)
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+
         renderCart();
         updateCartCount();
         updateCartDropdown();
@@ -362,10 +205,9 @@
         }
 
         existingTotals.innerHTML = `
-            <p>Subtotal: ${total.toFixed(2)}</p>
-            <p style="font-weight:bold; border-top: 1px solid #fff">Grand Total: ${total.toFixed(2)}</p>
-            <a href="{{ route('payment.checkout') }}" class="add-to-cart" style="width: 100%; display: inline-block; text-align: center;">Checkout</a>
-            <a href="{{ route('customer.product_list') }}" class="cancel-btn" style="width: 100%; display: inline-block; text-align: center; background-color: red; border-radius: 4px; padding: 0.5rem 1rem;">Cancel</a>
+            <p>Subtotal: ${parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <p style="font-weight:bold; border-top: var(--border); padding-top: var(--padding);">Grand Total: ${parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <a href="{{ route('payment.checkout') }}" class="btn primary" style="width: 100%; display: inline-block; text-align: center;">Checkout</a>
         `;
     }
 
@@ -413,5 +255,5 @@
         renderCart();
     };
 });
-    </script>
+</script>
 @endpush

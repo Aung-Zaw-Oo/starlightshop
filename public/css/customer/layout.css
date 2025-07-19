@@ -331,6 +331,7 @@ footer {
 
 .qty-btn:hover {
     background-color: var(--primary);
+    color: var(--text-dark);
 }
 
 .qty-btn:disabled {
@@ -361,8 +362,6 @@ footer {
     min-width: 36px;
     height: 36px;
     padding: 0 12px;
-    background-color: var(--color-2);
-    color: var(--color-8);
     font-weight: 600;
     text-decoration: none;
     transition: var(--transition);

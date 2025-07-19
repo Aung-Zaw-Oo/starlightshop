@@ -30,30 +30,29 @@ class OrderController extends Controller
         return view('customer.order_history', compact('orders'));
     }
 
-    public function reorder($productId)
+    public function cancel(Request $request, $id)
     {
-        $product = Product::find($productId);
+        $order = Order::findOrFail($id);
 
-        if (!$product) {
-            return redirect()->back()->with('error', 'Product not found.');
+        if($order->order_status == 'pending') {
+            $order->order_status = $request->status;
+            $order->save();
         }
 
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += 1;
-        } else {
-            $cart[$productId] = [
-                'name' => $product->name,
-                'price' => $product->sale_price,
-                'quantity' => 1,
-                'image' => $product->image ?? 'default.jpg', // fallback if null
-            ];
-        }
-
-        session()->put('cart', $cart);
-
-        return redirect()->route('customer.cart')->with('success', $product->name . ' has been added to your cart again.');
+        return redirect()->back()->with('success', 'Order cancelled successfully.');
     }
 
+    public function reorder($productId)
+    {
+        $product = Product::findOrFail($productId);
+
+        return response()->json([
+            'id'       => $product->id,
+            'name'     => $product->name,
+            'price'    => $product->price,
+            'image'    => $product->image,
+            'category' => $product->category->name ?? '',
+            'stockQty' => $product->quantity,
+        ]);
+    }
 }

@@ -200,7 +200,7 @@ body {
 
 .secondary {
     background-color: var(--secondary);
-    color: var(--text-white);
+    color: var(--text-light);
 }
 
 .danger {
@@ -228,4 +228,8 @@ body {
 .detail-btn a:hover {
     color: var(--success);
     transform: translateX(5px);
+}
+
+.error {
+    color: var(--danger);
 }

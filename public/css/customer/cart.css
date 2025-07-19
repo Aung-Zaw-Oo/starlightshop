@@ -1,0 +1,140 @@
+.cart-box {
+    max-width: 1200px;
+    height: auto;
+    margin: auto;
+    padding: 1rem;
+    padding-top: 0;
+}
+
+.cart-header {
+    text-align: center;
+    padding: 1rem 1rem;
+}
+
+.cart-header h2 {
+    margin-bottom: calc(var(--margin) * 2);
+}
+
+.cart-body {
+    border-radius: var(--radius);
+    padding: var(--padding);
+}
+
+.cart-body-titles,
+.cart-body-items {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr;
+    gap: var(--gap);
+    padding: var(--padding) 0;
+    border-bottom: var(--border);
+    align-items: center;
+}
+
+.cart-body-titles {
+    font-weight: bold;
+}
+
+.cart-body-titles p {
+    text-align: start;
+}
+
+.cart-body-items img {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    margin-right: 1rem;
+    background-color: var(--bg-light);
+}
+
+.cart-body-items > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.cart-body-items p {
+    text-align: start;
+}
+
+.cart-body-items i {
+    color: var(--danger);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.cart-body-items i:hover {
+    color: #ff0000;
+}
+
+.qty-btn {
+    background-color: var(--bg-light);
+    border: var(--border);
+    padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background-color: var(--primary);
+}
+
+.qty-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mobile {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .cart-body-titles,
+    .cart-body-items {
+        grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 0.5fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-body-titles,
+    .cart-body-items {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        row-gap: 1rem;
+    }
+
+    .cart-body-items > div:first-child {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+
+    .cart-body-titles {
+        display: none;
+    }
+
+    .cart-body-items {
+        border: var(--border);
+        padding: var(--padding);
+        border-radius: var(--radius);
+        background-color: var(--bg-light);
+        margin-bottom: var(--margin);
+    }
+
+    .cart-body-items p {
+        text-align: left;
+    }
+
+    .cart-body-items i {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .mobile {
+        display: inline;
+    }
+}
