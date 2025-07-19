@@ -45,20 +45,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const cartCount = document.querySelector('.cart-header span');
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Function to update cart count in dropdown/navbar
     function updateCartCount() {
         const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
         
-        // Update main cart count
         cartCount.textContent = totalItems;
         
-        // Update dropdown/navbar cart count (multiple possible selectors)
         const dropdownCounts = document.querySelectorAll('.cart-count, .navbar-cart-count, #cart-count, [data-cart-count]');
         dropdownCounts.forEach(el => {
             el.textContent = totalItems;
         });
         
-        // Trigger custom event for other components
         window.dispatchEvent(new CustomEvent('cartUpdated', { 
             detail: { 
                 cart: cart, 
@@ -68,9 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }));
     }
 
-    // Function to update dropdown cart items
     function updateCartDropdown() {
-        cart = JSON.parse(localStorage.getItem('cart')) || []; // ⬅ Force reload
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         cartItemsContainer.innerHTML = '';
         if (cart.length === 0) {
@@ -110,14 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
-        }
+    }
 
-    // Function to remove item from dropdown
     window.removeFromDropdown = function(index) {
         cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
 
-        // 🔥 Reload cart from localStorage (to keep in sync)
         cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         renderCart();

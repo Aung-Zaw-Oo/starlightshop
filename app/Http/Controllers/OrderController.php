@@ -42,17 +42,29 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Order cancelled successfully.');
     }
 
-    public function reorder($productId)
+    public function reorder(Request $request, $orderId)
     {
-        $product = Product::findOrFail($productId);
+        $order = Order::with('orderDetails.product.category')->findOrFail($orderId);
 
-        return response()->json([
-            'id'       => $product->id,
-            'name'     => $product->name,
-            'price'    => $product->price,
-            'image'    => $product->image,
-            'category' => $product->category->name ?? '',
-            'stockQty' => $product->quantity,
-        ]);
+        $items = [];
+
+        foreach ($order->orderDetails as $detail) {
+            $product = $detail->product;
+
+            if (!$product) continue;
+
+            $items[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'category' => $product->category->name ?? 'N/A',
+                'quantity' => $detail->qty,
+                'stockQty' => $product->qty,
+                'image' => asset('storage/' . $product->image),
+                'price' => (int) $product->sale_price,
+            ];
+        }
+
+        // Return JSON instead of a redirect or view
+        return response()->json($items);
     }
 }
