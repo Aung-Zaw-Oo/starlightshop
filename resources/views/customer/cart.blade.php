@@ -45,67 +45,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const cartCount = document.querySelector('.cart-header span');
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    function updateCartCount() {
-        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    // function updateCartCount() {
+    //     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
         
-        cartCount.textContent = totalItems;
+    //     cartCount.textContent = totalItems;
         
-        const dropdownCounts = document.querySelectorAll('.cart-count, .navbar-cart-count, #cart-count, [data-cart-count]');
-        dropdownCounts.forEach(el => {
-            el.textContent = totalItems;
-        });
+    //     const dropdownCounts = document.querySelectorAll('.cart-count, .navbar-cart-count, #cart-count, [data-cart-count]');
+    //     dropdownCounts.forEach(el => {
+    //         el.textContent = totalItems;
+    //     });
         
-        window.dispatchEvent(new CustomEvent('cartUpdated', { 
-            detail: { 
-                cart: cart, 
-                totalItems: totalItems,
-                totalPrice: cart.reduce((total, item) => total + (item.quantity * item.price), 0)
-            } 
-        }));
-    }
-
-    function updateCartDropdown() {
-        cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        cartItemsContainer.innerHTML = '';
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = `
-            <p style="padding: 1rem;">Your cart is empty.</p>
-            <img src="{{ asset('storage/uploads/empty-cart.png') }}"></img>
-            `;
-            cartTotalEl.textContent = 'Total: $0.00';
-            return;
-        }
-
-        let total = 0;
-
-        cart.forEach((item, index) => {
-            const itemEl = document.createElement('div');
-            itemEl.className = 'cart-item';
-            total += item.price * item.quantity;
-
-            const disableMinus = item.quantity <= 1 ? 'disabled' : '';
-            const disablePlus = item.quantity >= item.stockQty ? 'disabled' : '';
-
-            itemEl.innerHTML = `
-            <img src="${item.image}" alt="${item.name}">
-            <div class="cart-item-details">
-                <strong>${item.name}</strong>
-                <span>Category: ${item.category}</span>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
-                <span>${item.quantity}</span>
-                <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
-                </div>
-                <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                <button class="remove-cart-btn" data-index="${index}">Remove</button>
-            </div>
-            `;
-            cartItemsContainer.appendChild(itemEl);
-        });
-
-        cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
-    }
+    //     window.dispatchEvent(new CustomEvent('cartUpdated', { 
+    //         detail: { 
+    //             cart: cart, 
+    //             totalItems: totalItems,
+    //             totalPrice: cart.reduce((total, item) => total + (item.quantity * item.price), 0)
+    //         } 
+    //     }));
+    // }
 
     window.removeFromDropdown = function(index) {
         cart.splice(index, 1);

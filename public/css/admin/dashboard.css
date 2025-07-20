@@ -82,6 +82,7 @@
 
 .pie-chart-card {
     grid-column: span 1;
+    min-width: 150px;
 }
 
 .legend-placeholder {

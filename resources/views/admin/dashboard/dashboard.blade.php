@@ -15,8 +15,8 @@
             <!-- NA -->
         </div>
         <div class="dashboard-beadcrumb-right">
-            <button class="mode-btn primary">7D</button>
-            <button class="mode-btn secondary">M</button>
+            <button class="mode-btn primary" id="weekly-btn">7D</button>
+            <button class="mode-btn secondary" id="monthly-btn">M</button>
         </div>
     </div>
 
@@ -80,6 +80,7 @@
             </div>
             <div>
                 <div id="linechart"></div>
+                <div id="monthlyOrderChart" style="display: none;"></div>
             </div>
         </div>
 
@@ -177,9 +178,61 @@
 @push('scripts')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+
+    const weeklyBtn = document.getElementById('weekly-btn');
+    const monthlyBtn = document.getElementById('monthly-btn');
+
+    weeklyBtn.addEventListener('click', function() {
+        weeklyBtn.classList.add('primary');
+        weeklyBtn.classList.remove('secondary');
+        monthlyBtn.classList.add('secondary');
+        monthlyBtn.classList.remove('primary');
+        document.getElementById('linechart').style.display = 'block';
+        document.getElementById('monthlyOrderChart').style.display = 'none';
+        drawAllCharts();
+    })
+
+    weeklyBtn.addEventListener('click', function() {
+        weeklyBtn.classList.add('primary');
+        weeklyBtn.classList.remove('secondary');
+        monthlyBtn.classList.add('secondary');
+        monthlyBtn.classList.remove('primary');
+        document.getElementById('linechart').style.display = 'block';
+        document.getElementById('monthlyOrderChart').style.display = 'none';
+        drawAllCharts();
+    });
+
+    monthlyBtn.addEventListener('click', function() {
+        monthlyBtn.classList.add('primary');
+        monthlyBtn.classList.remove('secondary');
+        weeklyBtn.classList.add('secondary');
+        weeklyBtn.classList.remove('primary');
+        document.getElementById('linechart').style.display = 'none';
+        document.getElementById('monthlyOrderChart').style.display = 'block';
+        drawAllCharts();
+    })
+
+    monthlyBtn.addEventListener('click', function() {
+        monthlyBtn.classList.add('primary');
+        monthlyBtn.classList.remove('secondary');
+        weeklyBtn.classList.add('secondary');
+        weeklyBtn.classList.remove('primary');
+        document.getElementById('linechart').style.display = 'none';
+        document.getElementById('monthlyOrderChart').style.display = 'block';
+
+        setTimeout(() => {
+            if (monthOrderChartInstance) {
+                monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
+            }
+        }, 100);
+    });
+
     let lineChartInstance;
     let lineChartData;
     let lineChartOptions;
+    let monthOrderChartInstance
+    let monthOrderChartData;
+    let monthOrderChartOptions;
     let pieChartInstance;
     let pieChartData;
     let pieChartOptions;
@@ -193,6 +246,7 @@
     google.charts.setOnLoadCallback(lineChart);
     google.charts.setOnLoadCallback(pieChart);
     google.charts.setOnLoadCallback(columnChart);
+    google.charts.setOnLoadCallback(monthlyOrderChart);
 
 
     // Line Chart
@@ -246,94 +300,146 @@
         lineChartInstance.draw(lineChartData, lineChartOptions);
     }
 
-    // Pie Chart
-    const mobileCount = @json($mobileCount);
-    const desktopCount = @json($desktopCount);
-    const tabletCount = @json($tabletCount);
-    function pieChart() {
-    pieChartData = google.visualization.arrayToDataTable([
-        ['Devices', 'Count'],
-        ['Mobile', mobileCount],
-        ['Desktop', desktopCount],
-        ['Tablet', tabletCount]
-    ]);
+    function monthlyOrderChart() {
+        const chartData = @json($ordersPerMonthChartData);
 
-    pieChartOptions = {
-        backgroundColor: 'transparent',
-        titleTextStyle: {
-        color: '#14213D',
-        fontSize: 18,
-        bold: true
-        },
-        colors: ['#E56763', '#98EC88', '#66C9C7'],
-        legend: { position: 'none' },
-        pieSliceText: 'percentage',
-        pieSliceTextStyle: {
-            color: '#fff',
-            fontSize: 14,
-            bold: true
-        },
-        chartArea: {
-            left: 10,
-            top: 10,
-            width: '90%',
-            height: '90%'
-        },
-        slices: {
-        0: { offset: 0.05 },
-        },
-        tooltip: {
-        text: 'value'
-        }
-    };
+        monthOrderChartData = new google.visualization.DataTable();
+        monthOrderChartData.addColumn('string', 'Month');
+        monthOrderChartData.addColumn('number', 'Orders');
+        monthOrderChartData.addColumn('number', 'Orders');
 
-    pieChartInstance = new google.visualization.PieChart(document.getElementById('piechart'));
-    pieChartInstance.draw(pieChartData, pieChartOptions);
+        const modifiedRows = chartData.map(row => [row[0], row[1], row[1]]);
+        monthOrderChartData.addRows(modifiedRows);
 
-    generateDynamicLegend(pieChartData, pieChartOptions.colors);
-    }
-
-    // Column Chart
-    function columnChart() {
-        const monthlyChartData = @json($monthlyChartData);
-
-        const data = [['Month', 'Income', 'Expenses'], ...monthlyChartData];
-
-        const columnChartData = google.visualization.arrayToDataTable(data);
-
-        columnChartOptions = {
+        monthOrderChartOptions = {
             backgroundColor: 'transparent',
-            legend: {
-                position: 'top',
-                alignment: 'end',
-                textStyle: { color: '#e2e8f0', fontSize: 12 }
-            },
-            colors: ['#3b82f6', '#f59e0b'],
-            chartArea: {
-                left: '10%',
-                top: '15%',
-                width: '85%',
-                height: '70%'
-            },
+            legend: 'none',
             hAxis: {
-                textStyle: { color: '#e2e8f0', fontSize: 12 },
-                gridlines: { color: '#334155' }
+                textStyle: { color: '#ffffff' },
+                gridlines: { color: 'grey' }
             },
             vAxis: {
-                textStyle: { color: '#e2e8f0', fontSize: 12 },
-                gridlines: { color: '#334155' },
-                baselineColor: '#64748b'
+                textStyle: { color: '#ffffff' },
+                gridlines: { color: 'grey' }
             },
-            bar: { groupWidth: '60%' },
+            series: {
+                0: {
+                    color: 'white',
+                    pointSize: 0,
+                    lineWidth: 2
+                },
+                1: {
+                    color: 'red',
+                    lineWidth: 0,
+                    pointSize: 8,
+                    pointShape: 'circle'
+                }
+            },
+            chartArea: {
+                left: '10%',
+                top: '10%',
+                width: '85%',
+                height: '75%'
+            },
             tooltip: {
                 textStyle: { color: '#000000' },
                 showColorCode: true
             }
         };
 
-        columnChartInstance = new google.visualization.ColumnChart(document.getElementById('columnchart'));
-        columnChartInstance.draw(columnChartData, columnChartOptions);
+        monthOrderChartInstance = new google.visualization.LineChart(document.getElementById('monthlyOrderChart'));
+        monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
     }
+
+
+    // Pie Chart
+    const mobileCount = @json($mobileCount);
+    const desktopCount = @json($desktopCount);
+    const tabletCount = @json($tabletCount);
+    function pieChart() {
+        pieChartData = google.visualization.arrayToDataTable([
+            ['Devices', 'Count'],
+            ['Mobile', mobileCount],
+            ['Desktop', desktopCount],
+            ['Tablet', tabletCount]
+        ]);
+
+        pieChartOptions = {
+            backgroundColor: 'transparent',
+            titleTextStyle: {
+            color: '#14213D',
+            fontSize: 18,
+            bold: true
+            },
+            colors: ['#E56763', '#98EC88', '#66C9C7'],
+            legend: { position: 'none' },
+            pieSliceText: 'percentage',
+            pieSliceTextStyle: {
+                color: '#fff',
+                fontSize: 14,
+                bold: true
+            },
+            chartArea: {
+                left: 10,
+                top: 10,
+                width: '90%',
+                height: '90%'
+            },
+            slices: {
+            0: { offset: 0.05 },
+            },
+            tooltip: {
+            text: 'value'
+            }
+        };
+
+            pieChartInstance = new google.visualization.PieChart(document.getElementById('piechart'));
+            pieChartInstance.draw(pieChartData, pieChartOptions);
+
+            generateDynamicLegend(pieChartData, pieChartOptions.colors);
+        }
+
+        // Column Chart
+        function columnChart() {
+            const monthlyChartData = @json($monthlyChartData);
+
+            const data = [['Month', 'Income', 'Expenses'], ...monthlyChartData];
+
+            columnChartData = google.visualization.arrayToDataTable(data);
+
+            columnChartOptions = {
+                backgroundColor: 'transparent',
+                legend: {
+                    position: 'top',
+                    alignment: 'end',
+                    textStyle: { color: '#e2e8f0', fontSize: 12 }
+                },
+                colors: ['#3b82f6', '#f59e0b'],
+                chartArea: {
+                    left: '10%',
+                    top: '15%',
+                    width: '85%',
+                    height: '70%'
+                },
+                hAxis: {
+                    textStyle: { color: '#e2e8f0', fontSize: 12 },
+                    gridlines: { color: '#334155' }
+                },
+                vAxis: {
+                    textStyle: { color: '#e2e8f0', fontSize: 12 },
+                    gridlines: { color: '#334155' },
+                    baselineColor: '#64748b'
+                },
+                bar: { groupWidth: '60%' },
+                tooltip: {
+                    textStyle: { color: '#000000' },
+                    showColorCode: true
+                }
+            };
+
+            columnChartInstance = new google.visualization.ColumnChart(document.getElementById('columnchart'));
+            columnChartInstance.draw(columnChartData, columnChartOptions);
+        }
 
     // Generate dynamic legend
     function generateDynamicLegend(data, colors) {
@@ -360,25 +466,36 @@
         }
     }
 
+    function drawAllCharts() {
+        if (lineChartInstance) {
+            lineChartInstance.draw(lineChartData, lineChartOptions);
+        }
+        if (monthOrderChartInstance) {
+            monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
+        }
+        if (columnChartInstance) {
+            columnChartInstance.draw(columnChartData, columnChartOptions);
+        }
+        if (pieChartInstance) {
+            pieChartInstance.draw(pieChartData, pieChartOptions);
+        }
+    }
+
     let resizeTimer;
+    let hasReloaded = false;
+
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-            if (pieChartInstance && pieChartData && pieChartOptions) {
-                pieChartInstance.draw(pieChartData, pieChartOptions);
+            drawAllCharts();
+
+            const screenWidth = window.innerWidth;
+            if (screenWidth <= 768 && !hasReloaded) {
+                hasReloaded = true;
+                location.reload();
             }
-
-            if (lineChartInstance && lineChartData && lineChartOptions) {
-                lineChartInstance.draw(lineChartData, lineChartOptions);
-            }
-
-            if (columnChartInstance && columnChartData && columnChartOptions) {
-                columnChartInstance.draw(columnChartData, columnChartOptions);
-            }
-
-            location.reload();
-
-        }, 500);
+        }, 300);
     });
+
 </script>
 @endpush

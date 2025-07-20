@@ -124,7 +124,6 @@ input:-webkit-autofill {
     -webkit-text-fill-color: var(--text-light) !important;
 }
 
-
 /* Root default variables */
 :root {
     --bg-black: #000000;
@@ -183,6 +182,7 @@ body {
 
 .primary:hover {
     background-color: var(--primary-hover);
+    box-shadow: var(--hover);
 }
 
 .secondary {
@@ -191,7 +191,8 @@ body {
 }
 
 .secondary:hover {
-    background-color: var(--secondary-hover);
+    background-color: var(--primary-hover);
+    box-shadow: var(--hover);
 }
 
 .danger {
