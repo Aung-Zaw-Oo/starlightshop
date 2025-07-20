@@ -150,6 +150,7 @@
     background-color: var(--carosel-bg);
     padding: var(--padding) calc(var(--padding) * 2);
     border-radius: var(--radius);
+    cursor: pointer;
 }
 
 .tag:hover {
@@ -190,13 +191,13 @@
     padding: calc(var(--padding) * 2);
 }
 
-/* Common styles for all cards */
 .top-selling-card {
     background-color: var(--carosel-bg);
     padding: calc(var(--padding) * 2);
     border-radius: var(--radius);
     transition: var(--transition);
     gap: calc(var(--gap) * 2);
+    cursor: pointer;
 }
 
 .top-selling-card:hover {
@@ -264,6 +265,7 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    cursor: pointer;
 }
 
 .new-arrival-card-image {
@@ -313,7 +315,6 @@
 }
 
 @media screen and (max-width: 1024px) {
-    
 }
 
 @media screen and (max-width: 768px) {

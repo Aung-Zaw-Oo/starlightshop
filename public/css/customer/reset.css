@@ -232,4 +232,5 @@ body {
 
 .error {
     color: var(--danger);
+    font-size: .85rem;
 }

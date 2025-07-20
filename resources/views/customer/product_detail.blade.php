@@ -42,7 +42,7 @@
                     </p>
 
                     <p class="product-category">Category: {{ $product->category->name }}</p>
-                    <p class="product-price">Price: ${{ $product->sale_price }}</p>
+                    <p class="product-price">Price: $ {{ number_format($product->sale_price, 2) }}</p>
                     <div class="product-buttons">
                         <button class="add-to-cart-btn btn primary"
                             data-product-id="{{ $product->id }}"
