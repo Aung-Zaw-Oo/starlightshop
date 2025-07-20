@@ -134,7 +134,7 @@ td {
     color: var(--warning);
 }
 
-.status-delivered {
+.status-completed {
     color: var(--success);
 }
 
@@ -195,7 +195,7 @@ td {
     .product-image {
         width: 100%;
         height: auto;
-}
+    }
 }
 
 @media screen and (max-width: 430px) {

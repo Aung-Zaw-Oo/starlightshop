@@ -62,7 +62,7 @@
                 <label>Order Status</label>
                 <select name="order_status">
                     <option value="pending" {{ $order->order_status === 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="delivered" {{ $order->order_status === 'delivered' ? 'selected' : '' }}>Delivered</option>
+                    <option value="completed" {{ $order->order_status === 'completed' ? 'selected' : '' }}>Completed</option>
                     <option value="cancelled" {{ $order->order_status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
             </div>

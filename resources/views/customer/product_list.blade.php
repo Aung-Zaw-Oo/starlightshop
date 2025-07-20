@@ -32,9 +32,20 @@
                     <button type="button" id="clearFiltersBtn" class="btn primary">Clear Filters</button>
                 </div>
 
+                @php
+                    $selectedCategories = request()->has('category')
+                        ? [request()->get('category')] // Single category from home page
+                        : explode(',', request()->get('categories', '')); // Multiple from filter
+                @endphp
+
                 @foreach ($categories as $category)
                     <div class="category-item">
-                        <input type="checkbox" id="category-{{ $category->id }}" checked>
+                        <input
+                            type="checkbox"
+                            id="category-{{ $category->id }}"
+                            value="{{ $category->id }}"
+                            {{ in_array($category->id, $selectedCategories) ? 'checked' : '' }}
+                        >
                         <label for="category-{{ $category->id }}">{{ $category->name }}</label>
                     </div>
                 @endforeach
@@ -65,6 +76,7 @@
                     <div class="sort-section">
                         <label for="sortSelect">Sort by</label>
                         <select class="sort-select" id="sortSelect">
+                            <option value="all">All Products</option>
                             <option value="price-low">Lower to higher</option>
                             <option value="price-high">Higher to lower</option>
                             <option value="name-asc">Name A-Z</option>
@@ -179,6 +191,7 @@
             document.getElementById('paginationWrapper').innerHTML = data.pagination;
             attachPaginationLinks();
             applyViewMode(); // Apply current view mode to new content
+            handleClickable(); // Re-apply clickable functionality
         })
         .catch(err => {
             console.error('AJAX fetch error:', err);
@@ -213,5 +226,6 @@
 
     attachPaginationLinks();
     handleClickable();
+    fetchProducts(1);
 </script>
 @endpush

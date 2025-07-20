@@ -64,7 +64,9 @@
     <p class="section-title">TOP SELLING</p>
         <div class="top-selling-cards-container">
             @foreach ($topSellings as $product)
-                <div class="top-selling-card">
+                <div class="top-selling-card clickable-card"
+                    data-href="{{ route('customer.product_detail', $product->id) }}"
+                >
                     <div class="top-selling-card-image">
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                     </div>
@@ -84,8 +86,11 @@
         <p class="section-title">NEW ARRIVALS</p>
         <div class="new-arrival-cards-container">
             @for ($i = 1; $i <= 5; $i++)
-                <div class="new-arrival-card">
-                    <div class="new-arrival-card-image">
+                <div class="new-arrival-card clickable-card" 
+                    data-href="{{ route('customer.product_detail', $products[count($products) - $i]->id) }}"
+                >
+                    <div class="new-arrival-card-image"
+                    >
                         <img src="{{ asset('storage/' . $products[count($products) - $i]->image) }}" alt="{{ $products[count($products) - $i]->name }}">
                     </div>
                     <div class="new-arrival-card-description">
@@ -165,5 +170,7 @@
 
     // Initial setup
     goToSlide(0);
+
+    handleClickable();
 </script>
 @endpush
