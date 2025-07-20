@@ -170,7 +170,6 @@
 
     // Initial setup
     goToSlide(0);
-
     handleClickable();
 </script>
 @endpush

@@ -63,7 +63,8 @@ class AdminController extends Controller
     public function dashboard()
     {
         $details = OrderDetail::with('product', 'order')->get();
-        $orderCount = Order::count();
+        // $orderCount = Order::count();
+        $orderCount = Order::where('order_status', '!=' ,'cancelled')->count();
         $signupCount = Customer::count();
         $sessions = CustomerSession::get();
 
@@ -116,6 +117,7 @@ class AdminController extends Controller
         // Dashboard Order Chart Dynamic Data
         $ordersThisWeek = Order::selectRaw('DAYNAME(order_date) as day, COUNT(*) as count')
             ->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->where('order_status', '!=' ,'cancelled')
             ->groupBy('day')
             ->pluck('count', 'day'); // ['Monday' => 30, ...]
 
@@ -167,6 +169,17 @@ class AdminController extends Controller
             return [$month, $income, $expense];
         });
 
+        $ordersPerMonth = Order::selectRaw('MONTH(order_date) as month_num, COUNT(*) as count')
+            ->whereYear('order_date', now()->year)
+            ->groupBy('month_num')
+            ->pluck('count', 'month_num'); // [1 => 120, 2 => 95, ...]
+
+        $ordersPerMonthChartData = collect($months)->map(function ($month, $index) use ($ordersPerMonth) {
+            $monthNumber = $index + 1; // because Jan = 1
+            $count = $ordersPerMonth[$monthNumber] ?? 0;
+            return [$month, $count];
+        });
+
 
         return view('admin.dashboard.dashboard', compact(
             'totalIncome',
@@ -182,7 +195,9 @@ class AdminController extends Controller
             'chromeCount',
             'firefoxCount',
             'safariCount',
-            'otherCount'
+            'otherCount',
+
+            'ordersPerMonthChartData'
         ));
     }
 

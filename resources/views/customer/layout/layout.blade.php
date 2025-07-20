@@ -68,7 +68,11 @@
             Total: $0.00
           </div>
           <div style="padding: 0.75rem; text-align: center;">
-            <a href="{{ route('customer.cart') }}" class="btn primary" style="width: 100%; display: inline-block;">Go to Cart</a>
+            <!-- Go to Shop -->
+            <a href="{{ route('customer.product_list') }}" class="btn primary" style="width: 100%; display: inline-block;" id="go-to-shop" href="{{ route('customer.product_list') }}">Go Shopping</a>
+
+            <!-- Go to Cart -->
+            <a href="{{ route('customer.cart') }}" class="btn primary" style="width: 100%; display: inline-block;" id="go-to-cart">Go to Cart</a>
           </div>
         </div>
       </div>
@@ -203,8 +207,15 @@
 
   function updateCartDropdown() {
   cartItemsContainer.innerHTML = '';
+  
   if (cart.length === 0) {
-    cartItemsContainer.innerHTML = '<p style="padding: 1rem;">Your cart is empty.</p>';
+    document.getElementById('go-to-cart').style.display = 'none';
+    document.getElementById('go-to-shop').style.display = 'inline-block';
+
+    cartItemsContainer.innerHTML = `
+    <p style="padding: 1rem;">Your cart is empty.</p>
+    <img src="{{ asset('storage/uploads/empty-cart.png') }}"></img>
+    `;
     cartTotalEl.textContent = 'Total: $0.00';
     return;
   }
@@ -237,6 +248,9 @@
     `;
 
     cartItemsContainer.appendChild(itemEl);
+
+    document.getElementById('go-to-cart').style.display = 'inline-block';
+    document.getElementById('go-to-shop').style.display = 'none';
   });
 
   cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
