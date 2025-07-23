@@ -2,18 +2,22 @@
 
 @section('title', 'Orders')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/order.css') }}">
+@endpush
+
 @section('content')
 <!-- Notification Container -->
 <div id="notification-container"></div>
 
 <!-- Breadcrumb -->
 <div class="order-breadcrumb">
-    <div class="order-beadcrumb-left">
+    <div class="order-breadcrumb-left">
         <span><i class="fa-solid fa-house"></i> Home</span>
         <span>&nbsp;>&nbsp;</span>
         <span>Orders</span>
     </div>
-    <div class="order-beadcrumb-center">
+    <div class="order-breadcrumb-center">
         <label for="from-date" class="">From:</label>
         <div>
             <input type="date" name="from_date" id="from-date">
@@ -25,7 +29,7 @@
             <i class="fa-solid fa-calendar"></i>
         </div>
     </div>
-    <div class="order-beadcrumb-right">
+    <div class="order-breadcrumb-right">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" name="search" id="search" placeholder="search">
