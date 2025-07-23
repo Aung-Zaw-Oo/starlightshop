@@ -2,7 +2,9 @@
 
 @section('title', 'Home')
 
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/customer/home.css') }}">
+@endpush
 
 @section('content')
     <!-- Carousel -->
@@ -18,7 +20,7 @@
                     <div class="slide">
                         <div class="slide-content">
                             <p class="slide-title">{{ $product['name'] }}</p>
-                            <p class="slide-description">{{ $product['description'] }}</p>
+                            <!-- <p class="slide-description">{{ $product['description'] }}</p> -->
                             <a href="{{ route('customer.product_detail', $product['id']) }}" class="btn primary">Shop Collection</a>
                         </div>
                         <div class="slide-image">
@@ -64,7 +66,7 @@
     <p class="section-title">TOP SELLING</p>
         <div class="top-selling-cards-container">
             @foreach ($topSellings as $product)
-                <div class="top-selling-card clickable-card"
+                <div class="top-selling-card"
                     data-href="{{ route('customer.product_detail', $product->id) }}"
                 >
                     <div class="top-selling-card-image">
@@ -86,7 +88,7 @@
         <p class="section-title">NEW ARRIVALS</p>
         <div class="new-arrival-cards-container">
             @for ($i = 1; $i <= 5; $i++)
-                <div class="new-arrival-card clickable-card" 
+                <div class="new-arrival-card" 
                     data-href="{{ route('customer.product_detail', $products[count($products) - $i]->id) }}"
                 >
                     <div class="new-arrival-card-image"
@@ -158,7 +160,7 @@
     });
 
     // Optional: autoplay with pause on hover
-    let autoPlayInterval = setInterval(nextSlide, 3000);
+    let autoPlayInterval = setInterval(nextSlide, 4000);
 
     document.querySelector('.carousel').addEventListener('mouseenter', () => {
         clearInterval(autoPlayInterval);

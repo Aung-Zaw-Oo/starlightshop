@@ -25,6 +25,7 @@ class OrderController extends Controller
 
         $orders = Order::with('orderDetails.product')
             ->where('customer_id', session('customer_id'))
+            ->orderByDesc('created_at')
             ->paginate(10);
 
         return view('customer.order_history', compact('orders'));

@@ -258,7 +258,7 @@ footer {
     border: 1px solid var(--border-dark);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    min-width: 250px;
+    min-width: 340px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -281,8 +281,8 @@ footer {
 }
 
 .cart-item img {
-    width: 60px;
-    height: 60px;
+    width: 130px;
+    height: 130px;
     object-fit: cover;
     border-radius: 6px;
 }
@@ -403,6 +403,36 @@ footer {
 .pagination .disabled .page-link {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.success {
+    background-color: #065f46;
+    color: #d1fae5;
+    border: 1px solid #059669;
 }
 
 @media (max-width: 1024px) {

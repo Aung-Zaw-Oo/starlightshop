@@ -210,6 +210,9 @@ class CustomerController extends Controller
         // Find the credential record by email
         $credential = Credential::where('email', $validated['email'])->first();
 
+        $credential->updated_at = now();
+        $credential->save();
+
         // Check if credential exists and the password matches the hashed password in DB
         if ($credential && Hash::check($validated['password'], $credential->password)) {
             // Get the associated customer model

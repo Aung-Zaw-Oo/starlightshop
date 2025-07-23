@@ -77,45 +77,52 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
+{
+    $product = Product::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'sale_price' => 'required|numeric|min:0',
-            'purchase_price' => 'required|numeric|min:0',
-            'qty' => 'required|integer|min:0',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-        ]);
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+        'sale_price' => 'required|numeric|min:0',
+        'purchase_price' => 'required|numeric|min:0',
+        'qty' => 'required|integer|min:0',
+        'description' => 'nullable|string',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        try {
-            if ($request->hasFile('image')) {
-                if ($product->image && Storage::disk('public')->exists($product->image)) {
-                    Storage::disk('public')->delete($product->image);
-                }
-                $imagePath = $request->file('image')->store('uploads', 'public');
-                $product->image = $imagePath;
+    try {
+        $updateData = [
+            'name' => $validated['name'],
+            'category_id' => $validated['category_id'],
+            'sale_price' => $validated['sale_price'],
+            'purchase_price' => $validated['purchase_price'],
+            'qty' => $validated['qty'],
+            'description' => $validated['description'] ?? '',
+        ];
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
             }
 
-            $product->update([
-                'name' => $validated['name'],
-                'category_id' => $validated['category_id'],
-                'sale_price' => $validated['sale_price'],
-                'purchase_price' => $validated['purchase_price'],
-                'qty' => $validated['qty'],
-                'description' => $validated['description'] ?? '',
-            ]);
-
-            return redirect()->route('admin.product')->with('success', 'Product updated successfully.');
-        } catch (QueryException $e) {
-            if ($e->errorInfo[1] == 1062) {
-                return redirect()->back()->withInput()->withErrors(['name' => 'Product name already exists. Please choose a different name.']);
-            }
-            return redirect()->back()->withInput()->withErrors(['error' => 'An error occurred. Please try again.']);
+            // Store new image and add path to update data
+            $imagePath = $request->file('image')->store('uploads', 'public');
+            $updateData['image'] = $imagePath;
         }
+
+        // Update product with all fields
+        $product->update($updateData);
+
+        return redirect()->route('admin.product')->with('success', 'Product updated successfully.');
+    } catch (QueryException $e) {
+        if ($e->errorInfo[1] == 1062) {
+            return redirect()->back()->withInput()->withErrors(['name' => 'Product name already exists. Please choose a different name.']);
+        }
+        return redirect()->back()->withInput()->withErrors(['error' => 'An error occurred. Please try again.']);
     }
+}
+
 
     public function destroy($id)
     {

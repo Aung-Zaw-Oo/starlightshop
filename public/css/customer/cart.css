@@ -101,6 +101,10 @@
 }
 
 @media (max-width: 768px) {
+    .cart-body {
+        padding: 0;
+    }
+
     .cart-body-titles,
     .cart-body-items {
         grid-template-columns: 1fr 1fr;
@@ -109,8 +113,15 @@
     }
 
     .cart-body-items > div:first-child {
+        display: unset;
         grid-column: 1 / -1;
-        justify-content: center;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .cart-body-items img {
+        width: 100%;
+        height: auto;
     }
 
     .cart-body-titles {
