@@ -2,6 +2,10 @@
 
 @section('title', 'Dashboard')
 
+@push('styles')
+
+@endpush
+
 @section('content')
 
     <!-- Breadcrumb -->
@@ -189,16 +193,8 @@
         monthlyBtn.classList.remove('primary');
         document.getElementById('linechart').style.display = 'block';
         document.getElementById('monthlyOrderChart').style.display = 'none';
-        drawAllCharts();
-    })
-
-    weeklyBtn.addEventListener('click', function() {
-        weeklyBtn.classList.add('primary');
-        weeklyBtn.classList.remove('secondary');
-        monthlyBtn.classList.add('secondary');
-        monthlyBtn.classList.remove('primary');
-        document.getElementById('linechart').style.display = 'block';
-        document.getElementById('monthlyOrderChart').style.display = 'none';
+        fadeInChart('linechart');
+        fadeOutChart('monthlyOrderChart');
         drawAllCharts();
     });
 
@@ -209,22 +205,9 @@
         weeklyBtn.classList.remove('primary');
         document.getElementById('linechart').style.display = 'none';
         document.getElementById('monthlyOrderChart').style.display = 'block';
+        fadeOutChart('linechart');
+        fadeInChart('monthlyOrderChart');
         drawAllCharts();
-    })
-
-    monthlyBtn.addEventListener('click', function() {
-        monthlyBtn.classList.add('primary');
-        monthlyBtn.classList.remove('secondary');
-        weeklyBtn.classList.add('secondary');
-        weeklyBtn.classList.remove('primary');
-        document.getElementById('linechart').style.display = 'none';
-        document.getElementById('monthlyOrderChart').style.display = 'block';
-
-        setTimeout(() => {
-            if (monthOrderChartInstance) {
-                monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
-            }
-        }, 100);
     });
 
     let lineChartInstance;
@@ -261,6 +244,12 @@
         lineChartData.addRows(orderChartData);
 
         lineChartOptions = {
+            animation: {
+                startup: true,
+                duration: 1200,
+                easing: 'inAndOut'
+            },
+
             backgroundColor: 'transparent',
             legend: 'none',
             hAxis: {
@@ -312,6 +301,11 @@
         monthOrderChartData.addRows(modifiedRows);
 
         monthOrderChartOptions = {
+            animation: {
+                startup: true,
+                duration: 1200,
+                easing: 'inAndOut'
+            },
             backgroundColor: 'transparent',
             legend: 'none',
             hAxis: {
@@ -365,6 +359,11 @@
         ]);
 
         pieChartOptions = {
+            animation: {
+                startup: true,
+                duration: 1000,
+                easing: 'out'
+            },
             backgroundColor: 'transparent',
             titleTextStyle: {
             color: '#14213D',
@@ -408,6 +407,11 @@
             columnChartData = google.visualization.arrayToDataTable(data);
 
             columnChartOptions = {
+                animation: {
+                    startup: true,
+                    duration: 1200,
+                    easing: 'inAndOut'
+                },
                 backgroundColor: 'transparent',
                 legend: {
                     position: 'top',
@@ -482,7 +486,6 @@
     }
 
     let resizeTimer;
-    let hasReloaded = false;
 
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
@@ -490,12 +493,40 @@
             drawAllCharts();
 
             const screenWidth = window.innerWidth;
-            if (screenWidth <= 768 && !hasReloaded) {
-                hasReloaded = true;
+            const hasReloaded = sessionStorage.getItem('hasReloaded');
+
+            if (screenWidth <= 768 && hasReloaded !== 'true') {
+                sessionStorage.setItem('hasReloaded', 'true');
                 location.reload();
             }
         }, 0);
     });
+
+    const resizeObserver = new ResizeObserver(() => {
+        drawAllCharts();
+    });
+
+    resizeObserver.observe(mainContent);
+
+    function fadeInChart(id) {
+        const el = document.getElementById(id);
+        el.style.opacity = 0;
+        el.style.display = 'block';
+        setTimeout(() => {
+            el.style.transition = 'opacity 0.6s ease-in-out';
+            el.style.opacity = 1;
+        }, 50);
+    }
+
+    function fadeOutChart(id) {
+        const el = document.getElementById(id);
+        el.style.transition = 'opacity 0.3s ease-in-out';
+        el.style.opacity = 0;
+        setTimeout(() => {
+            el.style.display = 'none';
+        }, 300);
+    }
+
 
 </script>
 @endpush

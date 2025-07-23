@@ -28,8 +28,6 @@
 }
 
 /* Table */
-
-/* Table */
 .desktop-only table {
     width: 100%;
     border-collapse: collapse;
@@ -72,22 +70,27 @@ td {
     );
     border: var(--border);
     cursor: pointer;
+
+    /* Make all cards same height */
+    min-height: 350px;
 }
 
+/* Fixed card-header and card-body height for alignment */
 .customer-card .card-header {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--gap);
     margin-bottom: var(--margin);
+    min-height: 160px; /* fixed height */
 }
 
-.customer-card .card-header .avatar {
-    width: 250px;
-    height: 250px;
-    border-radius: var(--radius);
+/* Image sizing */
+.customer-card .card-header img {
+    width: 100px; /* adjust as needed */
+    height: 100px; /* adjust as needed */
     object-fit: cover;
-    border: var(--border);
+    border-radius: var(--radius);
     background-color: var(--bg-dark);
 }
 
@@ -105,6 +108,7 @@ td {
     gap: var(--gap);
     font-size: 0.95rem;
     color: var(--text-grey);
+    min-height: 150px; /* fixed height */
 }
 
 .customer-card .card-body .info-row,
@@ -135,7 +139,7 @@ td {
 
     .mobile-only {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         margin-bottom: 0;
         gap: var(--gap);
         width: 100%;
@@ -143,6 +147,7 @@ td {
 
     .customer-card {
         margin-bottom: 0;
+        min-height: unset; /* optional unset for smaller screens */
     }
 
     .card-summary {

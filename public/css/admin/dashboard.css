@@ -148,10 +148,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .kpi-card {
-        grid-column: span 1;
-    }
-
     .chart-card {
         grid-column: span 2;
     }
@@ -165,11 +161,12 @@
     .dashboard-breadcrumb {
         grid-template-columns: auto 1fr;
     }
+
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 
-    .chart-card {
-        grid-column: span 1;
+    .legend-placeholder .legend-item {
+        width: 100%;
     }
 }

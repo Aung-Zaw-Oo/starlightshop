@@ -6,9 +6,9 @@
     </tr>
 @else
     @foreach ($categories as $category)
-        <div class="product-card clickable-card" data-href="{{ route('admin.category.edit', $category->id) }}">
+        <div class="category-card clickable-card" data-href="{{ route('admin.category.edit', $category->id) }}">
             <div class="card-header">
-                <img class="product-image" src="{{ asset('storage/' . ($category->image ?? 'uploads/default-item.png')) }}" alt="product-image">
+                <img class="category-image" src="{{ asset('storage/' . ($category->image ?? 'uploads/default-item.png')) }}" alt="category-image">
                 <div class="name">{{ $category->name }}</div>
             </div>
             <div class="card-body">

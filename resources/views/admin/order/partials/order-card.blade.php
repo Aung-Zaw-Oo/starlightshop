@@ -35,7 +35,7 @@
                 <div class="info-row">
                     <strong>Total:</strong> ${{ number_format($order->total_price, 2) }}
                 </div>
-                @if ($order->orderDetails->count() > 1)
+                @if ($order->orderDetails->count() != 0)
                     <div class="info-row">
                         <strong>Items:</strong> {{ $order->orderDetails->count() }} Products
                     </div>
