@@ -63,8 +63,10 @@ class AdminController extends Controller
     public function dashboard()
     {
         $details = OrderDetail::with('product', 'order')->get();
-        // $orderCount = Order::count();
         $orderCount = Order::where('order_status', '!=' ,'cancelled')->count();
+
+        $orderThisWeek = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+
         $signupCount = Customer::count();
         $sessions = CustomerSession::get();
 
@@ -182,6 +184,7 @@ class AdminController extends Controller
 
 
         return view('admin.dashboard.dashboard', compact(
+            'orderThisWeek',
             'totalIncome',
             'orderCount',
             'totalProfit',

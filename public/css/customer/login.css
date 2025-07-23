@@ -4,6 +4,7 @@
 
 .main-content .container {
     padding: calc(var(--padding) * 2) var(--padding);
+    height: fit-content !important;
 }
 
 .container h2 {
@@ -17,7 +18,7 @@
     align-items: center;
     flex-direction: row;
     gap: var(--gap);
-    height: 80%;
+    height: auto;
 }
 
 .left,

@@ -45,24 +45,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const cartCount = document.querySelector('.cart-header span');
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // function updateCartCount() {
-    //     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    function updateCartCount() {
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
         
-    //     cartCount.textContent = totalItems;
+        cartCount.textContent = totalItems;
         
-    //     const dropdownCounts = document.querySelectorAll('.cart-count, .navbar-cart-count, #cart-count, [data-cart-count]');
-    //     dropdownCounts.forEach(el => {
-    //         el.textContent = totalItems;
-    //     });
+        const dropdownCounts = document.querySelectorAll('.cart-count, .navbar-cart-count, #cart-count, [data-cart-count]');
+        dropdownCounts.forEach(el => {
+            el.textContent = totalItems;
+        });
         
-    //     window.dispatchEvent(new CustomEvent('cartUpdated', { 
-    //         detail: { 
-    //             cart: cart, 
-    //             totalItems: totalItems,
-    //             totalPrice: cart.reduce((total, item) => total + (item.quantity * item.price), 0)
-    //         } 
-    //     }));
-    // }
+        window.dispatchEvent(new CustomEvent('cartUpdated', { 
+            detail: { 
+                cart: cart, 
+                totalItems: totalItems,
+                totalPrice: cart.reduce((total, item) => total + (item.quantity * item.price), 0)
+            } 
+        }));
+    }
 
     window.removeFromDropdown = function(index) {
         cart.splice(index, 1);
@@ -106,7 +106,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <img src="${item.image}" alt="${item.name}">
                     <p>${item.name}</p>
                 </div>
-                <p><span class="mobile">Price: <br></span>${item.price.toFixed(2)}</p>
+                <p>
+                    <span class="mobile">Price: <br></span>$${item.price.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </p>
                 <p>
                     <span class="mobile">Quantity: <br></span>
                     <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
@@ -114,7 +119,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
                 </p>
                 <p><span class="mobile">Stock Qty: <br></span>${item.stockQty}</p>
-                <p><span class="mobile">Total: <br></span>${itemTotal.toFixed(2)}</p>
+                <p>
+                    <span class="mobile">Total: <br></span>$${itemTotal.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </p>
                 <p><i class="fa-solid fa-trash" data-index="${index}"></i></p>
             `;
 

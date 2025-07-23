@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StarLight Store</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <title>@yield('title')</title>
   <link rel="stylesheet" href="{{ asset('css/customer/reset.css') }}"/>
   <link rel="stylesheet" href="{{ asset('css/customer/layout.css') }}">
   @stack('styles')
@@ -24,7 +23,7 @@
         <ul class="nav-menu" id="navMenu">
         <li><a href="{{ route('customer.home') }}" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
         <li><a href="{{ route('customer.product_list') }}" class="{{ Route::currentRouteName() == 'customer.product_list' ? 'active' : '' }}">Product List</a></li>
-        <li><a href="#">About Us</a></li>
+        <li><a href="{{ route('customer.about') }}">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
       </ul>
     </div>
@@ -130,84 +129,68 @@
     </div>
   </footer>
 
+<script src="https://kit.fontawesome.com/2e96e08057.js" crossorigin="anonymous"></script>
 <script>
-  // ====== DOM Elements ======
-  const profileBtn = document.getElementById('profileBtn');
-  const profileDropdown = document.getElementById('profileDropdown');
-  const cartBtn = document.getElementById('cartBtn');
-  const cartDropdown = document.getElementById('cartDropdown');
-  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-  const navMenu = document.getElementById('navMenu');
-  const cartCountEl = document.getElementById('cart-count');
-  const cartItemsContainer = document.getElementById('cart-items');
-  const cartTotalEl = document.getElementById('cart-total');
+// ====== DOM Elements ======
+const profileBtn = document.getElementById('profileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+const cartBtn = document.getElementById('cartBtn');
+const cartDropdown = document.getElementById('cartDropdown');
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const navMenu = document.getElementById('navMenu');
+const cartCountEl = document.getElementById('cart-count');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
 
-  // ====== Cart State ======
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// ====== Cart State ======
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  // ====== UI Toggles ======
-  profileBtn?.addEventListener('click', e => {
+// ====== UI Toggles ======
+profileBtn?.addEventListener('click', e => {
   e.stopPropagation();
   profileDropdown?.classList.toggle('show');
-  });
+});
 
-  cartBtn?.addEventListener('click', e => {
+cartBtn?.addEventListener('click', e => {
   e.stopPropagation();
   cartDropdown?.classList.toggle('show');
-  });
+});
 
-  mobileMenuToggle?.addEventListener('click', e => {
+mobileMenuToggle?.addEventListener('click', e => {
   e.stopPropagation();
   navMenu?.classList.toggle('show');
-  });
+});
 
-  document.addEventListener('click', e => {
+document.addEventListener('click', e => {
   if (!profileBtn?.contains(e.target) && !profileDropdown?.contains(e.target)) {
     profileDropdown?.classList.remove('show');
   }
+
   if (!mobileMenuToggle?.contains(e.target) && !navMenu?.contains(e.target)) {
     navMenu?.classList.remove('show');
   }
+
   if (!cartBtn?.contains(e.target) && !cartDropdown?.contains(e.target)) {
     cartDropdown?.classList.remove('show');
   }
-  });
+});
 
-  window.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
   if (window.innerWidth > 768) {
     navMenu?.classList.remove('show');
   }
-  });
+});
 
-  // ====== Smooth Scroll for Anchor Links ======
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-  });
+// ====== Cart Logic ======
 
-  // ====== Cart Logic ======
-
-  function updateCartCount() {
+function updateCartCount() {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartCountEl.textContent = totalItems;
-  }
+}
 
-  function showNotification(message) {
-  const notification = document.createElement('div');
-  notification.className = 'notification';
-  notification.textContent = message;
-  document.body.appendChild(notification);
-  setTimeout(() => notification.remove(), 3000);
-  }
-
-  function updateCartDropdown() {
+function updateCartDropdown() {
   cartItemsContainer.innerHTML = '';
-  
+
   if (cart.length === 0) {
     document.getElementById('go-to-cart').style.display = 'none';
     document.getElementById('go-to-shop').style.display = 'inline-block';
@@ -220,134 +203,154 @@
     return;
   }
 
-  let total = 0;
+let total = 0;
 
-  cart.forEach((item, index) => {
-    const itemEl = document.createElement('div');
-    itemEl.className = 'cart-item';
-    total += item.price * item.quantity;
+cart.forEach((item, index) => {
+  const itemEl = document.createElement('div');
+  itemEl.className = 'cart-item';
+  total += item.price * item.quantity;
 
-    const disableMinus = item.quantity <= 1 ? 'disabled' : '';
-    const disablePlus = item.quantity >= item.stockQty ? 'disabled' : '';
+  const disableMinus = item.quantity <= 1 ? 'disabled' : '';
+  const disablePlus = item.quantity >= item.stockQty ? 'disabled' : '';
 
-    itemEl.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
-      <div class="cart-item-details">
-        <strong>
-          ${item.name}
-        </strong>
-        <span>Category: ${item.category}</span>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
-          <span>${item.quantity}</span>
-          <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
-        </div>
-        <span>$${(item.price * item.quantity).toFixed(2)}</span>
-        <button class="remove-cart-btn" data-index="${index}">Remove</button>
-      </div>
-    `;
+  itemEl.innerHTML = `
+  <img src="${item.image}" alt="${item.name}">
+  <div class="cart-item-details">
+    <strong>
+      ${item.name}
+    </strong>
+    <span>Category: ${item.category}</span>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <button class="qty-btn" data-index="${index}" data-action="decrease" ${disableMinus}>−</button>
+      <span>${item.quantity}</span>
+      <button class="qty-btn" data-index="${index}" data-action="increase" ${disablePlus}>+</button>
+    </div>
+  <span>
+    $${(item.price * item.quantity).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+    })}
+  </span>
+  <button class="remove-cart-btn" data-index="${index}">Remove</button>
+  </div>
+  `;
 
-    cartItemsContainer.appendChild(itemEl);
+  cartItemsContainer.appendChild(itemEl);
 
-    document.getElementById('go-to-cart').style.display = 'inline-block';
-    document.getElementById('go-to-shop').style.display = 'none';
-  });
+  document.getElementById('go-to-cart').style.display = 'inline-block';
+  document.getElementById('go-to-shop').style.display = 'none';
+});
 
-  cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
-  }
+cartTotalEl.textContent = `Total: $${total.toLocaleString('en-US', {
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+})}`;
+}
 
-  // ====== Cart Event Listeners ======
+// ====== Cart Event Listeners ======
 
-  document.addEventListener('click', function (e) {
-  // Add to Cart
-  const addBtn = e.target.closest('.add-to-cart-btn');
-  if (addBtn) {
-    const productId = addBtn.dataset.productId;
-    const productName = addBtn.dataset.productName;
-    const price = parseFloat(addBtn.dataset.price);
-    const image = addBtn.dataset.image;
-    const category = addBtn.dataset.category;
-    const stockQty = parseInt(addBtn.dataset.stock);
+document.addEventListener('click', function (e) {
+// Add to Cart
+const addBtn = e.target.closest('.add-to-cart-btn');
+if (addBtn) {
+const productId = addBtn.dataset.productId;
+const productName = addBtn.dataset.productName;
+const price = parseFloat(addBtn.dataset.price);
+const image = addBtn.dataset.image;
+const category = addBtn.dataset.category;
+const stockQty = parseInt(addBtn.dataset.stock);
 
-    const existingItem = cart.find(item => item.id === productId);
+const existingItem = cart.find(item => item.id === productId);
 
-    if (existingItem) {
-      if (existingItem.quantity < stockQty) {
-        existingItem.quantity += 1;
-      } else {
-        showNotification("Maximum stock reached.");
-        return;
-      }
-    } else {
-      cart.push({
-        id: productId,
-        name: productName,
-        price,
-        quantity: 1,
-        image,
-        category,
-        stockQty
-      });
-    }
+if (existingItem) {
+if (existingItem.quantity < stockQty) {
+existingItem.quantity += 1;
+} else {
+showNotification("Maximum stock reached.");
+return;
+}
+} else {
+cart.push({
+id: productId,
+name: productName,
+price,
+quantity: 1,
+image,
+category,
+stockQty
+});
+}
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    updateCartDropdown();
-    showNotification(`${productName} added to cart!`);
-  }
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCount();
+updateCartDropdown();
+showNotification(`${productName} added to cart!`);
+}
 
-  // Quantity Update
-  if (e.target.classList.contains('qty-btn')) {
-    const index = parseInt(e.target.dataset.index);
-    const action = e.target.dataset.action;
-    const item = cart[index];
+// Quantity Update
+if (e.target.classList.contains('qty-btn')) {
+const index = parseInt(e.target.dataset.index);
+const action = e.target.dataset.action;
+const item = cart[index];
 
-    if (action === 'increase' && item.quantity < item.stockQty) {
-      item.quantity += 1;
-    } else if (action === 'decrease' && item.quantity > 1) {
-      item.quantity -= 1;
-    }
+if (action === 'increase' && item.quantity < item.stockQty) {
+item.quantity += 1;
+} else if (action === 'decrease' && item.quantity > 1) {
+item.quantity -= 1;
+}
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    updateCartDropdown();
-  }
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCount();
+updateCartDropdown();
+}
 
-  // Remove Item
-  if (e.target.classList.contains('remove-cart-btn')) {
-    const index = e.target.dataset.index;
-    cart.splice(index, 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    updateCartDropdown();
-    showNotification("Item removed from cart");
-  }
-  });
+// Remove Item
+if (e.target.classList.contains('remove-cart-btn')) {
+const index = e.target.dataset.index;
+cart.splice(index, 1);
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCount();
+updateCartDropdown();
+showNotification('Item removed from cart.');
+}
+});
 
-  @if(session('logged_out'))
-    localStorage.removeItem('cart');
-    sessionStorage.removeItem('cart');
-    console.log('Cart cleared after logout.');
+@if(session('logged_out'))
+localStorage.removeItem('cart');
+sessionStorage.removeItem('cart');
 
-    updateCartCount();
-    updateCartDropdown();
+updateCartCount();
+updateCartDropdown();
 
-    window.location.reload();
-  @endif
+window.location.reload();
+@endif
 
-  const handleClickable = () => {
-      document.querySelectorAll('.clickable-row, .clickable-card').forEach(el => {
-          el.addEventListener('click', () => {
-              window.location.href = el.dataset.href;
-          });
-      });
-  };
+const handleClickable = () => {
+document.querySelectorAll('.clickable-row, .clickable-card').forEach(el => {
+el.addEventListener('click', () => {
+window.location.href = el.dataset.href;
+});
+});
+};
 
-  // ====== Init on Load ======
-  updateCartCount();
-  updateCartDropdown();
+// ====== Init on Load ======
+updateCartCount();
+updateCartDropdown();
 
+window.addEventListener('cartUpdated', function(e) {
+cart = e.detail.cart || [];
+updateCartCount();
+updateCartDropdown();
+});
+
+function showNotification(message) {
+const notification = document.createElement('div');
+notification.className = 'notification show success';
+notification.textContent = message;
+document.body.appendChild(notification);
+setTimeout(() => notification.remove(), 3000);
+}
 </script>
-  @stack('scripts')
+@stack('scripts')
 </body>
 </html>

@@ -167,8 +167,8 @@ input[type="number"],
     transition: var(--transition);
 }
 
-.products-grid.list-view {
-    grid-template-columns: 1fr;
+.list-view {
+    grid-template-columns: 1fr;  
 }
 
 .product-card {
@@ -243,10 +243,6 @@ input[type="number"],
     font-size: 0.75rem;
     margin-right: var(--margin);
     transition: var(--transition);
-}
-
-.btn:hover {
-    background-color: var(--hover);
 }
 
 .mobile-menu-btn {

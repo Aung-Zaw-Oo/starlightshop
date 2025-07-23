@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileDropdown = document.getElementById("profileDropdown");
     const menuItems = document.querySelectorAll(".menu-item");
 
+    const resizeObserver = new ResizeObserver(() => {
+        drawAllCharts();
+    });
+
+    resizeObserver.observe(mainContent);
+
     menuToggle?.addEventListener("click", () => {
         if (window.innerWidth <= 768) {
             sidebar.classList.toggle("open");

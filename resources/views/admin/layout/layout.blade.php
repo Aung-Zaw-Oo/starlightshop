@@ -34,7 +34,9 @@
         <span class="star-icon">
             <img src="{{ asset('icons/logo.svg') }}" alt="Logo">
         </span>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </div>
 
     <div class="nav-right">
@@ -75,7 +77,7 @@
             <span class="icon"><i class="fa-solid fa-bag-shopping"></i></span>
             <span class="text">Orders</span>
             <span class="order-count">
-                {{ \App\Models\Order::where('order_status', 'pending')->count() }}
+                {{ \App\Models\Order::where('order_status', '!=', 'cancelled')->count() }}
             </span>
         </a>
 

@@ -494,7 +494,7 @@
                 hasReloaded = true;
                 location.reload();
             }
-        }, 300);
+        }, 0);
     });
 
 </script>

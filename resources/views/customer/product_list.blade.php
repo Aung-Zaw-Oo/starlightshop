@@ -2,7 +2,9 @@
 
 @section('title', 'Products')
 
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/customer/product_list.css') }}">
+@endpush
 
 @section('content')
 <h2 style="text-align: center; margin-bottom: calc(var(--margin) * 2);">OUR PRODUCTS</h2>
@@ -34,8 +36,8 @@
 
                 @php
                     $selectedCategories = request()->has('category')
-                        ? [request()->get('category')] // Single category from home page
-                        : explode(',', request()->get('categories', '')); // Multiple from filter
+                        ? [request()->get('category')]
+                        : explode(',', request()->get('categories', ''));
                 @endphp
 
                 @foreach ($categories as $category)
@@ -115,10 +117,20 @@
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
 
+    gridView.addEventListener('click', () => {
+        gridView.classList.add('active');
+        listView.classList.remove('active');
+    });
+
+    listView.addEventListener('click', () => {
+        listView.classList.add('active');
+        gridView.classList.remove('active');
+    });
+
+
     function applyViewMode() {
         const isListView = productsGrid.classList.contains('list-view');
         const productCards = document.querySelectorAll('.product-card');
-        
         productCards.forEach(card => {
             if (isListView) {
                 card.classList.add('list-item');
@@ -127,6 +139,7 @@
             }
         });
     }
+
 
     menuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
@@ -190,8 +203,8 @@
             document.getElementById('ajaxProductContainer').innerHTML = data.html;
             document.getElementById('paginationWrapper').innerHTML = data.pagination;
             attachPaginationLinks();
-            applyViewMode(); // Apply current view mode to new content
-            handleClickable(); // Re-apply clickable functionality
+            applyViewMode();
+            handleClickable();
         })
         .catch(err => {
             console.error('AJAX fetch error:', err);
