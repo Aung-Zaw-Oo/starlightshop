@@ -197,7 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 cart.splice(index, 1);
                 localStorage.setItem('cart', JSON.stringify(cart));
                 renderCart();
-            }            
+            }     
+            showNotification('Item removed from cart!', 'success');       
         }
     });
 

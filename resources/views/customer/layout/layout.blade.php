@@ -68,7 +68,7 @@
           </div>
           <div style="padding: 0.75rem; text-align: center;">
             <!-- Go to Shop -->
-            <a href="{{ route('customer.product_list') }}" class="btn primary" style="width: 100%; display: inline-block;" id="go-to-shop" href="{{ route('customer.product_list') }}">Go Shopping</a>
+            <a href="{{ route('customer.product_list') }}" class="btn primary" style="width: 100%; display: inline-block;" id="go-to-shop">Go Shopping</a>
 
             <!-- Go to Cart -->
             <a href="{{ route('customer.cart') }}" class="btn primary" style="width: 100%; display: inline-block;" id="go-to-cart">Go to Cart</a>
@@ -248,9 +248,7 @@ maximumFractionDigits: 2
 }
 
 // ====== Cart Event Listeners ======
-
 document.addEventListener('click', function (e) {
-// Add to Cart
 const addBtn = e.target.closest('.add-to-cart-btn');
 if (addBtn) {
 const productId = addBtn.dataset.productId;
@@ -261,76 +259,78 @@ const category = addBtn.dataset.category;
 const stockQty = parseInt(addBtn.dataset.stock);
 
 const existingItem = cart.find(item => item.id === productId);
-
 if (existingItem) {
-if (existingItem.quantity < stockQty) {
-existingItem.quantity += 1;
+  if (existingItem.quantity < stockQty) {
+    existingItem.quantity += 1;
+  } else {
+    showNotification("Maximum stock reached.", "error");
+    return;
+  }
 } else {
-showNotification("Maximum stock reached.");
-return;
-}
-} else {
-cart.push({
-id: productId,
-name: productName,
-price,
-quantity: 1,
-image,
-category,
-stockQty
-});
+  cart.push({
+    id: productId,
+    name: productName,
+    price,
+    quantity: 1,
+    image,
+    category,
+    stockQty
+  });
 }
 
-localStorage.setItem('cart', JSON.stringify(cart));
-updateCartCount();
-updateCartDropdown();
-showNotification(`${productName} added to cart!`);
-}
+  localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+    showNotification(`${productName} added to cart!`);
+  }
 
-// Quantity Update
-if (e.target.classList.contains('qty-btn')) {
-const index = parseInt(e.target.dataset.index);
-const action = e.target.dataset.action;
-const item = cart[index];
+  // Quantity Update
+  if (e.target.classList.contains('qty-btn')) {
+    const index = parseInt(e.target.dataset.index);
+    const action = e.target.dataset.action;
+    const item = cart[index];
 
-if (action === 'increase' && item.quantity < item.stockQty) {
-item.quantity += 1;
-} else if (action === 'decrease' && item.quantity > 1) {
-item.quantity -= 1;
-}
+    if (action === 'increase' && item.quantity < item.stockQty) {
+      item.quantity += 1;
+      } else if (action === 'decrease' && item.quantity > 1) {
+      item.quantity -= 1;
+    }
 
-localStorage.setItem('cart', JSON.stringify(cart));
-updateCartCount();
-updateCartDropdown();
-}
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+  }
 
-// Remove Item
-if (e.target.classList.contains('remove-cart-btn')) {
-const index = e.target.dataset.index;
-cart.splice(index, 1);
-localStorage.setItem('cart', JSON.stringify(cart));
-updateCartCount();
-updateCartDropdown();
-showNotification('Item removed from cart.');
-}
+  // Remove Item
+  if (e.target.classList.contains('remove-cart-btn')) {
+    const index = e.target.dataset.index;
+    const removedItem = cart[index]; // capture item before removing
+
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDropdown();
+
+    showNotification(`${removedItem.name} removed from cart.`);
+  }
 });
 
 @if(session('logged_out'))
-localStorage.removeItem('cart');
-sessionStorage.removeItem('cart');
+  localStorage.removeItem('cart');
+  sessionStorage.removeItem('cart');
 
-updateCartCount();
-updateCartDropdown();
+  updateCartCount();
+  updateCartDropdown();
 
-window.location.reload();
+  window.location.reload();
 @endif
 
 const handleClickable = () => {
-document.querySelectorAll('.clickable-row, .clickable-card').forEach(el => {
-el.addEventListener('click', () => {
-window.location.href = el.dataset.href;
-});
-});
+  document.querySelectorAll('.clickable-row, .clickable-card').forEach(el => {
+    el.addEventListener('click', () => {
+      window.location.href = el.dataset.href;
+    });
+  });
 };
 
 // ====== Init on Load ======
@@ -338,18 +338,42 @@ updateCartCount();
 updateCartDropdown();
 
 window.addEventListener('cartUpdated', function(e) {
-cart = e.detail.cart || [];
-updateCartCount();
-updateCartDropdown();
+  cart = e.detail.cart || [];
+  updateCartCount();
+  updateCartDropdown();
 });
 
-function showNotification(message) {
-const notification = document.createElement('div');
-notification.className = 'notification show success';
-notification.textContent = message;
-document.body.appendChild(notification);
-setTimeout(() => notification.remove(), 3000);
+function showNotification(message, type = 'success') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <span class="notification-icon">
+      ${type === 'success' ? '<i class="fas fa-check"></i>' : type === 'error' ? '<i class="fas fa-times"></i>' : '<i class="fas fa-info"></i>'}
+    </span>
+    <div class="notification-content">
+      <div class="notification-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+      <div class="notification-message">${message}</div>
+    </div>
+    <button class="notification-close" aria-label="Close notification">&times;</button>
+  `;
+
+  document.body.appendChild(notification);
+
+  // Force reflow so that transition will work
+  void notification.offsetWidth;
+
+  notification.classList.add('show');
+
+  // Auto-remove after 3 seconds
+  const autoRemove = setTimeout(() => notification.remove(), 3000);
+
+  // Close button removes immediately
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    clearTimeout(autoRemove);
+    notification.remove();
+  });
 }
+
 </script>
 @stack('scripts')
 </body>
