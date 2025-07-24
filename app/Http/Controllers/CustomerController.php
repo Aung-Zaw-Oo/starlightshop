@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Credential;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use App\Models\CustomerSession;
 use Jenssegers\Agent\Agent;
+use Illuminate\Http\Request;
+use App\Models\CustomerSession;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Str;
 
 class CustomerController extends Controller
 {
@@ -47,10 +48,9 @@ class CustomerController extends Controller
         ]);
 
         // Handle image upload
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads', 'public');
-        }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
         // Create customer linked to credential
         Customer::create([
@@ -104,11 +104,24 @@ class CustomerController extends Controller
         ]);
 
         // Handle image upload if present
+        // if ($request->hasFile('image')) {
+        //     if ($customer->image && Storage::disk('public')->exists($customer->image)) {
+        //         Storage::disk('public')->delete($customer->image);
+        //     }
+        //     $imagePath = $request->file('image')->store('uploads', 'public');
+        //     $customer->image = $imagePath;
+        // }
+
         if ($request->hasFile('image')) {
-            if ($customer->image && Storage::disk('public')->exists($customer->image)) {
-                Storage::disk('public')->delete($customer->image);
-            }
-            $imagePath = $request->file('image')->store('uploads', 'public');
+            // Delete old image if exists
+            if ($customer->image && File::exists(public_path('storage/' . $customer->image))) {
+                File::delete(public_path('storage/' . $customer->image));
+            }                
+
+            $uuid = Str::uuid()->toString();
+            $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+            $request->image->move(public_path('storage/uploads'), $imagePath);
+
             $customer->image = $imagePath;
         }
 

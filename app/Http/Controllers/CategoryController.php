@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Role;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Str;
 
 class CategoryController extends Controller
 {
@@ -47,10 +45,9 @@ class CategoryController extends Controller
         ]);
 
         // Handle image upload
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads', 'public');
-        }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
         // Create category with uploaded image path        
         $category = Category::create([
@@ -107,14 +104,14 @@ class CategoryController extends Controller
         ]);
 
         // Handle image upload and delete old one if exists
-        if ($request->hasFile('image')) {
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
-            }
-            $imagePath = $request->file('image')->store('uploads', 'public');
-            $category->image = $imagePath;
+        if ($category->image && File::exists(public_path('storage/' . $category->image))) {
+            File::delete(public_path('storage/' . $category->image));
         }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
+        $category->image = $imagePath;
         $category->name = $validated['name'];
         $category->status = $validated['status'];
         $category->save();
@@ -133,6 +130,8 @@ class CategoryController extends Controller
         if ($currentUserRole === 'Staff') {
             return redirect()->back()->with('error', 'Unauthorized deletion attempt.');
         }
+
+        File::delete(public_path('storage/' . $category->image));
 
         $category->delete();
         return redirect()->route('admin.category')->with('success', 'Category deleted successfully.');
