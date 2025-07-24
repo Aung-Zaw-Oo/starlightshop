@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\File;
+use Str;
 
 class ProductController extends Controller
 {
@@ -39,10 +40,9 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads', 'public');
-        }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
         Product::create([
             'name' => $validated['name'],
@@ -77,60 +77,64 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $product = Product::findOrFail($id);
+    {
+        $product = Product::findOrFail($id);
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
-        'sale_price' => 'required|numeric|min:0',
-        'purchase_price' => 'required|numeric|min:0',
-        'qty' => 'required|integer|min:0',
-        'description' => 'nullable|string',
-        'image' => 'nullable|image|max:2048',
-    ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'sale_price' => 'required|numeric|min:0',
+            'purchase_price' => 'required|numeric|min:0',
+            'qty' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+        ]);
 
-    try {
-        $updateData = [
-            'name' => $validated['name'],
-            'category_id' => $validated['category_id'],
-            'sale_price' => $validated['sale_price'],
-            'purchase_price' => $validated['purchase_price'],
-            'qty' => $validated['qty'],
-            'description' => $validated['description'] ?? '',
-        ];
+        try {
+            $updateData = [
+                'name' => $validated['name'],
+                'category_id' => $validated['category_id'],
+                'sale_price' => $validated['sale_price'],
+                'purchase_price' => $validated['purchase_price'],
+                'qty' => $validated['qty'],
+                'description' => $validated['description'] ?? '',
+            ];
 
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($product->image && File::exists(public_path('storage/' . $product->image))) {
+                    File::delete(public_path('storage/' . $product->image));
+                }                
+
+                $uuid = Str::uuid()->toString();
+                $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+                $request->image->move(public_path('storage/uploads'), $imagePath);
+
+                $updateData['image'] = $imagePath;
             }
 
-            // Store new image and add path to update data
-            $imagePath = $request->file('image')->store('uploads', 'public');
-            $updateData['image'] = $imagePath;
-        }
+            // Update product with all fields
+            $product->update($updateData);
 
-        // Update product with all fields
-        $product->update($updateData);
-
-        return redirect()->route('admin.product')->with('success', 'Product updated successfully.');
-    } catch (QueryException $e) {
-        if ($e->errorInfo[1] == 1062) {
-            return redirect()->back()->withInput()->withErrors(['name' => 'Product name already exists. Please choose a different name.']);
+            return redirect()->route('admin.product')->with('success', 'Product updated successfully.');
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return redirect()->back()->withInput()->withErrors(['name' => 'Product name already exists. Please choose a different name.']);
+            }
+            return redirect()->back()->withInput()->withErrors(['error' => 'An error occurred. Please try again.']);
         }
-        return redirect()->back()->withInput()->withErrors(['error' => 'An error occurred. Please try again.']);
     }
-}
+
 
 
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
 
-        if ($product->image && Storage::disk('public')->exists($product->image)) {
-            Storage::disk('public')->delete($product->image);
-        }
+        // delete old file
+        if ($product->image && File::exists(public_path('storage/' . $product->image))) {
+            File::delete(public_path('storage/' . $product->image));
+        }    
 
         $product->delete();
         return redirect()->route('admin.product')->with('success', 'Product deleted successfully.');

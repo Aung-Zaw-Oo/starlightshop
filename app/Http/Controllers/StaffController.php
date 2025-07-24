@@ -7,7 +7,8 @@ use App\Models\Staff;
 use App\Models\Credential;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Str;
 
 class StaffController extends Controller
 {
@@ -64,10 +65,9 @@ class StaffController extends Controller
         ]);
 
         // Handle image upload
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads', 'public');
-        }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
         // Create Staff
         Staff::create([
@@ -156,14 +156,13 @@ class StaffController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        // Handle image upload if present
-        if ($request->hasFile('image')) {
-            if ($staff->image && Storage::disk('public')->exists($staff->image)) {
-                Storage::disk('public')->delete($staff->image);
-            }
-            $imagePath = $request->file('image')->store('uploads', 'public');
-            $staff->image = $imagePath;
+        // Handle image upload and delete old one if exists
+        if ($staff->image && File::exists(public_path('storage/' . $staff->image))) {
+            File::delete(public_path('storage/' . $staff->image));
         }
+        $uuid = Str::uuid()->toString();
+        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $request->image->move(public_path('storage/uploads'), $imagePath);
 
         // Only Admins and Managers can update role and status
         if ($currentUserRole !== 'Staff') {
@@ -172,14 +171,12 @@ class StaffController extends Controller
         }
 
         // Staff can update their own info except role and status
-        // (no action needed here as we skip role and status update for Staff)
-
         $staff->first_name = $validated['first_name'];
         $staff->last_name = $validated['last_name'];
         $staff->address = $validated['address'];
         $staff->phone = $validated['phone'];
         $staff->dob = $validated['dob'];
-
+        $staff->image = $imagePath;
         $staff->save();
 
         return redirect()->route('admin.employee')->with('success', 'Staff updated successfully!');
@@ -203,6 +200,8 @@ class StaffController extends Controller
         if ($currentUserRole === 'Staff') {
             return redirect()->back()->with('error', 'Unauthorized deletion attempt.');
         }
+
+        File::delete(public_path('storage/' . $staff->image));
 
         $staff->delete();
         return redirect()->route('admin.employee')->with('success', 'Staff deleted successfully.');
