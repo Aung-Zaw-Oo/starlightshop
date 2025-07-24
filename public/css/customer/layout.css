@@ -405,6 +405,7 @@ footer {
     cursor: not-allowed;
 }
 
+/* Notification Styles */
 .notification {
     position: fixed;
     top: 20px;
@@ -433,6 +434,53 @@ footer {
     background-color: #065f46;
     color: #d1fae5;
     border: 1px solid #059669;
+}
+
+.notification.error {
+    background-color: #7f1d1d;
+    color: #fecaca;
+    border: 1px solid #dc2626;
+}
+
+.notification.info {
+    background-color: #1e3a8a;
+    color: #dbeafe;
+    border: 1px solid #3b82f6;
+}
+
+.notification-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.notification-message {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    opacity: 1;
 }
 
 @media (max-width: 1024px) {
