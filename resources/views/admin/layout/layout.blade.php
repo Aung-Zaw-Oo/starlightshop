@@ -221,7 +221,6 @@
     // Make showNotification available globally for future use
     window.showNotification = showNotification;
 
-
     // Modal Functions
     function showDeleteModal() {
         const modal = document.getElementById('delete-modal');

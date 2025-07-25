@@ -27,51 +27,83 @@
     <!-- Dashboard Grid -->
     <div class="dashboard-grid">
         <!-- Row 1: KPI Cards -->
+        <!-- Income -->
         <div class="card kpi-card">
             <div class="kpi-card-left">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Income</span>
             </div>
-            <div class="kpi-card-right">
-                @if ($totalIncome >= 100000)
+            <!-- Total Income -->
+            <div class="kpi-card-right" id="total-income" style="display: none;">
+                @if ($totalIncome >= 1000000)
+                    <span>$ {{ number_format($totalIncome / 1000000, 2) }}M</span>
+                @elseif ($totalIncome >= 1000)
                     <span>$ {{ number_format($totalIncome / 1000, 2) }}K</span>
                 @else
                     <span>$ {{ number_format($totalIncome, 2) }}</span>
                 @endif    
             </div>
+            <!-- This Week -->
+            <div class="kpi-card-right" id="income-this-week" style="display: flex;">
+                @if ($incomeThisWeek >= 1000000)
+                    <span>$ {{ number_format($incomeThisWeek / 1000000, 2) }}M</span>
+                @elseif ($incomeThisWeek >= 1000)
+                    <span>$ {{ number_format($incomeThisWeek / 1000, 2) }}K</span>
+                @else
+                    <span>$ {{ number_format($incomeThisWeek, 2) }}</span>
+                @endif    
+            </div>
         </div>
 
+        <!-- Order Count -->
         <div class="card kpi-card">
             <div class="kpi-card-left">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span>Order Count</span>
             </div>
             <div class="kpi-card-right">
-                <span>{{ $orderCount }}</span>
+                <span id="total-order" style="display: none;">{{ $totalOrder }}</span>
+                <span id="order-this-week" style="display: flex;">{{ $orderThisWeek }}</span>
             </div>
         </div>
 
+        <!-- Profit -->
         <div class="card kpi-card">
             <div class="kpi-card-left">
                 <i class="fa-solid fa-arrow-trend-up"></i>
                 <span>Profit</span>
             </div>
-            <div class="kpi-card-right">
-                @if ($totalProfit >= 100000)
+            <!-- Total -->
+            <div class="kpi-card-right" id="total-profit" style="display: none;">
+                @if ($totalProfit >= 1000000)
+                    <span>$ {{ number_format($totalProfit / 1000000, 2) }}M</span>
+                @elseif ($totalProfit >= 1000)
                     <span>$ {{ number_format($totalProfit / 1000, 2) }}K</span>
                 @else
                     <span>$ {{ number_format($totalProfit, 2) }}</span>
-                @endif
+                @endif    
+            </div>
+            <!-- This Week -->
+            <div class="kpi-card-right" id="profit-this-week" style="display: flex;">
+                @if ($profitThisWeek >= 1000000)
+                    <span>$ {{ number_format($profitThisWeek / 1000000, 2) }}M</span>
+                @elseif ($profitThisWeek >= 1000)
+                    <span>$ {{ number_format($profitThisWeek / 1000, 2) }}K</span>
+                @else
+                    <span>$ {{ number_format($profitThisWeek, 2) }}</span>
+                @endif    
             </div>
         </div>
 
+        <!-- Sign Up -->
         <div class="card kpi-card">
             <div class="kpi-card-left">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Sign Up</span>
             </div>
             <div class="kpi-card-right">
-                <span>{{ $signupCount }}</span>
+                <span style="display: none;" id="total-signup">{{ $totalSignup }}</span>
+                <span style="display: flex;" id="signup-this-week">{{ $signupThisWeek }}</span>
             </div>
         </div>
 
@@ -103,7 +135,8 @@
                 <span>Income Expense</span>
             </div>
             <div>
-                <div id="columnchart"></div>
+                <div id="weeklyColumnchart"></div>
+                <div id="monthlyColumnchart" style="display: none;"></div>
             </div>
         </div>
 
@@ -191,10 +224,34 @@
         weeklyBtn.classList.remove('secondary');
         monthlyBtn.classList.add('secondary');
         monthlyBtn.classList.remove('primary');
-        document.getElementById('linechart').style.display = 'block';
+
+        // Line charts
+        document.getElementById('linechart').style.display = 'flex';
         document.getElementById('monthlyOrderChart').style.display = 'none';
+
+        // Column charts
+        document.getElementById('weeklyColumnchart').style.display = 'flex';
+        document.getElementById('monthlyColumnchart').style.display = 'none';
+
+        // KPI cards
+        document.getElementById('total-income').style.display = 'none';
+        document.getElementById('income-this-week').style.display = 'flex';
+
+        document.getElementById('total-order').style.display = 'none';
+        document.getElementById('order-this-week').style.display = 'flex';
+
+        document.getElementById('total-profit').style.display = 'none';
+        document.getElementById('profit-this-week').style.display = 'flex';
+        
+        document.getElementById('total-signup').style.display = 'none';
+        document.getElementById('signup-this-week').style.display = 'flex';
+
+        // Fade effects
         fadeInChart('linechart');
         fadeOutChart('monthlyOrderChart');
+        fadeInChart('weeklyColumnchart');
+        fadeOutChart('monthlyColumnchart');
+        
         drawAllCharts();
     });
 
@@ -203,10 +260,34 @@
         monthlyBtn.classList.remove('secondary');
         weeklyBtn.classList.add('secondary');
         weeklyBtn.classList.remove('primary');
+
+        // Line charts
         document.getElementById('linechart').style.display = 'none';
-        document.getElementById('monthlyOrderChart').style.display = 'block';
+        document.getElementById('monthlyOrderChart').style.display = 'flex';
+
+        // Column charts
+        document.getElementById('weeklyColumnchart').style.display = 'none';
+        document.getElementById('monthlyColumnchart').style.display = 'flex';
+
+        // KPI cards
+        document.getElementById('total-income').style.display = 'flex';
+        document.getElementById('income-this-week').style.display = 'none';
+        
+        document.getElementById('total-order').style.display = 'flex';
+        document.getElementById('order-this-week').style.display = 'none';
+
+        document.getElementById('total-profit').style.display = 'flex';
+        document.getElementById('profit-this-week').style.display = 'none';
+        
+        document.getElementById('total-signup').style.display = 'flex';
+        document.getElementById('signup-this-week').style.display = 'none';
+
+        // Fade effects
         fadeOutChart('linechart');
         fadeInChart('monthlyOrderChart');
+        fadeOutChart('weeklyColumnchart');
+        fadeInChart('monthlyColumnchart');
+        
         drawAllCharts();
     });
 
@@ -219,18 +300,21 @@
     let pieChartInstance;
     let pieChartData;
     let pieChartOptions;
-    let columnChartInstance;
-    let columnChartData;
-    let columnChartOptions;
+    let weeklyColumnChartInstance;
+    let weeklyColumnChartData;
+    let weeklyColumnChartOptions;
+    let monthlyColumnChartInstance;
+    let monthlyColumnChartData;
+    let monthlyColumnChartOptions;
 
     google.charts.load('current', {'packages':['corechart']});
     google.charts.load('current', {'packages':['bar']});
 
     google.charts.setOnLoadCallback(lineChart);
     google.charts.setOnLoadCallback(pieChart);
-    google.charts.setOnLoadCallback(columnChart);
+    google.charts.setOnLoadCallback(weeklyColumnChart);
+    google.charts.setOnLoadCallback(monthlyColumnChart);
     google.charts.setOnLoadCallback(monthlyOrderChart);
-
 
     // Line Chart
     function lineChart() {
@@ -345,7 +429,6 @@
         monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
     }
 
-
     // Pie Chart
     const mobileCount = @json($mobileCount);
     const desktopCount = @json($desktopCount);
@@ -398,52 +481,99 @@
             generateDynamicLegend(pieChartData, pieChartOptions.colors);
         }
 
-        // Column Chart
-        function columnChart() {
-            const monthlyChartData = @json($monthlyChartData);
+    // Weekly Column Chart
+    function weeklyColumnChart() {
+        const weeklyChartData = @json($weeklyChartData);
 
-            const data = [['Month', 'Income', 'Expenses'], ...monthlyChartData];
+        const data = [['Day', 'Income', 'Expenses'], ...weeklyChartData];
 
-            columnChartData = google.visualization.arrayToDataTable(data);
+        weeklyColumnChartData = google.visualization.arrayToDataTable(data);
 
-            columnChartOptions = {
-                animation: {
-                    startup: true,
-                    duration: 1200,
-                    easing: 'inAndOut'
-                },
-                backgroundColor: 'transparent',
-                legend: {
-                    position: 'top',
-                    alignment: 'end',
-                    textStyle: { color: '#e2e8f0', fontSize: 12 }
-                },
-                colors: ['#3b82f6', '#f59e0b'],
-                chartArea: {
-                    left: '10%',
-                    top: '15%',
-                    width: '85%',
-                    height: '70%'
-                },
-                hAxis: {
-                    textStyle: { color: '#e2e8f0', fontSize: 12 },
-                    gridlines: { color: '#334155' }
-                },
-                vAxis: {
-                    textStyle: { color: '#e2e8f0', fontSize: 12 },
-                    gridlines: { color: '#334155' },
-                    baselineColor: '#64748b'
-                },
-                bar: { groupWidth: '60%' },
-                tooltip: {
-                    textStyle: { color: '#000000' },
-                    showColorCode: true
-                }
-            };
+        weeklyColumnChartOptions = {
+            animation: {
+                startup: true,
+                duration: 1200,
+                easing: 'inAndOut'
+            },
+            backgroundColor: 'transparent',
+            legend: {
+                position: 'top',
+                alignment: 'end',
+                textStyle: { color: '#e2e8f0', fontSize: 12 }
+            },
+            colors: ['#3b82f6', '#f59e0b'],
+            chartArea: {
+                left: '10%',
+                top: '15%',
+                width: '85%',
+                height: '70%'
+            },
+            hAxis: {
+                textStyle: { color: '#e2e8f0', fontSize: 12 },
+                gridlines: { color: '#334155' }
+            },
+            vAxis: {
+                textStyle: { color: '#e2e8f0', fontSize: 12 },
+                gridlines: { color: '#334155' },
+                baselineColor: '#64748b'
+            },
+            bar: { groupWidth: '60%' },
+            tooltip: {
+                textStyle: { color: '#000000' },
+                showColorCode: true
+            }
+        };
 
-            columnChartInstance = new google.visualization.ColumnChart(document.getElementById('columnchart'));
-            columnChartInstance.draw(columnChartData, columnChartOptions);
-        }
+        weeklyColumnChartInstance = new google.visualization.ColumnChart(document.getElementById('weeklyColumnchart'));
+        weeklyColumnChartInstance.draw(weeklyColumnChartData, weeklyColumnChartOptions);
+    }
+
+    // Monthly Column Chart
+    function monthlyColumnChart() {
+        const monthlyChartData = @json($monthlyChartData);
+
+        const data = [['Month', 'Income', 'Expenses'], ...monthlyChartData];
+
+        monthlyColumnChartData = google.visualization.arrayToDataTable(data);
+
+        monthlyColumnChartOptions = {
+            animation: {
+                startup: true,
+                duration: 1200,
+                easing: 'inAndOut'
+            },
+            backgroundColor: 'transparent',
+            legend: {
+                position: 'top',
+                alignment: 'end',
+                textStyle: { color: '#e2e8f0', fontSize: 12 }
+            },
+            colors: ['#3b82f6', '#f59e0b'],
+            chartArea: {
+                left: '10%',
+                top: '15%',
+                width: '85%',
+                height: '70%'
+            },
+            hAxis: {
+                textStyle: { color: '#e2e8f0', fontSize: 12 },
+                gridlines: { color: '#334155' }
+            },
+            vAxis: {
+                textStyle: { color: '#e2e8f0', fontSize: 12 },
+                gridlines: { color: '#334155' },
+                baselineColor: '#64748b'
+            },
+            bar: { groupWidth: '60%' },
+            tooltip: {
+                textStyle: { color: '#000000' },
+                showColorCode: true
+            }
+        };
+
+        monthlyColumnChartInstance = new google.visualization.ColumnChart(document.getElementById('monthlyColumnchart'));
+        monthlyColumnChartInstance.draw(monthlyColumnChartData, monthlyColumnChartOptions);
+    }
 
     // Generate dynamic legend
     function generateDynamicLegend(data, colors) {
@@ -477,8 +607,11 @@
         if (monthOrderChartInstance) {
             monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
         }
-        if (columnChartInstance) {
-            columnChartInstance.draw(columnChartData, columnChartOptions);
+        if (weeklyColumnChartInstance) {
+            weeklyColumnChartInstance.draw(weeklyColumnChartData, weeklyColumnChartOptions);
+        }
+        if (monthlyColumnChartInstance) {
+            monthlyColumnChartInstance.draw(monthlyColumnChartData, monthlyColumnChartOptions);
         }
         if (pieChartInstance) {
             pieChartInstance.draw(pieChartData, pieChartOptions);
@@ -526,7 +659,5 @@
             el.style.display = 'none';
         }, 300);
     }
-
-
 </script>
 @endpush

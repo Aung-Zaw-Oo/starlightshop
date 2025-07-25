@@ -63,7 +63,7 @@
     color: var(--primary);
 }
 
-.kpi-card-right span:first-child {
+.kpi-card-right span {
     font-size: 1.5rem;
     font-weight: bold;
 }
