@@ -448,6 +448,12 @@ footer {
     border: 1px solid #3b82f6;
 }
 
+.notification.warning {
+    background-color: #f59e0b;
+    color: #fef3c7;
+    border: 1px solid #fbbf24;
+}
+
 .notification-icon {
     font-size: 18px;
     flex-shrink: 0;

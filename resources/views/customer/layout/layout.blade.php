@@ -311,7 +311,7 @@ if (existingItem) {
     updateCartCount();
     updateCartDropdown();
 
-    showNotification(`${removedItem.name} removed from cart.`);
+    showNotification(`${removedItem.name} removed from cart.`, 'warning');
   }
 });
 
@@ -348,7 +348,7 @@ function showNotification(message, type = 'success') {
   notification.className = `notification ${type}`;
   notification.innerHTML = `
     <span class="notification-icon">
-      ${type === 'success' ? '<i class="fas fa-check"></i>' : type === 'error' ? '<i class="fas fa-times"></i>' : '<i class="fas fa-info"></i>'}
+      ${type === 'success' ? '<i class="fas fa-circle-check"></i>' : type === 'error' ? '<i class="fas fa-circle-exclamation"></i>' : '<i class="fas fa-circle-info"></i>'}
     </span>
     <div class="notification-content">
       <div class="notification-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>

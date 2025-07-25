@@ -62,14 +62,13 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $details = OrderDetail::with('product', 'order')->get();
-        $orderCount = Order::where('order_status', '!=' ,'cancelled')->count();
-
+        $totalOrder = Order::where('order_status', '!=' ,'cancelled')->count();
         $orderThisWeek = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
 
-        $signupCount = Customer::count();
-        $sessions = CustomerSession::get();
+        $totalSignup = Customer::count();
+        $signupThisWeek = Customer::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
 
+        $sessions = CustomerSession::get();
         // Device Count
         $mobileCount = 0;
         $desktopCount = 0;
@@ -103,9 +102,12 @@ class AdminController extends Controller
             }
         }
 
+        $details = OrderDetail::with('product', 'order')->get();
         $totalIncome = 0;
+        $incomeThisWeek = 0;
+
         $totalProfit = 0;
-    
+        $profitThisWeek = 0;
         // Dashboard Cards KPI Data Calculation
         foreach ($details as $detail) {
             $qty = $detail->qty;
@@ -113,7 +115,14 @@ class AdminController extends Controller
             $purchasePrice = $detail->product->purchase_price ?? 0;
 
             $totalIncome += $qty * $salePrice;
+            if ($detail->order->order_date >= now()->startOfWeek() && $detail->order->order_date <= now()->endOfWeek()) {
+                $incomeThisWeek += $qty * $salePrice;
+            }
+
             $totalProfit += $qty * ($salePrice - $purchasePrice);
+            if ($detail->order->order_date >= now()->startOfWeek() && $detail->order->order_date <= now()->endOfWeek()) {
+                $profitThisWeek += $qty * ($salePrice - $purchasePrice);
+            }
         }
 
         // Dashboard Order Chart Dynamic Data
@@ -121,7 +130,7 @@ class AdminController extends Controller
             ->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()])
             ->where('order_status', '!=' ,'cancelled')
             ->groupBy('day')
-            ->pluck('count', 'day'); // ['Monday' => 30, ...]
+            ->pluck('count', 'day');
 
         $dayMap = [
             'Mon' => 'Monday',
@@ -138,15 +147,43 @@ class AdminController extends Controller
             return [$short, $count, $count];
         })->values();
 
-        $todayName = now()->format('l'); // e.g., 'Monday'
-        $todayOrderCount = $ordersThisWeek[$todayName] ?? 0;
+        // Dashboard Profit Expense Chart Dynamic Data - WEEKLY
+        $weeklyIncomeExpenseData = OrderDetail::with('product', 'order')
+            ->whereHas('order', function($query) {
+                $query->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()]);
+            })
+            ->get()
+            ->groupBy(function ($detail) {
+                return Carbon::parse($detail->order->order_date)->format('D'); // Mon, Tue, etc.
+            })
+            ->map(function ($details) {
+                $income = $details->sum(function ($d) {
+                    return $d->qty * ($d->product->sale_price ?? 0);
+                });
 
-        // Dashboard Profit Chart Dynamic Data
+                $expense = $details->sum(function ($d) {
+                    return $d->qty * ($d->product->purchase_price ?? 0);
+                });
+
+                return [
+                    'income' => $income,
+                    'expense' => $expense
+                ];
+            });
+
+        $weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        $weeklyChartData = collect($weekDays)->map(function ($day) use ($weeklyIncomeExpenseData) {
+            $income = $weeklyIncomeExpenseData[$day]['income'] ?? 0;
+            $expense = $weeklyIncomeExpenseData[$day]['expense'] ?? 0;
+            return [$day, $income, $expense];
+        });
+
+        // Dashboard Profit Expense Chart Dynamic Data - MONTHLY
         $monthlyData = OrderDetail::with('product', 'order')
             ->whereYear('created_at', now()->year)
             ->get()
             ->groupBy(function ($detail) {
-                return Carbon::parse($detail->order->order_date)->format('M'); // Jan, Feb, etc.
+                return Carbon::parse($detail->order->order_date)->format('M');
             })
             ->map(function ($details) {
                 $income = $details->sum(function ($d) {
@@ -164,7 +201,6 @@ class AdminController extends Controller
             });
 
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
         $monthlyChartData = collect($months)->map(function ($month) use ($monthlyData) {
             $income = $monthlyData[$month]['income'] ?? 0;
             $expense = $monthlyData[$month]['expense'] ?? 0;
@@ -174,33 +210,28 @@ class AdminController extends Controller
         $ordersPerMonth = Order::selectRaw('MONTH(order_date) as month_num, COUNT(*) as count')
             ->whereYear('order_date', now()->year)
             ->groupBy('month_num')
-            ->pluck('count', 'month_num'); // [1 => 120, 2 => 95, ...]
+            ->pluck('count', 'month_num');
 
         $ordersPerMonthChartData = collect($months)->map(function ($month, $index) use ($ordersPerMonth) {
-            $monthNumber = $index + 1; // because Jan = 1
+            $monthNumber = $index + 1;
             $count = $ordersPerMonth[$monthNumber] ?? 0;
             return [$month, $count];
         });
 
-
         return view('admin.dashboard.dashboard', compact(
-            'orderThisWeek',
-            'totalIncome',
-            'orderCount',
-            'totalProfit',
-            'signupCount',
-            'todayOrderCount',
+            'totalIncome','totalOrder','totalProfit','totalSignup',
+            'incomeThisWeek','orderThisWeek','profitThisWeek','signupThisWeek',
+            
             'ordersPerDay',
-            'monthlyChartData',
-            'mobileCount',
-            'desktopCount',
-            'tabletCount',
-            'chromeCount',
-            'firefoxCount',
-            'safariCount',
-            'otherCount',
+            'ordersPerMonthChartData',
 
-            'ordersPerMonthChartData'
+            'weeklyChartData',  // NEW: Weekly column chart data
+            'monthlyChartData', // Existing monthly column chart data
+
+            'mobileCount','desktopCount','tabletCount',
+
+            'chromeCount','firefoxCount','safariCount','otherCount',
+
         ));
     }
 
