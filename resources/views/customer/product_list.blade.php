@@ -107,7 +107,7 @@
     const gridView = document.getElementById('gridView');
     const listView = document.getElementById('listView');
     const ajaxProductContainer = document.getElementById('ajaxProductContainer');
-    const productsGrid = document.getElementById('productsGrid');
+    let productsGrid = document.getElementById('productsGrid');
     const viewButtons = document.querySelectorAll('.view-btn');
     const searchInput = document.getElementById('searchInput');
     const categoryCheckboxes = document.querySelectorAll('.category-item input[type="checkbox"]');
@@ -117,29 +117,36 @@
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
 
+    let currentView = 'grid'; // default
+
     gridView.addEventListener('click', () => {
+        currentView = 'grid';
         gridView.classList.add('active');
         listView.classList.remove('active');
+        productsGrid.classList.add('grid-view');
+        productsGrid.classList.remove('list-view');
+        applyViewMode();
     });
 
     listView.addEventListener('click', () => {
-        listView.classList.add('active');
+        currentView = 'list';
         gridView.classList.remove('active');
+        listView.classList.add('active');
+        productsGrid.classList.add('list-view');
+        productsGrid.classList.remove('grid-view');
+        applyViewMode();
     });
 
-
     function applyViewMode() {
-        const isListView = productsGrid.classList.contains('list-view');
         const productCards = document.querySelectorAll('.product-card');
         productCards.forEach(card => {
-            if (isListView) {
+            if (currentView === 'list') {
                 card.classList.add('list-item');
             } else {
                 card.classList.remove('list-item');
             }
         });
     }
-
 
     menuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
@@ -202,8 +209,20 @@
         .then(data => {
             document.getElementById('ajaxProductContainer').innerHTML = data.html;
             document.getElementById('paginationWrapper').innerHTML = data.pagination;
-            attachPaginationLinks();
+
+            // Reassign productsGrid and reapply view
+            productsGrid = document.getElementById('productsGrid');
+
+            if (currentView === 'list') {
+                productsGrid.classList.add('list-view');
+                productsGrid.classList.remove('grid-view');
+            } else {
+                productsGrid.classList.add('grid-view');
+                productsGrid.classList.remove('list-view');
+            }
+
             applyViewMode();
+            attachPaginationLinks();
             handleClickable();
         })
         .catch(err => {
