@@ -252,44 +252,44 @@
         fadeInChart('weeklyColumnchart');
         fadeOutChart('monthlyColumnchart');
         
-        drawAllCharts();
+        weeklyColumnChart();
+        lineChart();
     });
 
-    monthlyBtn.addEventListener('click', function() {
+    monthlyBtn.addEventListener('click', function () {
+        // Button UI toggle
         monthlyBtn.classList.add('primary');
         monthlyBtn.classList.remove('secondary');
         weeklyBtn.classList.add('secondary');
         weeklyBtn.classList.remove('primary');
 
-        // Line charts
+        // Chart visibility
         document.getElementById('linechart').style.display = 'none';
         document.getElementById('monthlyOrderChart').style.display = 'flex';
-
-        // Column charts
         document.getElementById('weeklyColumnchart').style.display = 'none';
         document.getElementById('monthlyColumnchart').style.display = 'flex';
 
         // KPI cards
         document.getElementById('total-income').style.display = 'flex';
         document.getElementById('income-this-week').style.display = 'none';
-        
         document.getElementById('total-order').style.display = 'flex';
         document.getElementById('order-this-week').style.display = 'none';
-
         document.getElementById('total-profit').style.display = 'flex';
         document.getElementById('profit-this-week').style.display = 'none';
-        
         document.getElementById('total-signup').style.display = 'flex';
         document.getElementById('signup-this-week').style.display = 'none';
 
-        // Fade effects
+        // Fade
         fadeOutChart('linechart');
         fadeInChart('monthlyOrderChart');
         fadeOutChart('weeklyColumnchart');
         fadeInChart('monthlyColumnchart');
-        
-        drawAllCharts();
+
+        monthlyColumnChart();
+        monthlyOrderChart();
     });
+
+
 
     let lineChartInstance;
     let lineChartData;
@@ -313,8 +313,6 @@
     google.charts.setOnLoadCallback(lineChart);
     google.charts.setOnLoadCallback(pieChart);
     google.charts.setOnLoadCallback(weeklyColumnChart);
-    google.charts.setOnLoadCallback(monthlyColumnChart);
-    google.charts.setOnLoadCallback(monthlyOrderChart);
 
     // Line Chart
     function lineChart() {
@@ -322,8 +320,8 @@
 
         lineChartData = new google.visualization.DataTable();
         lineChartData.addColumn('string', 'Day');
-        lineChartData.addColumn('number', 'Orders');   // For the line
-        lineChartData.addColumn('number', 'Orders');   // For the points
+        lineChartData.addColumn('number', 'Orders');
+        lineChartData.addColumn('number', 'Orders');
 
         lineChartData.addRows(orderChartData);
 
@@ -600,23 +598,29 @@
         }
     }
 
-    function drawAllCharts() {
-        if (lineChartInstance) {
+    function drawAllCharts() 
+    {
+        if (lineChartInstance && document.getElementById('linechart').style.display !== 'none') {
             lineChartInstance.draw(lineChartData, lineChartOptions);
         }
-        if (monthOrderChartInstance) {
+
+        if (monthOrderChartInstance && document.getElementById('monthlyOrderChart').style.display !== 'none') {
             monthOrderChartInstance.draw(monthOrderChartData, monthOrderChartOptions);
         }
-        if (weeklyColumnChartInstance) {
+
+        if (weeklyColumnChartInstance && document.getElementById('weeklyColumnchart').style.display !== 'none') {
             weeklyColumnChartInstance.draw(weeklyColumnChartData, weeklyColumnChartOptions);
         }
-        if (monthlyColumnChartInstance) {
+
+        if (monthlyColumnChartInstance && document.getElementById('monthlyColumnchart').style.display !== 'none') {
             monthlyColumnChartInstance.draw(monthlyColumnChartData, monthlyColumnChartOptions);
         }
-        if (pieChartInstance) {
+
+        if (pieChartInstance && document.getElementById('piechart').style.display !== 'none') {
             pieChartInstance.draw(pieChartData, pieChartOptions);
         }
     }
+
 
     let resizeTimer;
 
