@@ -155,7 +155,7 @@
                 </div>
                 <div class="btn-right">
                     <a href="{{ route('admin.customer') }}" class="btn secondary">Cancel</a>
-                    <button type="submit" class="btn primary">Save</button>
+                    <button type="submit" class="btn primary">Update</button>
                 </div>
             </div>
         </form>

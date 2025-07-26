@@ -20,16 +20,9 @@
             @csrf
             @method('PUT')
 
-            @if ($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            @error('image')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="profile-section">
                 <div class="profile-image">
                     @if ($staff->image)
@@ -50,24 +43,33 @@
                 </div>
             </div>
 
+            @error('first_name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
+            @error('last_name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="first_name">Name</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <input type="text" name="first_name" id="first_name" placeholder="First Name" required value="{{ $staff->first_name }}">
+                    <input type="text" name="first_name" id="first_name" placeholder="First Name" value="{{ $staff->first_name }}">
                 </div>
                 <div class="employee-edit-form-group">
-                    <input type="text" name="last_name" id="last_name" placeholder="Last Name" required value="{{ $staff->last_name }}">
+                    <input type="text" name="last_name" id="last_name" placeholder="Last Name" value="{{ $staff->last_name }}">
                 </div>
             </div>
 
+            @error('email')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="dob_day">D.O.B</label>
                 </div>
                 <div class="date-group">
-                    <select name="dob_day" id="dob_day" required>
+                    <select name="dob_day" id="dob_day">
                         <option value="">DD</option>
                         @for($i = 1; $i <= 31; $i++)
                             @php
@@ -77,7 +79,7 @@
                             <option value="{{ $day }}" {{ $currentDay == $day ? 'selected' : '' }}>{{ $day }}</option>
                         @endfor
                     </select>
-                    <select name="dob_month" id="dob_month" required>
+                    <select name="dob_month" id="dob_month">
                         <option value="">MM</option>
                         @for($i = 1; $i <= 12; $i++)
                             @php
@@ -87,7 +89,7 @@
                             <option value="{{ $month }}" {{ $currentMonth == $month ? 'selected' : '' }}>{{ $month }}</option>
                         @endfor
                     </select>
-                    <select name="dob_year" id="dob_year" required>
+                    <select name="dob_year" id="dob_year">
                         <option value="">YYYY</option>
                         @for($i = date('Y'); $i >= 1950; $i--)
                             @php
@@ -103,12 +105,15 @@
                 $currentUserRole = session('role');
             @endphp
 
+            @error('role_id')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="role_id">Position</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <select name="role_id" id="role_id" required {{ $currentUserRole === 'Staff' ? 'disabled' : '' }}>
+                    <select name="role_id" id="role_id" {{ $currentUserRole === 'Staff' ? 'disabled' : '' }}>
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}" {{ $staff->role_id == $role->id ? 'selected' : '' }}>
                                 {{ $role->name }}
@@ -123,45 +128,60 @@
                 </div>
             </div>
 
+            @error('email')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="email">Email</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <input type="email" name="email" id="email" placeholder="example@gmail.com" required value="{{ $staff->credential->email }}">
+                    <input type="email" name="email" id="email" placeholder="example@gmail.com" value="{{ $staff->credential->email }}">
                 </div>
             </div>
 
+            @error('address')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="address">Address</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <textarea name="address" id="address" placeholder="Enter address......" required>{{ $staff->address }}</textarea>
+                    <textarea name="address" id="address" placeholder="Enter address......">{{ $staff->address }}</textarea>
                 </div>
             </div>
 
+            @error('phone')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="phone">Phone</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <input type="text" name="phone" id="phone" placeholder="Enter Phone Number" required value="{{ $staff->phone }}">
+                    <input type="text" name="phone" id="phone" placeholder="Enter Phone Number" value="{{ $staff->phone }}">
                 </div>
             </div>
 
+            @error('status')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="status">Status</label>
                 </div>
                 <div class="employee-edit-form-group">
-                    <select name="status" id="status" required>
+                    <select name="status" id="status">
                         <option value="Active" {{ $staff->status === 'Active' ? 'selected' : '' }}>Active</option>
                         <option value="Inactive" {{ $staff->status === 'Inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
                 </div>
             </div>
 
+            @error('password')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="password">Password</label>
@@ -171,6 +191,9 @@
                 </div>
             </div>
 
+            @error('password_confirmation')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="employee-edit-form-row">
                 <div class="employee-edit-form-group" style="width: 150px; flex: none;">
                     <label for="password_confirmation">Confirm Password</label>
@@ -205,9 +228,9 @@
                     
                     @if ($currentUserRole === 'Staff' && !$isSelf)
                         {{-- Staff cannot edit others --}}
-                        <button type="submit" class="btn primary" disabled title="You cannot edit other users.">Save</button>
+                        <button type="submit" class="btn primary" disabled title="You cannot edit other users.">Update</button>
                     @else
-                        <button type="submit" class="btn primary">Save</button>
+                        <button type="submit" class="btn primary">Update</button>
                     @endif
                 </div>
             </div>

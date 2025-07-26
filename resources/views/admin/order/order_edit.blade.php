@@ -77,10 +77,11 @@
 
             <div class="btn-group">
                 <div class="btn-left">
-                    <a href="{{ route('admin.order') }}" class="btn secondary">Cancel</a>
+                    <!-- NA -->
                 </div>
-
+                    
                 <div class="btn-right">
+                    <a href="{{ route('admin.order') }}" class="btn secondary">Cancel</a>
                     <button type="submit" class="btn primary">Update</button>
                 </div>
             </div>
