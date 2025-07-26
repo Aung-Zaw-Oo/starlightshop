@@ -1,6 +1,6 @@
-<div class="products-grid" id="productsGrid">
+<div class="products-grid grid-view" id="productsGrid">
     @foreach ($products as $product)
-        <div class="product-card list-item clickable-card"
+        <div class="product-card clickable-card"
             data-name="{{ strtolower($product->name) }}"
             data-category-id="{{ $product->category_id }}"
             data-price="{{ $product->sale_price }}"
