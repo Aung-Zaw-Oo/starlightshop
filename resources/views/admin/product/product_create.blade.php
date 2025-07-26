@@ -6,9 +6,9 @@
 <!-- Breadcrumb -->
 <div class="product-breadcrumb">
     <div class="product-beadcrumb-left">
-        <span><i class="fa-solid fa-house"></i> Home</span>
+        <span><i class="fa-solid fa-house"></i> <a href="{{ route('admin.dashboard') }}">Home</a></span>
         <span>&nbsp;>&nbsp;</span>
-        <span>Product</span>
+        <span><a href="{{ route('admin.product') }}">Product</a></span>
         <span>&nbsp;>&nbsp;</span>
         <span>Create Product</span>
     </div>
@@ -19,16 +19,9 @@
         <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            @if ($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            @error('image')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="profile-section">
                 <div class="profile-image">
                     <i class="fa-solid fa-box" id="profile-icon"></i>
@@ -45,6 +38,9 @@
                 </div>
             </div>
 
+            @error('name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="name">Name</label>
@@ -54,6 +50,9 @@
                 </div>
             </div>
 
+            @error('category_id')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="category_id">Category</label>
@@ -70,6 +69,9 @@
                 </div>
             </div>
 
+            @error('sale_price')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="sale_price">Sale Price ($)</label>
@@ -79,6 +81,9 @@
                 </div>
             </div>
 
+            @error('purchase_price')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="purchase_price">Purchase Price ($)</label>
@@ -88,6 +93,9 @@
                 </div>
             </div>
 
+            @error('qty')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="qty">Quantity</label>
@@ -97,6 +105,9 @@
                 </div>
             </div>
 
+            @error('description')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-create-form-row">
                 <div class="product-create-form-group" style="width: 150px; flex: none;">
                     <label for="description">Description</label>
@@ -108,9 +119,10 @@
 
             <div class="btn-group">
                 <div class="left-group">
-                    <a href="{{ route('admin.product') }}" class="btn secondary">Cancel</a>
+                    <!-- NA -->
                 </div>
                 <div class="right-group">
+                    <a href="{{ route('admin.product') }}" class="btn secondary">Cancel</a>
                     <button type="submit" class="btn primary">Save</button>
                 </div>
             </div>

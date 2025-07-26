@@ -178,6 +178,7 @@ body {
 .primary {
     background-color: var(--primary);
     color: var(--text-white);
+    transition: var(--transition);
 }
 
 .primary:hover {
@@ -188,6 +189,7 @@ body {
 .secondary {
     background-color: var(--secondary);
     color: var(--text-white);
+    transition: var(--transition);
 }
 
 .secondary:hover {
@@ -198,6 +200,7 @@ body {
 .danger {
     background-color: var(--danger);
     color: var(--text-white);
+    transition: var(--transition);
 }
 
 .danger:hover {

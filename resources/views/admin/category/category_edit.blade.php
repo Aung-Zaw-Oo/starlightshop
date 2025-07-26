@@ -19,16 +19,6 @@
             @csrf
             @method('PUT')
 
-            @if ($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <div class="profile-section">
                 <div class="profile-image">
                     @if ($category->image)
@@ -49,22 +39,27 @@
                 </div>
             </div>
 
+            @error('name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="category-edit-form-row">
                 <div class="category-edit-form-group" style="width: 150px; flex: none;">
                     <label for="name">Name</label>
                 </div>
                 <div class="category-edit-form-group">
-                    <input type="text" name="name" id="name" placeholder="Enter Category Name" required value="{{ $category->name }}">
+                    <input type="text" name="name" id="name" placeholder="Enter Category Name" value="{{ $category->name }}">
                 </div>
             </div>
 
-            <!-- Status Section -->
+            @error('status')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="category-edit-form-row">
                 <div class="category-edit-form-group" style="width: 150px; flex: none;">
                     <label for="status">Status</label>
                 </div>
                 <div class="category-edit-form-group">
-                    <select name="status" id="status" required>
+                    <select name="status" id="status">
                         <option value="active" {{ $category->status === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="inactive" {{ $category->status === 'inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
@@ -90,9 +85,9 @@
                     
                     @if ($currentUserRole === 'Staff' && !$isSelf)
                         {{-- Staff cannot edit others --}}
-                        <button type="submit" class="btn primary" disabled title="You cannot edit category.">Save</button>
+                        <button type="submit" class="btn primary" disabled title="You cannot edit category.">Update</button>
                     @else
-                        <button type="submit" class="btn primary">Save</button>
+                        <button type="submit" class="btn primary">Update</button>
                     @endif
                 </div>
             </div>

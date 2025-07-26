@@ -19,22 +19,15 @@
         <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            @if ($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            @error('name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="category-create-form-row">
                 <div class="category-create-form-group" style="width: 150px; flex: none;">
                     <label for="name">Name</label>
                 </div>
                 <div class="category-create-form-group">
-                    <input type="text" name="name" id="name" placeholder="Enter Category Name" required value="{{ old('name') }}">
+                    <input type="text" name="name" id="name" placeholder="Enter Category Name" value="{{ old('name') }}">
                 </div>
             </div>
 
@@ -54,16 +47,13 @@
                 </div>
             </div>
 
-            @php
-                $currentUserRole = session('role');
-            @endphp
-
             <!-- Action Buttons -->
             <div class="btn-group">
                 <div class="left-group">
-                    <a href="{{ route('admin.category') }}" class="btn secondary">Cancel</a>
+                    <!-- NA -->
                 </div>
                 <div class="right-group">
+                    <a href="{{ route('admin.category') }}" class="btn secondary">Cancel</a>
                     <button type="submit" class="btn primary">Save</button>
                 </div>
             </div>

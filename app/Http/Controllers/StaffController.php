@@ -49,6 +49,18 @@ class StaffController extends Controller
             'email' => 'required|email|unique:credentials,email',
             'password' => 'required|string|min:6|confirmed',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'role_id.required' => 'Please select a role.',
+            'first_name.required' => 'Please enter a first name.',
+            'last_name.required' => 'Please enter a last name.',
+            'address.required' => 'Please enter an address.',
+            'phone.required' => 'Please enter a phone number.',
+            'dob.required' => 'Please enter a date of birth.',
+            'email.required' => 'Please enter an email address.',
+            'email.unique' => 'This email address is already in use.',
+            'password.required' => 'Please enter a password.',
+            'password.confirmed' => 'Passwords do not match.',
+            'image.image' => 'Please upload a valid image file.',
         ]);
 
         $currentUserRole = session('role');
@@ -154,6 +166,15 @@ class StaffController extends Controller
             'dob' => 'required|date',
             'status' => 'required|in:Active,Inactive',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'role_id.required' => 'Please select a role.',
+            'first_name.required' => 'Please enter a first name.',
+            'last_name.required' => 'Please enter a last name.',
+            'address.required' => 'Please enter an address.',
+            'phone.required' => 'Please enter a phone number.',
+            'dob.required' => 'Please enter a date of birth.',
+            'status.required' => 'Please select a status.',
+            'image.image' => 'Please upload a valid image file.',
         ]);
 
         // Handle image upload and delete old one if exists

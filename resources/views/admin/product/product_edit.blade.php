@@ -20,16 +20,9 @@
             @csrf
             @method('PUT')
 
-            @if ($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            @error('image')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-section">
                 <div class="product-image">
                     @if ($product->image)
@@ -50,21 +43,27 @@
                 </div>
             </div>
 
+            @error('name')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-edit-form-row">
                 <div class="product-edit-form-group" style="width: 150px; flex: none;">
                     <label for="name">Name</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <input type="text" name="name" id="name" placeholder="Product Name" required value="{{ $product->name }}">
+                    <input type="text" name="name" id="name" placeholder="Product Name" value="{{ $product->name }}">
                 </div>
             </div>
 
+            @error('category_id')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-edit-form-row">
                 <div class="product-edit-form-group" style="width: 150px; flex: none;">
                     <label for="category_id">Category</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <select name="category_id" id="category_id" required>
+                    <select name="category_id" id="category_id">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
                                 {{ $category->name }}
@@ -74,12 +73,15 @@
                 </div>
             </div>
 
+            @error('sale_price')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-edit-form-row">
                 <div class="product-edit-form-group" style="width: 150px; flex: none;">
                     <label for="sale_price">Sale Price ($)</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <input type="number" step="0.01" name="sale_price" id="sale_price" placeholder="0.00" required value="{{ $product->sale_price }}">
+                    <input type="number" step="0.01" name="sale_price" id="sale_price" placeholder="0.00" value="{{ $product->sale_price }}">
                 </div>
             </div>
 
@@ -88,25 +90,31 @@
                     <label for="purchase_price">Purchase Price ($)</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <input type="number" step="0.01" name="purchase_price" id="purchase_price" placeholder="0.00" required value="{{ $product->purchase_price }}">
+                    <input type="number" step="0.01" name="purchase_price" id="purchase_price" placeholder="0.00" value="{{ $product->purchase_price }}">
                 </div>
             </div>
 
+            @error('qty')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-edit-form-row">
                 <div class="product-edit-form-group" style="width: 150px; flex: none;">
                     <label for="qty">Quantity</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <input type="number" name="qty" id="qty" placeholder="0" required value="{{ $product->qty }}">
+                    <input type="number" name="qty" id="qty" placeholder="0" value="{{ $product->qty }}">
                 </div>
             </div>
 
+            @error('description')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="product-edit-form-row">
                 <div class="product-edit-form-group" style="width: 150px; flex: none;">
                     <label for="description">Description</label>
                 </div>
                 <div class="product-edit-form-group">
-                    <textarea name="description" id="description" placeholder="Enter description..." required>{{ $product->description }}</textarea>
+                    <textarea name="description" id="description" placeholder="Enter description...">{{ $product->description }}</textarea>
                 </div>
             </div>
 

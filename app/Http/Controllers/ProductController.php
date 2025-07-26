@@ -38,6 +38,17 @@ class ProductController extends Controller
             'qty' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'name.required' => 'Product name is required.',
+            'name.unique' => 'Product name already exists.',
+            'name.max' => 'Product name should not exceed 255 characters.',
+            'category_id.required' => 'Category is required.',
+            'sale_price.required' => 'Sale price is required.',
+            'purchase_price.required' => 'Purchase price is required.',
+            'qty.required' => 'Quantity is required.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
+            'description.max' => 'Description should not exceed 255 characters.',
         ]);
 
         $uuid = Str::uuid()->toString();
@@ -88,6 +99,16 @@ class ProductController extends Controller
             'qty' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'name.required' => 'Product name is required.',
+            'name.max' => 'Product name should not exceed 255 characters.',
+            'category_id.required' => 'Category is required.',
+            'sale_price.required' => 'Sale price is required.',
+            'purchase_price.required' => 'Purchase price is required.',
+            'qty.required' => 'Quantity is required.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
+            'description.max' => 'Description should not exceed 255 characters.',
         ]);
 
         try {
