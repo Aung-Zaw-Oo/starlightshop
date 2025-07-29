@@ -26,7 +26,7 @@
                         @foreach ($order->orderDetails as $detail)
                             <tr>
                                 <td data-label="Order ID">{{ $order->id }}</td>
-                                <td data-label="Product Name">{{ $detail->product->name ?? 'N/A' }}</td>
+                                <td data-label="Product Name">{{ \Illuminate\Support\Str::limit($detail->product->name ?? 'N/A',20) }}</td>
                                 <td data-label="Image">
                                     @if(isset($detail->product) && $detail->product->image)
                                         <img src="{{ asset('storage/' . $detail->product->image) }}" alt="{{ $detail->product->name }}" loading="lazy">
@@ -45,7 +45,7 @@
                                             @method('PATCH')
                                             <select name="status" onchange="this.form.submit()" class="{{ strtolower($order->order_status) }}">
                                                 <option value="pending" selected>Pending</option>
-                                                <option value="cancelled">Cancelled</option>
+                                                <option value="cancelled" style="color: red;">Cancelled</option>
                                             </select>
                                         </form>
                                     @else
@@ -56,7 +56,7 @@
                                 <td data-label="Reorder">
                                     <form action="{{ route('order.reorder', $order->id) }}" method="POST" class="reorder-form">
                                         @csrf
-                                        <button type="submit" class="reorder-btn">
+                                        <button type="submit" class="reorder-btn btn primary">
                                             Reorder
                                         </button>
                                     </form>
