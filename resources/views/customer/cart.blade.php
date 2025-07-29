@@ -80,7 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
         let total = 0;
 
         if (cart.length === 0) {
-            cartContainer.innerHTML = '<p style="text-align:center; color:#aaa;">Your cart is empty.</p>';
+            cartContainer.innerHTML = `
+            <p style="text-align:center; color:#aaa; margin-top: var(--margin);">Your cart is empty.</p>
+            <div style="text-align: center; margin-top: var(--margin);">
+                <a href="{{ route('customer.product_list') }}" class="btn primary" style="width: 200px; display: inline-block;" id="go-to-shop">Go Shopping</a>
+            </div>
+            `;
             // Remove totals section when cart is empty
             const existingTotals = document.getElementById('cart-totals');
             if (existingTotals) {
@@ -180,12 +185,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const index = parseInt(e.target.dataset.index);
             const action = e.target.dataset.action;
 
-            if (action === 'increase' && cart[index].quantity < cart[index].stockQty) {
-                cart[index].quantity++;
-            } else if (action === 'decrease' && cart[index].quantity > 1) {
-                cart[index].quantity--;
-            }
-
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
@@ -194,15 +193,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.classList.contains('fa-trash')) {
             const index = parseInt(e.target.getAttribute('data-index'));
             if (!isNaN(index)) {
+                const removedItem = cart[index]; // Get item before removing it
                 cart.splice(index, 1);
                 localStorage.setItem('cart', JSON.stringify(cart));
                 renderCart();
-            }     
-            showNotification('Item removed from cart!', 'success');       
+                
+                updateCartCount();
+                updateCartDropdown();
+                showNotification(`${removedItem.name} removed from cart.`, 'warning');
+            }
         }
     });
 
-    // Listen for cart updates from other pages (external updates only)
     window.addEventListener('storage', function(e) {
         if (e.key === 'cart') {
             cart = JSON.parse(e.newValue) || [];
