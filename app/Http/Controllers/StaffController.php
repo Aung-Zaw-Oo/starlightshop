@@ -26,10 +26,6 @@ class StaffController extends Controller
      */
     public function create()
     {
-        if (session('role') === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to create employees.');
-        }
-
         $roles = Role::where('status', 'active')->get();
         return view('admin.employee.employee_create', compact('roles'));
     }
@@ -114,19 +110,24 @@ class StaffController extends Controller
 
         $currentUserId = session('staff_id');
         $currentUserRole = session('role');
+        $targetUserRole = $staff->role->name; // role of the person being edited
 
-        // Staff can only edit themselves
-        if ($currentUserRole === 'Staff' && $staff->id !== $currentUserId) {
-            return redirect()->route('admin.employee')->with('error', 'Unauthorized access.');
-        }
-
+        // If current user is Staff...
         if ($currentUserRole === 'Staff') {
-            // Staff should only see roles they can assign (exclude Admin and Manager)
+            // ...and trying to edit someone else...
+            if ($staff->id !== $currentUserId) {
+                // ...and that person is not a regular Staff (e.g., Manager or Admin)
+                if (in_array($targetUserRole, ['Admin', 'Manager'])) {
+                    return redirect()->route('admin.employee')->with('error', 'Unauthorized access.');
+                }
+            }
+
+            // Staff can only assign Staff-level roles
             $roles = Role::where('status', 'Active')
                 ->whereNotIn('name', ['Admin', 'Manager'])
                 ->get();
         } else {
-            // Admin and Manager see all active roles
+            // Admin or Manager: can edit anyone, see all roles
             $roles = Role::where('status', 'Active')->get();
         }
 
@@ -138,14 +139,17 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $staff = Staff::findOrFail($id);
+        $staff = Staff::with('role')->findOrFail($id);
 
         $currentUserId = session('staff_id');
         $currentUserRole = session('role');
+        $targetUserRole = $staff->role->name;
 
-        // Staff can only update themselves
-        if ($currentUserRole === 'Staff' && $staff->id !== $currentUserId) {
-            return redirect()->route('admin.employee')->with('error', 'Unauthorized update attempt.');
+        // Staff can only update themselves and not Admins or Managers
+        if ($currentUserRole === 'Staff') {
+            if ($staff->id !== $currentUserId || in_array($targetUserRole, ['Admin', 'Manager'])) {
+                return redirect()->route('admin.employee')->with('error', 'Unauthorized update attempt.');
+            }
         }
 
         // Prevent Staff from assigning Admin or Manager roles
@@ -156,7 +160,6 @@ class StaffController extends Controller
             }
         }
 
-        // Validate input (adjust rules as needed)
         $validated = $request->validate([
             'role_id' => 'required|exists:roles,id',
             'first_name' => 'required|string|max:255',
@@ -166,7 +169,7 @@ class StaffController extends Controller
             'dob' => 'required|date',
             'status' => 'required|in:Active,Inactive',
             'image' => 'nullable|image|max:2048',
-        ],[
+        ], [
             'role_id.required' => 'Please select a role.',
             'first_name.required' => 'Please enter a first name.',
             'last_name.required' => 'Please enter a last name.',
@@ -177,31 +180,36 @@ class StaffController extends Controller
             'image.image' => 'Please upload a valid image file.',
         ]);
 
-        // Handle image upload and delete old one if exists
-        if ($staff->image && File::exists(public_path('storage/' . $staff->image))) {
-            File::delete(public_path('storage/' . $staff->image));
-        }
-        $uuid = Str::uuid()->toString();
-        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
-        $request->image->move(public_path('storage/uploads'), $imagePath);
+        // Handle image only if uploaded
+        if ($request->hasFile('image')) {
+            if ($staff->image && File::exists(public_path('storage/' . $staff->image))) {
+                File::delete(public_path('storage/' . $staff->image));
+            }
 
-        // Only Admins and Managers can update role and status
+            $uuid = Str::uuid()->toString();
+            $imagePath = 'uploads/' . $uuid . '.' . $request->image->extension();
+            $request->image->move(public_path('storage/uploads'), $imagePath);
+
+            $staff->image = $imagePath;
+        }
+
+        // Admins/Managers can update everything
         if ($currentUserRole !== 'Staff') {
             $staff->role_id = $validated['role_id'];
             $staff->status = $validated['status'];
         }
 
-        // Staff can update their own info except role and status
+        // Everyone (including Staff) can update these fields
         $staff->first_name = $validated['first_name'];
         $staff->last_name = $validated['last_name'];
         $staff->address = $validated['address'];
         $staff->phone = $validated['phone'];
         $staff->dob = $validated['dob'];
-        $staff->image = $imagePath;
         $staff->save();
 
         return redirect()->route('admin.employee')->with('success', 'Staff updated successfully!');
     }
+
 
 
     /**

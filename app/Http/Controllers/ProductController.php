@@ -20,10 +20,6 @@ class ProductController extends Controller
 
     public function create()
     {
-        if (session('role') === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to create products.');
-        }
-
         $categories = Category::where('status', 'active')->get();
         return view('admin.product.product_create', compact('categories'));
     }
@@ -37,7 +33,7 @@ class ProductController extends Controller
             'purchase_price' => 'required|numeric|min:0',
             'qty' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'required|image|max:2048',
         ],[
             'name.required' => 'Product name is required.',
             'name.unique' => 'Product name already exists.',
@@ -46,6 +42,7 @@ class ProductController extends Controller
             'sale_price.required' => 'Sale price is required.',
             'purchase_price.required' => 'Purchase price is required.',
             'qty.required' => 'Quantity is required.',
+            'image.required' => 'Product Image is required.',
             'image.image' => 'Please upload a valid image file.',
             'image.max' => 'Image size should not exceed 2MB.',
             'description.max' => 'Description should not exceed 255 characters.',
@@ -77,11 +74,6 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-
-        if (session('role') === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to create products.');
-        }
-
         $product = Product::findOrFail($id);
         $categories = Category::where('status', 'active')->get();
         return view('admin..product.product_edit', compact('product', 'categories'));
@@ -158,7 +150,7 @@ class ProductController extends Controller
         }    
 
         $product->delete();
-        return redirect()->route('admin.product')->with('success', 'Product deleted successfully.');
+        return redirect()->route('admin.product')->with('info', 'Product deleted successfully.');
     }
 
     public function ajaxSearch(Request $request)

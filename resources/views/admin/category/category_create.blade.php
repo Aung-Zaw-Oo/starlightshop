@@ -31,6 +31,9 @@
                 </div>
             </div>
 
+            @error('image')
+                <p class="alert alert-error">{{ $message }}</p>
+            @enderror
             <div class="profile-section">
                 <div class="profile-image">
                     <i class="fa-solid fa-box" id="profile-icon"></i>
