@@ -16,13 +16,13 @@
             
             <div class="price-range">
                 <div class="price-input">
-                    <label for="minPrice">Min:</label>
-                    <input type="number" id="minPrice">
+                    <label for="minPrice">Min Price:</label>
+                    <input type="number" id="minPrice" placeholder="Please enter mininal price.">
                 </div>
                 
                 <div class="price-input">
-                    <label for="maxPrice">Max:</label>
-                    <input type="number" id="maxPrice">
+                    <label for="maxPrice">Max Price:</label>
+                    <input type="number" id="maxPrice" placeholder="Please enter maximum price.">
                 </div>
             </div>
             

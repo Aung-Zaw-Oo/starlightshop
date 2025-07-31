@@ -23,13 +23,6 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $currentUserRole = session('role');
-
-        // Example authorization: prevent Staff from creating categories
-        if ($currentUserRole === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to create categories.');
-        }
-
         $category = Category::where('status', 'active')->get();
         return view('admin.category.category_create', compact('category'));
     }
@@ -41,7 +34,12 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'required|image|max:2048',
+        ],[
+            'name.required' => 'Category name is required.',
+            'name.max' => 'Category name should not exceed 255 characters.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
         ]);
 
         // Handle image upload
@@ -74,11 +72,6 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-
-        if (session('role') === 'Staff') {
-            return redirect()->back()->with('error', 'You are not authorized to edit categories.');
-        }
-
         return view('admin.category.category_edit', compact('category'));
     }
 
@@ -86,55 +79,45 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        $category = Category::findOrFail($id);
+{
+    $category = Category::findOrFail($id);
 
-        $currentUserRole = session('role');
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'image' => 'nullable|image|max:2048',
+        'status' => 'required|in:active,inactive',
+    ]);
 
-        // Staff are not authorized to update categories
-        if ($currentUserRole === 'Staff') {
-            return redirect()->back()->with('error', 'Unauthorized update attempt.');
-        }
-
-        // Validate inputs - use lowercase status to match DB enum
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'status' => 'required|in:active,inactive',
-        ]);
-
-        // Handle image upload and delete old one if exists
+    if ($request->hasFile('image')) {
         if ($category->image && File::exists(public_path('storage/' . $category->image))) {
             File::delete(public_path('storage/' . $category->image));
         }
+
         $uuid = Str::uuid()->toString();
-        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $imagePath = 'uploads/' . $uuid . '.' . $request->image->extension();
         $request->image->move(public_path('storage/uploads'), $imagePath);
 
         $category->image = $imagePath;
-        $category->name = $validated['name'];
-        $category->status = $validated['status'];
-        $category->save();
-
-        return redirect()->route('admin.category')->with('success', 'Category updated successfully!');
     }
+
+    $category->name = $validated['name'];
+    $category->status = $validated['status'];
+    $category->save();
+
+    return redirect()->route('admin.category')->with('success', 'Category updated successfully!');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id) {
         $category = Category::findOrFail($id);
-        $currentUserRole = session('role');
-
-        // Staff cannot delete
-        if ($currentUserRole === 'Staff') {
-            return redirect()->back()->with('error', 'Unauthorized deletion attempt.');
-        }
 
         File::delete(public_path('storage/' . $category->image));
 
         $category->delete();
-        return redirect()->route('admin.category')->with('success', 'Category deleted successfully.');
+        return redirect()->route('admin.category')->with('info', 'Category deleted successfully.');
     }
 
 

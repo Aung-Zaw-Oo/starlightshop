@@ -12,11 +12,22 @@
                 <img class="customer-image" src="{{ asset('storage/' . ($customer->image ?? 'uploads/default-avatar.png')) }}" alt="customer-image">
                 <div class="name">{{ $customer->name }}</div>
         </td>
-        <td>{{ $customer->phone }}</td>
-        <td>{{ $customer->credential->email ?? 'N/A' }}</td>
-        <td>{{ $customer->item_bought }}</td>
-        <td>${{ number_format($customer->money_spent, 2) }}</td>
-        <td>{{ optional($customer->credential)->updated_at ? \Carbon\Carbon::parse($customer->credential->updated_at)->diffForHumans() : 'Never' }}</td>
+        <td>
+            {{ $customer->phone }}
+        </td>
+        <td>
+            {{ $customer->credential->email ?? 'N/A' }}
+        </td>
+        <td>
+            {{ $customer->item_bought }}
+        </td>
+        <td>
+            ${{ number_format($customer->money_spent, 2) }}
+        </td>
+        <td>
+            {{ $customer->last_login ? \Carbon\Carbon::parse($customer->last_login)->diffForHumans() : 'Never' }}
+        </td>
+
     </tr>
     @endforeach
     <tr>

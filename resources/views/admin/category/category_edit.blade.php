@@ -76,19 +76,11 @@
 
             <div class="btn-group">
                 <div class="left-group">
-                    @if ($currentUserRole !== 'Staff')
-                        <button type="button" class="btn danger" onclick="showDeleteModal()">Delete</button>
-                    @endif
+                    <button type="button" class="btn danger" onclick="showDeleteModal()">Delete</button>
                 </div>
                 <div class="right-group">
                     <a href="{{ route('admin.category') }}" class="btn secondary">Cancel</a>
-                    
-                    @if ($currentUserRole === 'Staff' && !$isSelf)
-                        {{-- Staff cannot edit others --}}
-                        <button type="submit" class="btn primary" disabled title="You cannot edit category.">Update</button>
-                    @else
-                        <button type="submit" class="btn primary">Update</button>
-                    @endif
+                    <button type="submit" class="btn primary">Update</button>
                 </div>
             </div>
         </form>

@@ -25,7 +25,7 @@
                     ${{ number_format($customer->money_spent, 2) }}
                 </div>
                 <div class="info-row">
-                    <strong>Last Login:</strong> {{ optional($customer->credential)->last_login ? \Carbon\Carbon::parse($customer->credential->last_login)->diffForHumans() : 'Never' }}
+                    <strong>Last Login:</strong> {{ $customer->last_login ? \Carbon\Carbon::parse($customer->last_login)->diffForHumans() : 'Never' }}
                 </div>
             </div>
         </div>
