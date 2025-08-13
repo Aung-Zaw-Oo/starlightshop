@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('customer')->paginate(10);
+        $orders = Order::with('customer')
+            ->where('order_status', 'pending')
+            ->paginate(10);
+
         return view('admin.order', compact('orders'));
     }
 

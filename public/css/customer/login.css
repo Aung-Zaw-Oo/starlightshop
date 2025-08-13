@@ -85,6 +85,15 @@
     width: 100%;
 }
 
+.alert-error {
+    color: var(--danger);
+    background-color: #fff;
+    padding: calc(var(--padding) / 1.5) var(--padding);
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .login-container {
         flex-direction: column;

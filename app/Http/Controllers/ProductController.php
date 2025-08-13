@@ -34,7 +34,7 @@ class ProductController extends Controller
             'qty' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'image' => 'required|image|max:2048',
-        ],[
+        ], [
             'name.required' => 'Product name is required.',
             'name.unique' => 'Product name already exists.',
             'name.max' => 'Product name should not exceed 255 characters.',
@@ -48,8 +48,15 @@ class ProductController extends Controller
             'description.max' => 'Description should not exceed 255 characters.',
         ]);
 
+        // Custom validation for sale price > purchase price
+        if ($validated['sale_price'] <= $validated['purchase_price']) {
+            return back()
+                ->withErrors(['sale_price' => 'Sale price must be greater than purchase price.'])
+                ->withInput();
+        }
+
         $uuid = Str::uuid()->toString();
-        $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+        $imagePath = 'uploads/'.$uuid.'.'.$request->image->extension();
         $request->image->move(public_path('storage/uploads'), $imagePath);
 
         Product::create([
@@ -66,6 +73,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product')->with('success', 'Product created successfully.');
     }
+
 
     public function show(string $id)
     {
@@ -137,8 +145,6 @@ class ProductController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'An error occurred. Please try again.']);
         }
     }
-
-
 
     public function destroy($id)
     {

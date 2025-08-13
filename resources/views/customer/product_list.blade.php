@@ -108,7 +108,6 @@
     const listView = document.getElementById('listView');
     const ajaxProductContainer = document.getElementById('ajaxProductContainer');
     let productsGrid = document.getElementById('productsGrid');
-    const viewButtons = document.querySelectorAll('.view-btn');
     const searchInput = document.getElementById('searchInput');
     const categoryCheckboxes = document.querySelectorAll('.category-item input[type="checkbox"]');
     const sortSelect = document.getElementById('sortSelect');
@@ -117,36 +116,38 @@
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
 
-    let currentView = 'grid'; // default
+    // Restore or default to grid view
+    let currentView = sessionStorage.getItem('productView') || 'grid';
+
+    function applyViewMode() {
+        if (!productsGrid) return;
+        const productCards = document.querySelectorAll('.product-card');
+        if (currentView === 'list') {
+            productsGrid.classList.add('list-view');
+            productsGrid.classList.remove('grid-view');
+            productCards.forEach(card => card.classList.add('list-item'));
+            listView.classList.add('active');
+            gridView.classList.remove('active');
+        } else {
+            productsGrid.classList.add('grid-view');
+            productsGrid.classList.remove('list-view');
+            productCards.forEach(card => card.classList.remove('list-item'));
+            gridView.classList.add('active');
+            listView.classList.remove('active');
+        }
+    }
 
     gridView.addEventListener('click', () => {
         currentView = 'grid';
-        gridView.classList.add('active');
-        listView.classList.remove('active');
-        productsGrid.classList.add('grid-view');
-        productsGrid.classList.remove('list-view');
+        sessionStorage.setItem('productView', currentView);
         applyViewMode();
     });
 
     listView.addEventListener('click', () => {
         currentView = 'list';
-        gridView.classList.remove('active');
-        listView.classList.add('active');
-        productsGrid.classList.add('list-view');
-        productsGrid.classList.remove('grid-view');
+        sessionStorage.setItem('productView', currentView);
         applyViewMode();
     });
-
-    function applyViewMode() {
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            if (currentView === 'list') {
-                card.classList.add('list-item');
-            } else {
-                card.classList.remove('list-item');
-            }
-        });
-    }
 
     menuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
@@ -210,18 +211,9 @@
             document.getElementById('ajaxProductContainer').innerHTML = data.html;
             document.getElementById('paginationWrapper').innerHTML = data.pagination;
 
-            // Reassign productsGrid and reapply view
             productsGrid = document.getElementById('productsGrid');
-
-            if (currentView === 'list') {
-                productsGrid.classList.add('list-view');
-                productsGrid.classList.remove('grid-view');
-            } else {
-                productsGrid.classList.add('grid-view');
-                productsGrid.classList.remove('list-view');
-            }
-
             applyViewMode();
+
             attachPaginationLinks();
             handleClickable();
         })
@@ -256,8 +248,15 @@
     maxPriceInput.addEventListener('input', filterProducts);
     sortSelect.addEventListener('change', filterProducts);
 
+    window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) {
+            fetchProducts(1);
+        } else {
+            productsGrid = document.getElementById('productsGrid');
+            applyViewMode();
+        }
+    });
     attachPaginationLinks();
     handleClickable();
-    fetchProducts(1);
 </script>
 @endpush

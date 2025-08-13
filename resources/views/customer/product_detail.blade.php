@@ -11,7 +11,7 @@
     inset: 0;
     background-image: url('{{ asset('storage/' . $product->image) }}');
     background-repeat: no-repeat;
-    background-size: 150%; /* controls zoom level */
+    background-size: 150%;
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;

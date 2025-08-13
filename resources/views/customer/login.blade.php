@@ -18,7 +18,7 @@
 
                     <!-- Error Message -->
                     @if (session('error'))
-                        <div class="error">
+                        <div class="alert-error">
                             {{ session('error') }}
                         </div>
                     @endif

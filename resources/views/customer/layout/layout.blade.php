@@ -248,6 +248,7 @@ maximumFractionDigits: 2
 }
 
 // ====== Cart Event Listeners ======
+// ====== Cart Event Listeners ======
 document.addEventListener('click', function (e) {
 const addBtn = e.target.closest('.add-to-cart-btn');
 if (addBtn) {
@@ -256,16 +257,31 @@ const productName = addBtn.dataset.productName;
 const price = parseFloat(addBtn.dataset.price);
 const image = addBtn.dataset.image;
 const category = addBtn.dataset.category;
-const stockQty = parseInt(addBtn.dataset.stock);
+const originalStockQty = parseInt(addBtn.dataset.originalStock) || parseInt(addBtn.dataset.stock);
+
+// Store original stock on first click
+if (!addBtn.dataset.originalStock) {
+  addBtn.dataset.originalStock = addBtn.dataset.stock;
+}
+
+const currentDisplayStock = parseInt(addBtn.dataset.stock);
+
+// Check if we can add more
+if (currentDisplayStock <= 0) {
+  showNotification("Product is out of stock!", "error");
+  return;
+}
 
 const existingItem = cart.find(item => item.id === productId);
+let newCartQuantity = 1;
+
 if (existingItem) {
-  if (existingItem.quantity < stockQty) {
-    existingItem.quantity += 1;
-  } else {
+  newCartQuantity = existingItem.quantity + 1;
+  if (newCartQuantity > originalStockQty) {
     showNotification("Maximum stock reached.", "error");
     return;
   }
+  existingItem.quantity = newCartQuantity;
 } else {
   cart.push({
     id: productId,
@@ -274,15 +290,31 @@ if (existingItem) {
     quantity: 1,
     image,
     category,
-    stockQty
+    stockQty: originalStockQty
   });
 }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    updateCartDropdown();
-    showNotification(`${productName} added to cart!`);
+// Visual stock reduction
+const newDisplayStock = currentDisplayStock - 1;
+const stockElement = document.querySelector('.product-stock');
+
+if (stockElement) {
+  if (newDisplayStock > 0) {
+    stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> ${newDisplayStock} in stock`;
+    addBtn.dataset.stock = newDisplayStock;
+  } else {
+    stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> Out of stock`;
+    addBtn.disabled = true;
+    addBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i><span> Out of Stock</span>';
+    addBtn.classList.add('disabled');
   }
+}
+
+localStorage.setItem('cart', JSON.stringify(cart));
+updateCartCount();
+updateCartDropdown();
+showNotification(`${productName} added to cart!`);
+}
 
   // Quantity Update
   if (e.target.classList.contains('qty-btn')) {
