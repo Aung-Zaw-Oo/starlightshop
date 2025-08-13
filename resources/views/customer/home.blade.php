@@ -55,6 +55,7 @@
                 <div class="tag">
                     <a href="{{ route('customer.product_list', ['category' => $category->id]) }}">
                         <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
+                        <p style="margin-top: 8px;">{{ $category->name }}</p>
                     </a>
                 </div>
             @endforeach
@@ -73,7 +74,10 @@
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                     </div>
                     <div class="top-selling-card-description">
-                        <h3>{{ $product->name }}</h3>
+                        <div>
+                            <h3 style="margin-bottom: 8px;">{{ $product->name }}</h3>
+                            <b class="price">$ {{ number_format($product->sale_price, 2) }}</b>
+                        </div>
                         <button class="detail-btn">
                             <a href="{{ route('customer.product_detail', $product->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
                         </button>

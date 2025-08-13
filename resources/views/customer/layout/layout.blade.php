@@ -105,9 +105,9 @@
         <div class="footer-col">
             <h3>Customer Service</h3>
             <ul>
-                <li>Return Policy</li>
-                <li>Delivery Information</li>
-                <li>Privacy Policy</li>
+                <li><a href="#">Return Policy</a></li>
+                <li><a href="#">Delivery Information</a></li>
+                <li><a href="#">Privacy Policy</a></li>
             </ul>
         </div>
         <div class="footer-col">
@@ -118,9 +118,9 @@
                 <button class="btn primary">Subscribe</button>
             </div>
             <div class="social-icons">
-                <i class="fa-brands fa-square-facebook"></i>
-                <i class="fa-brands fa-square-twitter"></i>
-                <i class="fa-brands fa-square-instagram"></i>
+                <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-square-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
             </div>
         </div>
     </div>
@@ -248,7 +248,6 @@ maximumFractionDigits: 2
 }
 
 // ====== Cart Event Listeners ======
-// ====== Cart Event Listeners ======
 document.addEventListener('click', function (e) {
 const addBtn = e.target.closest('.add-to-cart-btn');
 if (addBtn) {
@@ -300,13 +299,13 @@ const stockElement = document.querySelector('.product-stock');
 
 if (stockElement) {
   if (newDisplayStock > 0) {
-    stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> ${newDisplayStock} in stock`;
+    stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> ${newDisplayStock} Items In Stock.`;
     addBtn.dataset.stock = newDisplayStock;
   } else {
-    stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> Out of stock`;
-    addBtn.disabled = true;
-    addBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i><span> Out of Stock</span>';
-    addBtn.classList.add('disabled');
+    stockElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Out of Stock.`;
+    addBtn.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span> Out of Stock</span>';
+    addBtn.dataset.stock = 0;
+    addBtn.classList.add('secondary');
   }
 }
 
@@ -316,16 +315,24 @@ updateCartDropdown();
 showNotification(`${productName} added to cart!`);
 }
 
-  // Quantity Update
+  // Dropdown Cart Quantity Update
   if (e.target.classList.contains('qty-btn')) {
     const index = parseInt(e.target.dataset.index);
     const action = e.target.dataset.action;
     const item = cart[index];
+    const productId = item.id;
 
     if (action === 'increase' && item.quantity < item.stockQty) {
       item.quantity += 1;
-      } else if (action === 'decrease' && item.quantity > 1) {
+      
+      // Update visual stock if on product detail page
+      updateProductPageStock(productId, -1);
+      
+    } else if (action === 'decrease' && item.quantity > 1) {
       item.quantity -= 1;
+      
+      // Update visual stock if on product detail page
+      updateProductPageStock(productId, 1);
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -333,10 +340,14 @@ showNotification(`${productName} added to cart!`);
     updateCartDropdown();
   }
 
-  // Remove Item
+  // Remove Item from Dropdown Cart
   if (e.target.classList.contains('remove-cart-btn')) {
     const index = e.target.dataset.index;
-    const removedItem = cart[index]; // capture item before removing
+    const removedItem = cart[index];
+    const quantityToRestore = removedItem.quantity;
+
+    // Update visual stock if on product detail page
+    updateProductPageStock(removedItem.id, quantityToRestore);
 
     cart.splice(index, 1);
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -346,6 +357,37 @@ showNotification(`${productName} added to cart!`);
     showNotification(`${removedItem.name} removed from cart.`, 'warning');
   }
 });
+
+// Helper function to update product page stock display
+function updateProductPageStock(productId, quantityChange) {
+  const productButton = document.querySelector(`[data-product-id="${productId}"]`);
+  const stockElement = document.querySelector('.product-stock');
+  
+  if (productButton && stockElement) {
+    const currentDisplayStock = parseInt(productButton.dataset.stock);
+    const newDisplayStock = currentDisplayStock + quantityChange;
+    const originalStock = parseInt(productButton.dataset.originalStock) || currentDisplayStock;
+    
+    // Don't let display stock go above original stock
+    const finalDisplayStock = Math.min(newDisplayStock, originalStock);
+    
+    if (finalDisplayStock > 0) {
+      stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> ${finalDisplayStock} Items In Stock.`;
+      productButton.dataset.stock = finalDisplayStock;
+      
+      // Re-enable button text if it was showing out of stock
+      if (productButton.innerHTML.includes('Out of Stock')) {
+        productButton.innerHTML = '<i class="fa-solid fa-cart-plus"></i><span> Add To Cart</span>';
+        productButton.classList.remove('secondary'); // Remove secondary class when back in stock
+      }
+    } else {
+      stockElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Out of Stock.`;
+      productButton.dataset.stock = 0;
+      productButton.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span> Out of Stock</span>';
+      productButton.classList.add('secondary'); // Add secondary class when out of stock
+    }
+  }
+}
 
 @if(session('logged_out'))
   localStorage.removeItem('cart');

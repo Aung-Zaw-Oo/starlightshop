@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-
-public function index()
+    public function index()
     {
         $products = Product::all();
         $categories = Category::all();
@@ -20,9 +19,10 @@ public function index()
                 'products.id',
                 'products.name',
                 'products.image',
+                'products.sale_price',
                 DB::raw('SUM(order_details.qty) as total_qty')
             )
-            ->groupBy('products.id', 'products.name', 'products.image')
+            ->groupBy('products.id', 'products.name', 'products.image', 'products.sale_price')
             ->orderByDesc('total_qty')
             ->take(3)
             ->get();
