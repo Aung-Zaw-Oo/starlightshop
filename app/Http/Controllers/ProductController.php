@@ -13,7 +13,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->paginate(10);
+        $products = Product::with('category')
+        ->orderByDesc('created_at')
+        ->paginate(10);
         $categories = Category::where('status', 'active')->get();
         return view('admin.product.product', compact('products','categories'));
     }
