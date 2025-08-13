@@ -178,7 +178,9 @@ class CustomerController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads', 'public');
+            $uuid = Str::uuid()->toString();
+            $imagePath =  'uploads/'.$uuid.'.'.$request->image->extension();
+            $request->image->move(public_path('storage/uploads'), $imagePath);
             $validated['image'] = $imagePath;
         }
 
@@ -222,8 +224,6 @@ class CustomerController extends Controller
 
         // Find the credential record by email
         $credential = Credential::where('email', $validated['email'])->first();
-
-        $credential->save();
 
         // Check if credential exists and the password matches the hashed password in DB
         if ($credential && Hash::check($validated['password'], $credential->password)) {

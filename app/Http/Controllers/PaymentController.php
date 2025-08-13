@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderDetail;
 use Stripe\Stripe;
 use App\Models\Order;
+use App\Models\Product;
 use Stripe\PaymentIntent;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -56,6 +57,15 @@ class PaymentController extends Controller
                         'price'      => $item['price'],
                         'status'     => 'active',
                     ]);
+
+                    $product = Product::find($item['id']);
+                    if ($product) {
+                        $product->qty -= $item['quantity'];
+                        if ($product->qty < 0) {
+                            $product->qty = 0;
+                        }
+                        $product->save();
+                    }
                 }
             }
 
@@ -71,8 +81,6 @@ class PaymentController extends Controller
             ], 500);
         }
     }
-
-
 
     public function paymentSuccess()
     {

@@ -8,7 +8,7 @@
     <div>
         <h2>CUSTOMER REGISTRATION</h2>
         <div class="form-container">
-            <form action="{{ route('customer.registerProcess') }}" method="post">
+            <form action="{{ route('customer.registerProcess') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="input-box">
                     <label for="name">Customer Name:</label>

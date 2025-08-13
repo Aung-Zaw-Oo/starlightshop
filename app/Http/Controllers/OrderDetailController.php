@@ -11,6 +11,7 @@ class OrderDetailController extends Controller
     public function index()
     {
         $orders = Order::with(['customer.credential', 'orderDetails.product'])
+            ->where('order_status', 'pending')
             ->orderByDesc('created_at')
             ->paginate(10)
             ->appends(request()->all());
@@ -38,7 +39,6 @@ class OrderDetailController extends Controller
         $order->update($request->all());
         return redirect()->route('admin.order')->with('success', 'Order updated successfully.');
     }
-
 
     public function ajaxSearch(Request $request)
     {
@@ -92,7 +92,7 @@ class OrderDetailController extends Controller
             ->when($toDate, fn($q) => $q->whereDate('created_at', '<=', $toDate))
             ->orderByDesc('created_at');
 
-        $orders = $ordersQuery->paginate(10)->appends([
+        $orders = $ordersQuery->where('order_status', 'pending')->paginate(10)->appends([
             'query' => $query,
             'from-date' => $fromDate,
             'to-date' => $toDate,

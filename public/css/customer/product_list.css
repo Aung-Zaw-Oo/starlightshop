@@ -180,10 +180,11 @@ input[type="number"],
     padding: var(--padding);
     transition: var(--transition);
     cursor: pointer;
-    gap: var(--gap);
+    gap: calc(var(--gap) * 2);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr 1fr;
+    max-height: 400px;
 }
 
 .product-card:hover {
@@ -193,7 +194,6 @@ input[type="number"],
 
 .product-image {
     width: 100%;
-    height: 180px;
     border-radius: var(--radius);
     margin-bottom: var(--margin);
     display: flex;
@@ -205,25 +205,34 @@ input[type="number"],
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 200px;
 }
+
 .card-header img {
     width: 100%;
     border-radius: var(--radius);
 }
 
 .product-info {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
 }
 
 #productsGrid > div.list-item {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
 }
 
 #productsGrid > div.list-item .card-header {
-    max-width: 300px;
+    align-items: center;
+    height: unset;
+}
+
+#productsGrid > div.list-item .card-header img {
+    max-width: 200px;
 }
 
 #productsGrid > div.list-item .product-info {
@@ -366,6 +375,21 @@ input[type="number"],
 @media (max-width: 480px) {
     .products-grid {
         grid-template-columns: 1fr;
+    }
+
+    .product-card {
+        max-height: 375px;
+    }
+
+    .card-header {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .card-header img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     #productsGrid > div.list-item {

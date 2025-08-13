@@ -92,12 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`{{ route('admin.order.ajaxSearch') }}?${params.toString()}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-Device': window.innerWidth <= 768 ? 'mobile' : 'desktop'
+                'X-Device': window.innerWidth <= 1024 ? 'mobile' : 'desktop'
             }
         })
         .then(response => response.text())
         .then(html => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1024) {
                 document.querySelector('#order-card-list').innerHTML = html;
             } else {
                 document.querySelector('#order-table-body').innerHTML = html;
