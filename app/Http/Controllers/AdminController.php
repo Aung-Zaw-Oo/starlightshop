@@ -235,7 +235,6 @@ class AdminController extends Controller
         ));
     }
 
-
     public function order()
     {
         return view('admin.order');
