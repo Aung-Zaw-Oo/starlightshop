@@ -146,9 +146,10 @@ nav.top-nav {
 }
 
 footer {
-    padding: calc(var(--padding) * 1);
+    padding: calc(var(--padding) * 2);
     background-color: var(--bg-dark);
     transition: var(--transition);
+    padding-bottom: var(--padding);
 }
 
 footer a:hover {
@@ -572,6 +573,10 @@ footer a:hover {
     .profile-dropdown {
         right: 0;
         min-width: 180px;
+    }
+
+    footer {
+        padding: calc(var(--padding) * 1);
     }
 
     .footer-col {
