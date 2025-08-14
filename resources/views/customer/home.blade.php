@@ -76,7 +76,7 @@
                     <div class="top-selling-card-description">
                         <div>
                             <h3 style="margin-bottom: 8px;">{{ $product->name }}</h3>
-                            <b class="price">$ {{ number_format($product->sale_price, 2) }}</b>
+                            <b class="price" style="font-size: 18px; color: var(--primary);">$ {{ number_format($product->sale_price, 2) }}</b>
                         </div>
                         <button class="detail-btn">
                             <a href="{{ route('customer.product_detail', $product->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
@@ -100,11 +100,11 @@
                         <img src="{{ asset('storage/' . $products[count($products) - $i]->image) }}" alt="{{ $products[count($products) - $i]->name }}">
                     </div>
                     <div class="new-arrival-card-description">
-                        <div>
+                        <div style="margin-bottom: .5rem;">
                             <h3>
                                 {{ \Illuminate\Support\Str::limit($products[count($products) - $i]->name,30) }}
                             </h3>
-                            <p class="price">$ {{ number_format($products[count($products) - $i]->sale_price, 2) }}</p>
+                            <b class="price" style="font-size: 18px; color: var(--primary);">$ {{ number_format($products[count($products) - $i]->sale_price, 2) }}</b>
                         </div>
                         <button class="detail-btn">
                             <a href="{{ route('customer.product_detail', $products[count($products) - $i]->id) }}">Shop Now <i class="fa-solid fa-arrow-right"></i></a>

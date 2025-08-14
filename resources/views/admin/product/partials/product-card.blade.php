@@ -7,7 +7,7 @@
         <div class="product-card clickable-card" data-href="{{ route('admin.product.edit', $product->id) }}">
             <div class="card-header">
                 <img class="product-image" src="{{ asset('storage/' . ($product->image ?? 'uploads/default-item.png')) }}" alt="product-image">
-                <div class="name">{{ $product->name }}</div>
+                <div class="name">{{ Illuminate\Support\Str::limit($product->name, 30) }}</div>
             </div>
             <div class="card-body">
                 <div class="info-row">
@@ -28,11 +28,15 @@
                 </div>
                 <div class="status-row">
                     <strong>Status:</strong> 
-                    <span class="status-{{ strtolower($product->status) }}">
+                    <span>
                         @if ($product->qty > 0 && $product->status == 'Active')
-                            Available
+                            <span class="status-{{ strtolower($product->status) }}">
+                                Available
+                            </span>
                         @else
+                        <span class="status-inactive">
                             Out of Stock
+                        </span>
                         @endif 
                     </span>
                 </div>

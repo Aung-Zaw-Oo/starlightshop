@@ -31,7 +31,7 @@
       <div class="profile-container">
         <button class="profile-btn" id="profileBtn" type="button">
           <i class="fa-solid fa-user-gear"></i>
-          <span>
+          <span class="profile-name">
             @if (session('customer_name'))
               {{ \Illuminate\Support\Str::limit(session('customer_name'), 10) }}
             @else
@@ -142,6 +142,34 @@ const cartCountEl = document.getElementById('cart-count');
 const cartItemsContainer = document.getElementById('cart-items');
 const cartTotalEl = document.getElementById('cart-total');
 
+// ====== Check Initial Stock Status ======
+function checkInitialStockStatus() {
+  const addBtn = document.querySelector('.add-to-cart-btn');
+  const stockElement = document.querySelector('.product-stock');
+  
+  if (addBtn && stockElement) {
+    const currentStock = parseInt(addBtn.dataset.stock);
+    const originalStock = parseInt(addBtn.dataset.originalStock) || currentStock;
+    
+    // Set original stock if not already set
+    if (!addBtn.dataset.originalStock) {
+      addBtn.dataset.originalStock = originalStock;
+    }
+    
+    // Check if out of stock
+    if (currentStock <= 0) {
+      stockElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Out of Stock.`;
+      addBtn.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span> Out of Stock</span>';
+      addBtn.classList.add('secondary');
+      addBtn.dataset.stock = 0;
+    } else {
+      stockElement.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> ${currentStock} Items In Stock.`;
+      addBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i><span> Add To Cart</span>';
+      addBtn.classList.remove('secondary');
+    }
+  }
+}
+
 // ====== Cart State ======
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -182,7 +210,6 @@ window.addEventListener('resize', () => {
 });
 
 // ====== Cart Logic ======
-
 function updateCartCount() {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartCountEl.textContent = totalItems;
@@ -381,10 +408,10 @@ function updateProductPageStock(productId, quantityChange) {
         productButton.classList.remove('secondary'); // Remove secondary class when back in stock
       }
     } else {
-      stockElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Out of Stock.`;
+      stockElement.innerHTML = `<i class="fa-solid fa-circle-exclamation""></i> Out of Stock.`;
       productButton.dataset.stock = 0;
       productButton.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span> Out of Stock</span>';
-      productButton.classList.add('secondary'); // Add secondary class when out of stock
+      productButton.classList.add('secondary');
     }
   }
 }
@@ -410,6 +437,13 @@ const handleClickable = () => {
 // ====== Init on Load ======
 updateCartCount();
 updateCartDropdown();
+checkInitialStockStatus();
+
+window.addEventListener('cartUpdated', function(e) {
+  cart = e.detail.cart || [];
+  updateCartCount();
+  updateCartDropdown();
+});
 
 window.addEventListener('cartUpdated', function(e) {
   cart = e.detail.cart || [];

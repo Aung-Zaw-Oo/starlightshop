@@ -15,7 +15,7 @@
                 <img src="{{ asset('storage/' . ($productImage ?? 'uploads/default-item.png')) }}" alt="Product Image"
                         onerror="this.src='{{ asset('storage/uploads/default-item.png') }}'">
                 <div class="name">
-                    {{ $product->name ?? 'Unknown Product' }}
+                    {{ Illuminate\Support\Str::limit($product->name ?? 'Unknown Product', 30) }}
                 </div>
             </div>
             <div class="card-body">

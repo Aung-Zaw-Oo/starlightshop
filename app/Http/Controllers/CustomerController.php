@@ -103,15 +103,6 @@ class CustomerController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        // Handle image upload if present
-        // if ($request->hasFile('image')) {
-        //     if ($customer->image && Storage::disk('public')->exists($customer->image)) {
-        //         Storage::disk('public')->delete($customer->image);
-        //     }
-        //     $imagePath = $request->file('image')->store('uploads', 'public');
-        //     $customer->image = $imagePath;
-        // }
-
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($customer->image && File::exists(public_path('storage/' . $customer->image))) {
@@ -295,8 +286,16 @@ class CustomerController extends Controller
                     $session->update(['percentage' => $percentage]);
                 }
 
-                // Redirect to home with success message after login
-                return redirect()->to(route('customer.home'))->with('success', 'Login successful');
+                // CHECK FOR INTENDED REDIRECT URL
+                $redirectTo = session()->pull('redirectTo'); // Use pull() to get and remove from session
+                
+                if ($redirectTo) {
+                    // Redirect to the intended URL
+                    return redirect()->to($redirectTo)->with('success', 'Login successful');
+                }
+                
+                // Default redirect to home if no intended URL
+                return redirect()->route('customer.home')->with('success', 'Login successful');
             }
         }
 

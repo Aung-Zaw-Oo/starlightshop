@@ -62,11 +62,22 @@
                     </div>
                 </div>
             </div>
-            <div class="lower">
-                <p>Product Description</p>
+            <div class="lower">                 
+                <p>Product Description</p>                 
                 @foreach (explode('-', ltrim($product->description, '-')) as $item)
-                    <li style="list-style: none;">{{ $item }}</li>
-                @endforeach
+                    @php
+                        $parts = explode(':', $item, 2);
+                        $label = isset($parts[0]) ? trim($parts[0]) : '';
+                        $value = isset($parts[1]) ? trim($parts[1]) : $item;
+                    @endphp
+                    <li style="list-style: none;">
+                        @if($label && isset($parts[1]))
+                            <span class="spec-label">{{ $label }}: </span>{{ $value }}
+                        @else
+                            {{ $item }}
+                        @endif
+                    </li>                 
+                @endforeach             
             </div>
         </div>
     </div>
