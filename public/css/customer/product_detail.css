@@ -67,6 +67,7 @@
 .product-price {
     color: var(--primary);
     font-weight: bold;
+    font-size: 1rem;
 }
 
 .options {
@@ -92,6 +93,11 @@
 .product-description {
     font-size: 1rem;
     line-height: 1.6;
+}
+
+.spec-label {
+    color: whitesmoke;
+    opacity: 0.7;
 }
 
 @media (max-width: 768px) {
@@ -124,7 +130,6 @@
     }
 
     .product-stock,
-    .product-price,
     .product-category,
     .product-description {
         font-size: 14px;

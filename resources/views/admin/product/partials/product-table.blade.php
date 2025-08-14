@@ -12,17 +12,16 @@
                 <img class="product-image" src="{{ asset('storage/' . ($product->image ?? 'uploads/default-item.png')) }}" alt="product-image">
                 <span>{{ $product->name }}</span>
             </td>
-            
             <td>{{ $product->category->name }}</td>
             <td>${{ $product->sale_price }}</td>
             <td>${{ $product->purchase_price }}</td>
             <td>{{ $product->qty }}</td>
             <td>
-                <span class="status-{{ strtolower($product->status) }}"> 
+                <span> 
                     @if ($product->qty > 0 && $product->status == 'Active')
-                        Available
+                        <span class="status-{{ strtolower($product->status) }}">Available</span>
                     @else
-                        Out of Stock
+                        <span class="status-inactive">Out of Stock</span>
                     @endif 
                 </span>
             </td>

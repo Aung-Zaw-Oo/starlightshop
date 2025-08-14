@@ -16,9 +16,10 @@ class CustomerMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->session()->has('customer_id')) {
-            // Save intended URL to redirect after login
+            // Store intended URL in session for redirect after login
+            session()->put('redirectTo', url()->current());
+            
             return redirect()->route('customer.loginForm')->with([
-                'redirectTo' => url()->current(),
                 'error' => 'You need to login first.'
             ]);
         }

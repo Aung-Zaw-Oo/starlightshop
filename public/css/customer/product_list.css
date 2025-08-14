@@ -1,5 +1,5 @@
 .main-content {
-    padding: var(--padding);
+    padding: calc(var(--padding) * 2);
     min-height: auto !important;
 }
 
@@ -373,6 +373,9 @@ input[type="number"],
 }
 
 @media (max-width: 480px) {
+    .main-content {
+        padding: calc(var(--padding) * 1);
+    }
     .products-grid {
         grid-template-columns: 1fr;
     }
