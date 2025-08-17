@@ -8,6 +8,8 @@ use App\Models\Product;
 use Stripe\PaymentIntent;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use App\Mail\PurchaseConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -68,6 +70,8 @@ class PaymentController extends Controller
                     }
                 }
             }
+            
+            Mail::to(session('customer_email'))->send(new PurchaseConfirmation($order));
 
             return response()->json([
                 'success' => true,
