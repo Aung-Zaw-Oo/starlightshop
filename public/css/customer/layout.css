@@ -152,9 +152,14 @@ footer {
     padding-bottom: var(--padding);
 }
 
-footer a:hover {
-    text-decoration: underline;
+footer a {
     color: var(--primary);
+    transition: var(--transition);
+}
+
+footer a:hover {
+    text-shadow: var(--hover);
+    transform: scale(1.01);
 }
 
 .footer-upper {
