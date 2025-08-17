@@ -42,6 +42,10 @@ Route::prefix('customer')->group(function () {
         return view('customer.about');
     })->name('customer.about');
 
+    Route::get('contact', function(){
+        return view('customer.contact');
+    })->name('customer.contact');
+
     // Get Register Form
     Route::get('register', [CustomerController::class, 'registerForm'])->name('customer.registerForm');
 

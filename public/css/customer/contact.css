@@ -1,0 +1,40 @@
+.contact-box {
+    height: fit-content;
+    padding: var(--padding);
+}
+
+.contact-upper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-left,
+.contact-right {
+    padding: 0 var(--padding);
+    min-height: 500px;
+}
+
+.contact-left {
+    border: 1px solid red;
+    width: 60%;
+}
+
+.contact-left a {
+    display: block;
+}
+
+.contact-left a:hover {
+    text-decoration: underline;
+    color: var(--primary);
+}
+
+.contact-left .title {
+    font-size: 3rem;
+}
+
+.contact-right {
+    border: 1px solid green;
+    width: 40%;
+}
