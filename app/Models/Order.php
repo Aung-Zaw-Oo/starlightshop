@@ -17,7 +17,8 @@ class Order extends Model
         'total_price',
         'qty',
         'order_status',
-        'status'
+        'status',
+        'stripe_payment_id'
     ];
 
     public function customer(){

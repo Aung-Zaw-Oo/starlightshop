@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -37,13 +39,34 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        if($order->order_status == 'pending') {
-            $order->order_status = $request->status;
+        if ($order->order_status === 'pending') {
+
+            // 1. Restock products
+            foreach ($order->orderDetails as $detail) {
+                $product = Product::find($detail->product_id);
+                if ($product) {
+                    $product->qty += $detail->qty;
+                    $product->save();
+                }
+            }
+
+            // 2. Refund via Stripe
+            if ($order->stripe_payment_id) {
+                Stripe::setApiKey(config('services.stripe.secret'));
+
+                \Stripe\Refund::create([
+                    'payment_intent' => $order->stripe_payment_id,
+                ]);
+            }
+
+            // 3. Update order status
+            $order->order_status = 'cancelled';
             $order->save();
         }
 
-        return redirect()->back()->with('success', 'Order cancelled successfully.');
+        return redirect()->back()->with('success', 'Order cancelled, stock restored, and payment refunded.');
     }
+
 
     public function reorder(Request $request, $orderId)
     {
