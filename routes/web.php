@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
@@ -42,9 +43,13 @@ Route::prefix('customer')->group(function () {
         return view('customer.about');
     })->name('customer.about');
 
+    // Contact
     Route::get('contact', function(){
         return view('customer.contact');
     })->name('customer.contact');
+
+    // Contact Process
+    Route::post('/contact', [MailController::class, 'contact'])->name('contact.send');
 
     // Get Register Form
     Route::get('register', [CustomerController::class, 'registerForm'])->name('customer.registerForm');
