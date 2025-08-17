@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Refund;
 use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\Product;
+use App\Mail\OrderCancelled;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -54,7 +57,7 @@ class OrderController extends Controller
             if ($order->stripe_payment_id) {
                 Stripe::setApiKey(config('services.stripe.secret'));
 
-                \Stripe\Refund::create([
+                Refund::create([
                     'payment_intent' => $order->stripe_payment_id,
                 ]);
             }
@@ -62,10 +65,15 @@ class OrderController extends Controller
             // 3. Update order status
             $order->order_status = 'cancelled';
             $order->save();
+
+            // 4. Send cancellation email
+            Mail::to($order->customer->credential->email)
+                ->send(new OrderCancelled($order));
         }
 
-        return redirect()->back()->with('success', 'Order cancelled, stock restored, and payment refunded.');
+        return redirect()->back()->with('success', 'Order cancelled successfully!');
     }
+
 
 
     public function reorder(Request $request, $orderId)
