@@ -38,7 +38,8 @@
                 </div>
             </div>
             <div class="contact-right">
-                <form action="">
+                <form action="{{ route('contact.send') }}" method="post">
+                    @csrf
                     <p class="form-title">Get in Touch</p>
                     <p class="form-description">You can reach us anytime</p>
                     <div class="form-group">
@@ -63,4 +64,13 @@
 @endsection
 
 @push('scripts')
+<script>
+    @if(session('success'))
+        showNotification("{{ session('success') }}", "success");
+    @endif
+
+    @if(session('error'))
+        showNotification("{{ session('error') }}", "error");
+    @endif
+</script>
 @endpush
