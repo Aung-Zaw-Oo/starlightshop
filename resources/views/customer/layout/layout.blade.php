@@ -23,8 +23,8 @@
         <ul class="nav-menu" id="navMenu">
         <li><a href="{{ route('customer.home') }}" class="{{ Route::currentRouteName() == 'customer.home' ? 'active' : '' }}">Home</a></li>
         <li><a href="{{ route('customer.product_list') }}" class="{{ Route::currentRouteName() == 'customer.product_list' ? 'active' : '' }}">Product List</a></li>
-        <li><a href="{{ route('customer.about') }}">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="{{ route('customer.about') }}" class="{{ Route::currentRouteName() == 'customer.about' ? 'active' : '' }}">About Us</a></li>
+        <li><a href="{{ route('customer.contact') }}" class="{{ Route::currentRouteName() == 'customer.contact' ? 'active' : '' }}">Contact Us</a></li>
       </ul>
     </div>
     <div class="nav-right">
