@@ -194,20 +194,11 @@ Route::prefix('admin')->group(function () {
         // Order routes
         Route::get('/order', [OrderDetailController::class, 'index'])->name('admin.order');
 
-        // Order create
-        Route::get('/order/create', [OrderDetailController::class, 'create'])->name('admin.order.create');
-
-        // Order store
-        Route::post('/order', [OrderDetailController::class, 'store'])->name('admin.order.store');
-
         // Order edit
         Route::get('/order/{id}/edit', [OrderDetailController::class, 'edit'])->name('admin.order.edit');
 
         // Order update
         Route::put('/order/{id}', [OrderDetailController::class, 'update'])->name('admin.order.update');
-
-        // Order delete
-        Route::delete('/order/{id}', [OrderDetailController::class, 'destroy'])->name('admin.order.destroy');
 
         // Order search
         Route::get('/order/search', [OrderDetailController::class, 'ajaxSearch'])->name('admin.order.ajaxSearch');

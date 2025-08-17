@@ -141,8 +141,10 @@
                     }
                 });
             });
-
-
         });
+
+        @if(session('success'))
+            showNotification("{{ session('success') }}", "success");
+        @endif
     </script>
 @endpush

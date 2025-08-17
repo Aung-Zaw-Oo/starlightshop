@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Refund;
+use Stripe\Stripe;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Mail\OrderCancelled;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderDetailController extends Controller
 {
@@ -52,20 +56,20 @@ class OrderDetailController extends Controller
 
             // 2. Process Stripe refund
             if ($order->stripe_payment_id) {
-                try {
-                    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-                    \Stripe\Refund::create([
-                        'payment_intent' => $order->stripe_payment_id,
-                    ]);
-                } catch (\Exception $e) {
-                    // You might want to log the error or notify admin
-                    \Log::error("Stripe refund failed for Order #{$order->id}: " . $e->getMessage());
-                }
+                Stripe::setApiKey(config('services.stripe.secret'));
+                Refund::create([
+                    'payment_intent' => $order->stripe_payment_id,
+                ]);
             }
+
+            // 3. Send cancellation email
+            Mail::to($order->customer->credential->email)
+                ->send(new OrderCancelled($order));
         }
 
         return redirect()->route('admin.order')->with('success', 'Order updated successfully.');
     }
+
 
 
     public function ajaxSearch(Request $request)
