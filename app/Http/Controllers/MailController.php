@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactMessage;
+use App\Mail\PurchaseConfirmation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -24,5 +25,12 @@ class MailController extends Controller
         Mail::to('1997azo.azo@gmail.com')->send(new ContactMessage($validated));
 
         return back()->with('success', 'Your message has been sent successfully!');
+    }
+
+    public function purchase($orderDetails)
+    {
+        $email = $orderDetails->order?->customer?->credential?->email;
+
+        Mail::to($email)->send(new PurchaseConfirmation($orderDetails));
     }
 }

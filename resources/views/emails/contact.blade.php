@@ -59,7 +59,7 @@
     <div class="container">
         <div class="header">
             <i class="fa-solid fa-message"></i>
-            <span>New Contact Message</span>
+            <span>📩 New Contact Message</span>
         </div>
         <div class="content">
             <p><span class="label">Name:</span> {{ $data['first-name'] }} {{ $data['last-name'] }}</p>
