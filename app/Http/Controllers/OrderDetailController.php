@@ -36,9 +36,37 @@ class OrderDetailController extends Controller
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
+        $oldStatus = $order->order_status;
         $order->update($request->all());
+
+        // If the order was not cancelled before but now is cancelled
+        if ($oldStatus !== 'cancelled' && $order->order_status === 'cancelled') {
+            // 1. Restock products
+            foreach ($order->orderDetails as $detail) {
+                $product = $detail->product;
+                if ($product) {
+                    $product->qty += $detail->qty;
+                    $product->save();
+                }
+            }
+
+            // 2. Process Stripe refund
+            if ($order->stripe_payment_id) {
+                try {
+                    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+                    \Stripe\Refund::create([
+                        'payment_intent' => $order->stripe_payment_id,
+                    ]);
+                } catch (\Exception $e) {
+                    // You might want to log the error or notify admin
+                    \Log::error("Stripe refund failed for Order #{$order->id}: " . $e->getMessage());
+                }
+            }
+        }
+
         return redirect()->route('admin.order')->with('success', 'Order updated successfully.');
     }
+
 
     public function ajaxSearch(Request $request)
     {

@@ -70,9 +70,6 @@ Route::prefix('customer')->group(function () {
         // Cart
         Route::get('cart', [OrderController::class, 'cart'])->name('customer.cart');
 
-        // Checkout
-        Route::get('checkout', [OrderController::class, 'checkout'])->name('customer.checkout');
-
         // Reorder
         Route::post('/order/reorder/{orderId}', [OrderController::class, 'reorder'])->name('order.reorder');
 

@@ -85,6 +85,7 @@
                 <p><span class="label">Order Date:</span> {{ $order->order_date->format('M d, Y h:i A') }}</p>
                 <p><span class="label">Payment:</span> {{ $order->payment_type }}</p>
                 <p><span class="label">Total:</span> ${{ number_format($order->total_price, 2) }}</p>
+                <p><span class="label">Delivery Address:</span> {{ $order->customer->address }}</p>
             </div>
 
             <table class="order-items">

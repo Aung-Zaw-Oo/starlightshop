@@ -62,176 +62,126 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $totalOrder = Order::where('order_status', '!=' ,'cancelled')->count();
-        $orderThisWeek = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        // Total Orders (excluding cancelled)
+        $totalOrder = Order::where('order_status', '!=', 'cancelled')->count();
+        $orderThisWeek = Order::where('order_status', '!=', 'cancelled')
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
 
+        // Total Signups
         $totalSignup = Customer::count();
-        $signupThisWeek = Customer::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $signupThisWeek = Customer::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
 
+        // Customer Sessions Count
         $sessions = CustomerSession::get();
-        // Device Count
-        $mobileCount = 0;
-        $desktopCount = 0;
-        $tabletCount = 0;
-
-        // Browser Count
-        $chromeCount = 0;
-        $firefoxCount = 0;
-        $safariCount = 0;
-        $otherCount = 0;
+        $mobileCount = $desktopCount = $tabletCount = 0;
+        $chromeCount = $firefoxCount = $safariCount = $otherCount = 0;
 
         foreach ($sessions as $session) {
-            $device = $session->device;
-            if ($device == 'Mobile') {
-                $mobileCount++;
-            } elseif ($device == 'Desktop') {
-                $desktopCount++;
-            } elseif ($device == 'Tablet') {
-                $tabletCount++;
+            switch($session->device) {
+                case 'Mobile': $mobileCount++; break;
+                case 'Desktop': $desktopCount++; break;
+                case 'Tablet': $tabletCount++; break;
             }
 
-            $browser = $session->browser;
-            if ($browser == 'Chrome') {
-                $chromeCount++;
-            } elseif ($browser == 'Firefox') {
-                $firefoxCount++;
-            } elseif ($browser == 'Safari') {
-                $safariCount++;
-            } else {
-                $otherCount++;
+            switch($session->browser) {
+                case 'Chrome': $chromeCount++; break;
+                case 'Firefox': $firefoxCount++; break;
+                case 'Safari': $safariCount++; break;
+                default: $otherCount++; break;
             }
         }
 
-        $details = OrderDetail::with('product', 'order')->get();
-        $totalIncome = 0;
-        $incomeThisWeek = 0;
+        // Fetch OrderDetails excluding cancelled orders
+        $details = OrderDetail::with('product', 'order')
+            ->whereHas('order', function($query) {
+                $query->where('order_status', '!=', 'cancelled');
+            })
+            ->get();
 
-        $totalProfit = 0;
-        $profitThisWeek = 0;
-        // Dashboard Cards KPI Data Calculation
+        $totalIncome = $incomeThisWeek = 0;
+        $totalProfit = $profitThisWeek = 0;
+
         foreach ($details as $detail) {
             $qty = $detail->qty;
             $salePrice = $detail->product->sale_price ?? 0;
             $purchasePrice = $detail->product->purchase_price ?? 0;
 
             $totalIncome += $qty * $salePrice;
+            $totalProfit += $qty * ($salePrice - $purchasePrice);
+
             if ($detail->order->order_date >= now()->startOfWeek() && $detail->order->order_date <= now()->endOfWeek()) {
                 $incomeThisWeek += $qty * $salePrice;
-            }
-
-            $totalProfit += $qty * ($salePrice - $purchasePrice);
-            if ($detail->order->order_date >= now()->startOfWeek() && $detail->order->order_date <= now()->endOfWeek()) {
                 $profitThisWeek += $qty * ($salePrice - $purchasePrice);
             }
         }
 
-        // Dashboard Order Chart Dynamic Data
+        // Orders per Day (weekly)
         $ordersThisWeek = Order::selectRaw('DAYNAME(order_date) as day, COUNT(*) as count')
+            ->where('order_status', '!=', 'cancelled')
             ->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()])
-            ->where('order_status', '!=' ,'cancelled')
             ->groupBy('day')
             ->pluck('count', 'day');
 
-        $dayMap = [
-            'Mon' => 'Monday',
-            'Tue' => 'Tuesday',
-            'Wed' => 'Wednesday',
-            'Thu' => 'Thursday',
-            'Fri' => 'Friday',
-            'Sat' => 'Saturday',
-            'Sun' => 'Sunday',
-        ];
+        $dayMap = ['Mon'=>'Monday','Tue'=>'Tuesday','Wed'=>'Wednesday','Thu'=>'Thursday','Fri'=>'Friday','Sat'=>'Saturday','Sun'=>'Sunday'];
+        $ordersPerDay = collect($dayMap)->map(fn($full,$short) => [$short, $ordersThisWeek[$full] ?? 0, $ordersThisWeek[$full] ?? 0])->values();
 
-        $ordersPerDay = collect($dayMap)->map(function ($full, $short) use ($ordersThisWeek) {
-            $count = $ordersThisWeek[$full] ?? 0;
-            return [$short, $count, $count];
-        })->values();
-
-        // Dashboard Profit Expense Chart Dynamic Data - WEEKLY
+        // Weekly Income & Expense Chart
         $weeklyIncomeExpenseData = OrderDetail::with('product', 'order')
-            ->whereHas('order', function($query) {
-                $query->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()]);
+            ->whereHas('order', function($q) {
+                $q->where('order_status', '!=', 'cancelled')
+                ->whereBetween('order_date', [now()->startOfWeek(), now()->endOfWeek()]);
             })
             ->get()
-            ->groupBy(function ($detail) {
-                return Carbon::parse($detail->order->order_date)->format('D'); // Mon, Tue, etc.
-            })
-            ->map(function ($details) {
-                $income = $details->sum(function ($d) {
-                    return $d->qty * ($d->product->sale_price ?? 0);
-                });
+            ->groupBy(fn($d) => Carbon::parse($d->order->order_date)->format('D'))
+            ->map(fn($details) => [
+                'income' => $details->sum(fn($d) => $d->qty * ($d->product->sale_price ?? 0)),
+                'expense' => $details->sum(fn($d) => $d->qty * ($d->product->purchase_price ?? 0))
+            ]);
 
-                $expense = $details->sum(function ($d) {
-                    return $d->qty * ($d->product->purchase_price ?? 0);
-                });
+        $weekDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        $weeklyChartData = collect($weekDays)->map(fn($day) => [
+            $day,
+            $weeklyIncomeExpenseData[$day]['income'] ?? 0,
+            $weeklyIncomeExpenseData[$day]['expense'] ?? 0
+        ]);
 
-                return [
-                    'income' => $income,
-                    'expense' => $expense
-                ];
-            });
-
-        $weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        $weeklyChartData = collect($weekDays)->map(function ($day) use ($weeklyIncomeExpenseData) {
-            $income = $weeklyIncomeExpenseData[$day]['income'] ?? 0;
-            $expense = $weeklyIncomeExpenseData[$day]['expense'] ?? 0;
-            return [$day, $income, $expense];
-        });
-
-        // Dashboard Profit Expense Chart Dynamic Data - MONTHLY
+        // Monthly Income & Expense Chart
         $monthlyData = OrderDetail::with('product', 'order')
-            ->whereYear('created_at', now()->year)
+            ->whereHas('order', fn($q) => $q->where('order_status','!=','cancelled')->whereYear('order_date', now()->year))
             ->get()
-            ->groupBy(function ($detail) {
-                return Carbon::parse($detail->order->order_date)->format('M');
-            })
-            ->map(function ($details) {
-                $income = $details->sum(function ($d) {
-                    return $d->qty * ($d->product->sale_price ?? 0);
-                });
+            ->groupBy(fn($d) => Carbon::parse($d->order->order_date)->format('M'))
+            ->map(fn($details) => [
+                'income' => $details->sum(fn($d) => $d->qty * ($d->product->sale_price ?? 0)),
+                'expense' => $details->sum(fn($d) => $d->qty * ($d->product->purchase_price ?? 0))
+            ]);
 
-                $expense = $details->sum(function ($d) {
-                    return $d->qty * ($d->product->purchase_price ?? 0);
-                });
+        $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        $monthlyChartData = collect($months)->map(fn($month) => [
+            $month,
+            $monthlyData[$month]['income'] ?? 0,
+            $monthlyData[$month]['expense'] ?? 0
+        ]);
 
-                return [
-                    'income' => $income,
-                    'expense' => $expense
-                ];
-            });
-
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $monthlyChartData = collect($months)->map(function ($month) use ($monthlyData) {
-            $income = $monthlyData[$month]['income'] ?? 0;
-            $expense = $monthlyData[$month]['expense'] ?? 0;
-            return [$month, $income, $expense];
-        });
-
+        // Orders per Month
         $ordersPerMonth = Order::selectRaw('MONTH(order_date) as month_num, COUNT(*) as count')
+            ->where('order_status', '!=', 'cancelled')
             ->whereYear('order_date', now()->year)
             ->groupBy('month_num')
-            ->pluck('count', 'month_num');
+            ->pluck('count','month_num');
 
-        $ordersPerMonthChartData = collect($months)->map(function ($month, $index) use ($ordersPerMonth) {
-            $monthNumber = $index + 1;
-            $count = $ordersPerMonth[$monthNumber] ?? 0;
-            return [$month, $count];
-        });
+        $ordersPerMonthChartData = collect($months)->map(fn($month, $index) => [
+            $month,
+            $ordersPerMonth[$index+1] ?? 0
+        ]);
 
         return view('admin.dashboard.dashboard', compact(
             'totalIncome','totalOrder','totalProfit','totalSignup',
             'incomeThisWeek','orderThisWeek','profitThisWeek','signupThisWeek',
-            
-            'ordersPerDay',
-            'ordersPerMonthChartData',
-
-            'weeklyChartData',  // NEW: Weekly column chart data
-            'monthlyChartData', // Existing monthly column chart data
-
+            'ordersPerDay','ordersPerMonthChartData',
+            'weeklyChartData','monthlyChartData',
             'mobileCount','desktopCount','tabletCount',
-
-            'chromeCount','firefoxCount','safariCount','otherCount',
-
+            'chromeCount','firefoxCount','safariCount','otherCount'
         ));
     }
 

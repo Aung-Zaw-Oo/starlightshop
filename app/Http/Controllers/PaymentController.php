@@ -21,7 +21,6 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request)
     {
-        // Validate request
         $request->validate([
             'amount' => 'required|numeric|min:1',
             'paymentMethodId' => 'required|string',
@@ -31,6 +30,7 @@ class PaymentController extends Controller
         try {
             Stripe::setApiKey(config('services.stripe.secret'));
 
+            // Create PaymentIntent
             $paymentIntent = PaymentIntent::create([
                 'amount' => $request->amount,
                 'currency' => 'usd',
@@ -40,17 +40,22 @@ class PaymentController extends Controller
                 'return_url' => route('payment.success'),
             ]);
 
-            if (in_array($paymentIntent->status, ['requires_action', 'succeeded'])) {
+            // Only create order if payment succeeded
+            if ($paymentIntent->status === 'succeeded') {
+
+                // Create the Order
                 $order = Order::create([
-                    'customer_id'   => session('customer_id'),
-                    'payment_type'  => '4242-xxxx-xxxx-xxxx',
-                    'order_date'    => now(),
-                    'total_price'   => $request->amount / 100,
-                    'qty'           => collect($request->cart)->sum('quantity'),
-                    'order_status'  => 'pending',
-                    'status'        => 'active',
+                    'customer_id'       => session('customer_id'),
+                    'payment_type'      => '4242-xxxx-xxxx-xxxx', // you can replace with actual method type
+                    'order_date'        => now(),
+                    'total_price'       => $request->amount / 100,
+                    'qty'               => collect($request->cart)->sum('quantity'),
+                    'order_status'      => 'pending',
+                    'status'            => 'active',
+                    'stripe_payment_id' => $paymentIntent->id,
                 ]);
 
+                // Create OrderDetails & reduce stock
                 foreach ($request->cart as $item) {
                     OrderDetail::create([
                         'order_id'   => $order->id,
@@ -63,15 +68,13 @@ class PaymentController extends Controller
                     $product = Product::find($item['id']);
                     if ($product) {
                         $product->qty -= $item['quantity'];
-                        if ($product->qty < 0) {
-                            $product->qty = 0;
-                        }
                         $product->save();
                     }
                 }
+
+                // Send confirmation email
+                Mail::to(session('customer_email'))->send(new PurchaseConfirmation($order));
             }
-            
-            Mail::to(session('customer_email'))->send(new PurchaseConfirmation($order));
 
             return response()->json([
                 'success' => true,
@@ -85,6 +88,7 @@ class PaymentController extends Controller
             ], 500);
         }
     }
+
 
     public function paymentSuccess()
     {
