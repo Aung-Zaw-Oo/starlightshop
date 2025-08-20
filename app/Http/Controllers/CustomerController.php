@@ -65,7 +65,6 @@ class CustomerController extends Controller
         return redirect()->route('admin.customer')->with('success', 'Customer created successfully!');
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -302,8 +301,6 @@ class CustomerController extends Controller
         // Redirect back to login form with generic error if credentials invalid
         return redirect()->route('customer.loginForm')->with('error', 'Invalid credentials');
     }
-
-
 
     // Logout
     public function logout(Request $request)

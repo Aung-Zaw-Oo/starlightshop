@@ -79,39 +79,39 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $category = Category::findOrFail($id);
+    {
+        $category = Category::findOrFail($id);
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'image' => 'nullable|image|max:2048',
-        'status' => 'required|in:active,inactive',
-    ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048',
+            'status' => 'required|in:active,inactive',
+        ]);
 
-    if ($request->hasFile('image')) {
-        if ($category->image && File::exists(public_path('storage/' . $category->image))) {
-            File::delete(public_path('storage/' . $category->image));
+        if ($request->hasFile('image')) {
+            if ($category->image && File::exists(public_path('storage/' . $category->image))) {
+                File::delete(public_path('storage/' . $category->image));
+            }
+
+            $uuid = Str::uuid()->toString();
+            $imagePath = 'uploads/' . $uuid . '.' . $request->image->extension();
+            $request->image->move(public_path('storage/uploads'), $imagePath);
+
+            $category->image = $imagePath;
         }
 
-        $uuid = Str::uuid()->toString();
-        $imagePath = 'uploads/' . $uuid . '.' . $request->image->extension();
-        $request->image->move(public_path('storage/uploads'), $imagePath);
+        $category->name = $validated['name'];
+        $category->status = $validated['status'];
+        $category->save();
 
-        $category->image = $imagePath;
+        return redirect()->route('admin.category')->with('success', 'Category updated successfully!');
     }
-
-    $category->name = $validated['name'];
-    $category->status = $validated['status'];
-    $category->save();
-
-    return redirect()->route('admin.category')->with('success', 'Category updated successfully!');
-}
-
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {
+    public function destroy($id) 
+    {
         $category = Category::findOrFail($id);
 
         File::delete(public_path('storage/' . $category->image));
@@ -120,8 +120,7 @@ class CategoryController extends Controller
         return redirect()->route('admin.category')->with('info', 'Category deleted successfully.');
     }
 
-
-   public function ajaxSearch(Request $request)
+    public function ajaxSearch(Request $request)
     {
         $query = $request->get('query');
 

@@ -70,8 +70,6 @@ class OrderDetailController extends Controller
         return redirect()->route('admin.order')->with('success', 'Order updated successfully.');
     }
 
-
-
     public function ajaxSearch(Request $request)
     {
         $query = $request->get('query');

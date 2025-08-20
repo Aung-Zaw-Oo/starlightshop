@@ -76,7 +76,6 @@ class ProductController extends Controller
         return redirect()->route('admin.product')->with('success', 'Product created successfully.');
     }
 
-
     public function show(string $id)
     {
         abort(404);
@@ -192,5 +191,4 @@ class ProductController extends Controller
             return view('admin.product.partials.product-table', compact('products'))->render();
         }
     }
-
 }
