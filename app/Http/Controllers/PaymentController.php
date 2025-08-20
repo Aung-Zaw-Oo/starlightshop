@@ -89,7 +89,6 @@ class PaymentController extends Controller
         }
     }
 
-
     public function paymentSuccess()
     {
         return view('customer.thanks');

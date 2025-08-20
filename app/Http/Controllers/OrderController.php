@@ -74,8 +74,6 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Order cancelled successfully!');
     }
 
-
-
     public function reorder(Request $request, $orderId)
     {
         $order = Order::with('orderDetails.product.category')->findOrFail($orderId);

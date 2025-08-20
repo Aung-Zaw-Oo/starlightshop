@@ -210,8 +210,6 @@ class StaffController extends Controller
         return redirect()->route('admin.employee')->with('success', 'Staff updated successfully!');
     }
 
-
-
     /**
      * Remove the specified resource from storage.
      */
@@ -235,7 +233,6 @@ class StaffController extends Controller
         $staff->delete();
         return redirect()->route('admin.employee')->with('success', 'Staff deleted successfully.');
     }
-
 
     public function ajaxSearch(Request $request)
     {
