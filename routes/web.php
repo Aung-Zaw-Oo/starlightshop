@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductListController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -204,3 +205,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/order/search', [OrderDetailController::class, 'ajaxSearch'])->name('admin.order.ajaxSearch');
     });
 });
+
+// Password Reset
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('forgot.password.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('forgot.password');
+
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('reset.password.form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
