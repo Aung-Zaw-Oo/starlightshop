@@ -74,10 +74,29 @@
     display: flex;
     align-items: center;
     margin-bottom: calc(var(--margin) * 2);
+    justify-content: space-between;
 }
 
 .remember-box input {
     margin-right: 0.5em;
+}
+
+.remember-box a {
+    transition: var(--transition);
+}
+
+.remember-box a:hover {
+    color: var(--primary);
+    text-shadow: var(--hover);
+}
+
+.register-now {
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+.register-now:hover {
+    text-shadow: var(--hover);
 }
 
 .right form button {

@@ -44,12 +44,17 @@
                     </div>
 
                     <div class="remember-box">
-                        <input type="checkbox" name="remember-me" id="remember-me">
-                        <label for="remember-me">Remember me</label>
+                        <div>
+                            <input type="checkbox" name="remember-me" id="remember-me">
+                            <label for="remember-me">Remember me</label>
+                        </div>
+                        <div>
+                            <a href="{{ route('forgot.password.form') }}" class="forgot">Forgot your password?</a>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn primary">Login</button>
-                    <a href="{{ route('customer.registerForm') }}">Don't have an account? <span style="color: var(--primary);">Register Now.</span></a>
+                    <a href="{{ route('customer.registerForm') }}">Don't have an account? <span class="register-now">Register Now.</span></a>
                 </form>
             </div>
         </div>
