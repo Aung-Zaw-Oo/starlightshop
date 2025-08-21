@@ -23,18 +23,6 @@
                     Enter your new password below to reset your account password.
                 </p>
 
-                @if (session('status'))
-                    <div class="alert-success">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert-error">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 <label for="email">Email Address</label>
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
@@ -43,20 +31,12 @@
 
                 <label for="password">New Password</label>
 
-                @error('password')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
-
                 <div class="input-group">
                     <i class="fas fa-key"></i>
                     <input type="password" name="password" id="password" placeholder="Enter new password" autocomplete="new-password" required>
                 </div>
 
                 <label for="password_confirmation">Confirm New Password</label>
-
-                @error('password_confirmation')
-                    <div class="field-error">{{ $message }}</div>
-                @enderror
 
                 <div class="input-group">
                     <i class="fas fa-key"></i>
@@ -72,5 +52,51 @@
         </div>
     </div>
     <script src="https://kit.fontawesome.com/2e96e08057.js" crossorigin="anonymous"></script>
+    <script>
+        @if(session('success'))
+            showNotification("{{ session('success') }}", "success");
+        @endif
+
+        @if(session('error'))
+            showNotification("{{ session('error') }}", "error");
+        @endif
+
+        @if (session('info'))
+            showNotification("{{ session('info') }}", "info");
+        @endif
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                showNotification("{{ $error }}", "error");
+            @endforeach
+        @endif
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span class="notification-icon">
+                ${type === 'success' ? '<i class="fas fa-circle-check"></i>' : type === 'error' ? '<i class="fas fa-circle-exclamation"></i>' : '<i class="fas fa-circle-info"></i>'}
+                </span>
+                <div class="notification-content">
+                <div class="notification-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" aria-label="Close notification">&times;</button>
+            `;
+
+            document.body.appendChild(notification);
+
+            void notification.offsetWidth;
+            notification.classList.add('show');
+
+            const autoRemove = setTimeout(() => notification.remove(), 3000);
+
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                notification.remove();
+            });
+        }
+    </script>
 </body>
 </html>
