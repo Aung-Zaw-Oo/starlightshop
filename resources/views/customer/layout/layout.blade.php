@@ -89,16 +89,28 @@
             <h3>Star Light Store</h3>
             <ul>
                 <li>
-                    <i class="fa-solid fa-location-arrow"></i>
-                    <a href="https://maps.app.goo.gl/rB27Zx6Kdp2aJqtc7" target="_blank">No. 33, Pansodan, Upper BLock, Yangon Myanmar</a>
+                    <a href="https://maps.app.goo.gl/rB27Zx6Kdp2aJqtc7" target="_blank">
+                      <i class="fa-solid fa-location-arrow"></i> 
+                      <span>
+                        No. 33, Pansodan, Upper Block, Yangon Myanmar
+                      </span>
+                    </a>
                 </li>
                 <li>
-                    <i class="fa-solid fa-phone"></i>
-                    <a href="tel:+95948383383">+95 948 383 383</a>
+                    <a href="tel:+95948383383">
+                      <i class="fa-solid fa-phone"></i> 
+                      <span>
+                        +95 948 383 383
+                      </span>
+                    </a>
                 </li>
                 <li>
+                  <a href="mailto:starlight@shopping.com.mm">
                     <i class="fa-solid fa-envelopes-bulk"></i>
-                    <a href="mailto:starlight@shopping.com.mm">starlight@shopping.com.mm</a>
+                    <span>
+                      starlight@shopping.com.mm
+                    </span>    
+                  </a>
                 </li>
             </ul>
         </div>

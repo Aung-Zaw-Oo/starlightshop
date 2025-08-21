@@ -86,6 +86,13 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'status' => 'required|in:active,inactive',
+        ],[
+            'name.required' => 'Category name is required.',
+            'name.max' => 'Category name should not exceed 255 characters.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
+            'status.required' => 'Status is required.',
+            'status.in' => 'Invalid status value.',
         ]);
 
         if ($request->hasFile('image')) {

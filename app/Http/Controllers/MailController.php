@@ -19,6 +19,13 @@ class MailController extends Controller
             'email' => 'required|email',
             'phone' => 'required|string',
             'message' => 'required|string',
+        ],[
+            'first-name.required' => 'First name is required.',
+            'last-name.required' => 'Last name is required.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'phone.required' => 'Phone number is required.',
+            'message.required' => 'Message cannot be empty.'
         ]);
 
         // send mail

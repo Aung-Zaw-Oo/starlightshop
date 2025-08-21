@@ -39,6 +39,19 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:credentials,email',
             'password' => 'required|string|min:6|confirmed',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'name.required' => 'Name is required.',
+            'name.max' => 'Name should not exceed 255 characters.',
+            'phone.required' => 'Phone number is required.',
+            'phone.max' => 'Phone number should not exceed 20 characters.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'email.unique' => 'Email is already taken.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
         ]);
 
         // Create credential
@@ -100,6 +113,17 @@ class CustomerController extends Controller
             'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:credentials,email,' . $credentialId,
             'password' => 'nullable|string|min:6|confirmed',
+        ],[
+            'name.required' => 'Name is required.',
+            'name.max' => 'Name should not exceed 255 characters.',
+            'phone.required' => 'Phone number is required.',
+            'phone.max' => 'Phone number should not exceed 20 characters.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'email.unique' => 'Email is already taken.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.'
         ]);
 
         if ($request->hasFile('image')) {
@@ -164,6 +188,19 @@ class CustomerController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required|string|min:6',
             'image' => 'nullable|image|max:2048',
+        ],[
+            'name.required' => 'Name is required.',
+            'name.max' => 'Name should not exceed 255 characters.',
+            'phone.required' => 'Phone number is required.',
+            'phone.max' => 'Phone number should not exceed 20 characters.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'email.unique' => 'Email is already taken.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'image.image' => 'Please upload a valid image file.',
+            'image.max' => 'Image size should not exceed 2MB.',
         ]);
 
         $imagePath = null;
@@ -210,6 +247,10 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
+        ],[
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'password.required' => 'Password is required.'
         ]);
 
         // Find the credential record by email
