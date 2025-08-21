@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Login</title>
+    <title>Forgot Password</title>
     <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/login.css') }}">
 </head>
@@ -14,24 +14,25 @@
                 <img src="{{ asset('icons/logo.svg') }}" alt="Star Light Logo">
                 <p class="title">STAR LIGHT</p>
             </div>
-            <form action="{{ route('admin.login') }}" method="post">
+            <form action="{{ route('forgot.password') }}" method="POST">
                 @csrf
-                <p class="title">Welcome Back!</p>
+                <p class="title">Forgot Password?</p>
+                <p style="text-align: center; color: var(--text-grey); font-size: 0.9rem; margin-bottom: 10px;">
+                    Don't worry! Enter your email address and we'll send you a password reset link.
+                </p>
 
                 <label for="email">Your Email</label>
 
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter your email" autocomplete="email">
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter your email address" autocomplete="email">
                 </div>
-                <label for="password">Your Password</label>
 
-                <div class="input-group">
-                    <i class="fas fa-key"></i>
-                    <input type="password" name="password" id="password" placeholder="Enter your password" autocomplete="current-password">
-                </div>
-                <a href="{{ route('forgot.password.form') }}" class="forgot">Forgot your password?</a>
-                <button type="submit" class="btn btn-primary">LOGIN</button>
+                <button type="submit" class="btn btn-primary">SEND RESET LINK</button>
+                
+                <a href="{{ route('admin.login') }}" class="forgot" style="text-align: center;">
+                    Remember your password? Back to Login
+                </a>
             </form>
         </div>
     </div>
@@ -49,27 +50,11 @@
             showNotification("{{ session('info') }}", "info");
         @endif
 
-        let errorMessages = [];
-    
-        @error('email')
-            errorMessages.push('email');
-        @enderror
-        
-        @error('password')
-            errorMessages.push('password');
-        @enderror
-        
-        if (errorMessages.includes('email') && errorMessages.includes('password')) {
-            showNotification("Please provide both email and password.", "error");
-        } else {
-            @error('email')
-                showNotification("{{ $message }}", "error");
-            @enderror
-            
-            @error('password')
-                showNotification("{{ $message }}", "error");
-            @enderror
-        }
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                showNotification("{{ $error }}", "error");
+            @endforeach
+        @endif
 
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');

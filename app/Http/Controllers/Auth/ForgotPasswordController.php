@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
     // Show forgot password form
     public function showForgotForm()
     {
-        return view('auth.forgot_password');
+        return view('auth.admin.forgot_password');
     }
 
     // Handle sending reset link
@@ -31,7 +31,7 @@ class ForgotPasswordController extends Controller
         $credential = Credential::where('email', $request->email)->first();
 
         if (!$credential) {
-            return back()->withErrors(['email' => 'No account found with this email.']);
+            return back()->with('error', 'No account found with this email.');
         }
 
         // Generate token
@@ -53,14 +53,14 @@ class ForgotPasswordController extends Controller
             dd($e->getMessage());
         }
 
-        return back()->with('status', 'Password reset link sent to your email!');
+        return back()->with('info', 'Password reset link sent to your email!');
     }
 
     // Show reset password form
     public function showResetForm($token, Request $request)
     {
         $email = $request->email;
-        return view('auth.reset_password', compact('token', 'email'));
+        return view('auth.admin.reset_password', compact('token', 'email'));
     }
 
     // Handle password reset
@@ -80,7 +80,7 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (!$reset) {
-            return back()->withErrors(['email' => 'Invalid or expired token!']);
+            return back()->with('error', 'Invalid or expired token!');
         }
 
         // Update password in credentials table
@@ -91,6 +91,6 @@ class ForgotPasswordController extends Controller
         // Delete token after reset
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-        return redirect('admin/login')->with('status', 'Password has been reset successfully!');
+        return redirect('admin/login')->with('success', 'Password has been reset successfully!');
     }
 }
