@@ -14,7 +14,7 @@
                 <img src="{{ asset('icons/logo.svg') }}" alt="Star Light Logo">
                 <p class="title">STAR LIGHT</p>
             </div>
-            <form action="{{ route('reset.password') }}" method="POST">
+            <form action="{{ route('customer.reset.password') }}" method="POST">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
                 
@@ -45,7 +45,7 @@
 
                 <button type="submit" class="btn btn-primary">RESET PASSWORD</button>
                 
-                <a href="{{ route('admin.login') }}" class="forgot" style="text-align: center;">
+                <a href="{{ route('customer.loginForm') }}" class="forgot" style="text-align: center;">
                     Back to Login
                 </a>
             </form>

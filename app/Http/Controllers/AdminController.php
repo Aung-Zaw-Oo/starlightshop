@@ -23,6 +23,10 @@ class AdminController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
+        ],[
+            'email.required' => 'Email is required!',
+            'email.email' => 'Invalid email format!',
+            'password.required' => 'Password is required!'
         ]);
 
         $credential = Credential::where('email', $request->email)->first();

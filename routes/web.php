@@ -208,7 +208,13 @@ Route::prefix('admin')->group(function () {
 
 // Password Reset
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('forgot.password.form');
+Route::get('customer/forgot-password', [ForgotPasswordController::class, 'showCustomerForgotForm'])->name('customer.forgot.password.form');
+
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('forgot.password');
+Route::post('customer/forgot-password', [ForgotPasswordController::class, 'sendCustomerResetLink'])->name('customer.forgot.password');
 
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('reset.password.form');
+Route::get('customer/reset-password/{token}', [ForgotPasswordController::class, 'showCustomerResetForm'])->name('customer.reset.password.form');
+
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
+Route::post('customer/reset-password', [ForgotPasswordController::class, 'resetCustomerPassword'])->name('customer.reset.password');

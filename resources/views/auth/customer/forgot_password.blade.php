@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reset Password</title>
+    <title>Forgot Password</title>
     <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/login.css') }}">
 </head>
@@ -14,39 +14,24 @@
                 <img src="{{ asset('icons/logo.svg') }}" alt="Star Light Logo">
                 <p class="title">STAR LIGHT</p>
             </div>
-            <form action="{{ route('reset.password') }}" method="POST">
+            <form action="{{ route('customer.forgot.password') }}" method="POST">
                 @csrf
-                <input type="hidden" name="token" value="{{ $token }}">
-                
-                <p class="title">Reset Password</p>
+                <p class="title">Forgot Password?</p>
                 <p style="text-align: center; color: var(--text-grey); font-size: 0.9rem; margin-bottom: 10px;">
-                    Enter your new password below to reset your account password.
+                    Don't worry! Enter your email address and we'll send you a password reset link.
                 </p>
 
-                <label for="email">Email Address</label>
+                <label for="email">Your Email</label>
+
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" id="email" value="{{ $email }}" placeholder="Email address" readonly style="background-color: var(--bg-grey); cursor: not-allowed;">
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter your email address" autocomplete="email">
                 </div>
 
-                <label for="password">New Password</label>
-
-                <div class="input-group">
-                    <i class="fas fa-key"></i>
-                    <input type="password" name="password" id="password" placeholder="Enter new password" autocomplete="new-password">
-                </div>
-
-                <label for="password_confirmation">Confirm New Password</label>
-
-                <div class="input-group">
-                    <i class="fas fa-key"></i>
-                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm new password" autocomplete="new-password">
-                </div>
-
-                <button type="submit" class="btn btn-primary">RESET PASSWORD</button>
+                <button type="submit" class="btn btn-primary">SEND RESET LINK</button>
                 
-                <a href="{{ route('admin.login') }}" class="forgot" style="text-align: center;">
-                    Back to Login
+                <a href="{{ route('customer.loginForm') }}" class="forgot" style="text-align: center;">
+                    Remember your password? Back to Login
                 </a>
             </form>
         </div>
